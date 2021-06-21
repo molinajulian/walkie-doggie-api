@@ -22,9 +22,9 @@
     "start:test": "npm run migrations-reset; npm test",
     "development": "npm start",
     "production": "docker-compose up -d --build",
-    "test-docker": "docker-compose -f docker-compose.testing.yml up --abort-on-container-exit --build",
+    "docker-test": "docker-compose -f docker-compose.testing.yml up --abort-on-container-exit --build",
     "docker-stop-dev": "docker stop walkie-doggie-api-dev walkie-doggie-db-dev; docker rm walkie-doggie-api-dev walkie-doggie-db-dev",
-    "start-docker": "docker-compose -f docker-compose.development.yml up -d --build",
+    "docker-start-dev": "docker-compose -f docker-compose.development.yml up -d --build",
     "build-docker": "docker-compose -f docker-compose.development.yml build",
     "start": "node src/server.js",
     "build": "npm run migrations"
