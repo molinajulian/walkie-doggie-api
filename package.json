@@ -26,8 +26,7 @@
     "docker-stop-dev": "docker stop walkie-doggie-api-dev walkie-doggie-db-dev; docker rm walkie-doggie-api-dev walkie-doggie-db-dev",
     "docker-start-dev": "docker-compose -f docker-compose.development.yml up -d --build",
     "build-docker": "docker-compose -f docker-compose.development.yml build",
-    "start": "node src/server.js",
-    "build": "npm run migrations"
+    "start": "node src/server.js"
   },
   "cacheDirectories": [
     "node_modules"
