@@ -1,0 +1,36 @@
+version: "3.4"
+
+services:
+  walkie-doggie-api-dev:
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    container_name: walkie-doggie-api-dev
+    env_file:
+      - .env.development
+    environment:
+      - WAIT_HOSTS=walkie-doggie-db-dev:5432
+    ports:
+      - "9229:9229"
+      - "8080:8080"
+    volumes:
+      - ./src:/usr/local/src:ro
+    command: sh -c "/wait && npm run start:dev"
+    networks:
+      - walkie-doggie
+    depends_on:
+      - walkie-doggie-db-dev
+
+  walkie-doggie-db-dev:
+    image: postgres:12-alpine
+    container_name: walkie-doggie-db-dev
+    env_file:
+      - src/.env.development
+    ports:
+      - "35432:5432"
+    networks:
+      - walkie-doggie
+
+networks:
+  walkie-doggie:

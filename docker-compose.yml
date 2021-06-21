@@ -1,0 +1,32 @@
+version: "3.4"
+
+services:
+  walkie-doggie-api:
+    build:
+      context: .
+      args:
+        - NODE_ENV=production
+    container_name: walkie-doggie-api
+    env_file:
+      - .env
+    environment:
+      - WAIT_HOSTS=walkie-doggie-db:5432
+    depends_on:
+      - walkie-doggie-db
+    ports:
+      - "443:443"
+    networks:
+      - walkie-doggie
+
+  walkie-doggie-db:
+    image: postgres:12-alpine
+    container_name: walkie-doggie-db
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    networks:
+      - walkie-doggie
+
+networks:
+  walkie-doggie:

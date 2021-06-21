@@ -1,0 +1,122 @@
+{
+  "name": "walkie-doggie-api",
+  "version": "0.1.0",
+  "description": "walkie-doggie-api",
+  "engines": {
+    "node": "10.14.1",
+    "npm": "6.4.1"
+  },
+  "scripts": {
+    "eslint-check": "eslint --print-config ./src/.eslintrc.js --ignore-pattern ./src/.eslintrc.js | eslint-config-prettier-check",
+    "lint": "eslint \"**/*.js\" --ignore-pattern ./src/.eslintrc.js",
+    "lint-diff": "git diff --diff-filter=ACM --name-only --cached --relative | grep \\\\.js$ | xargs eslint --ignore-pattern ./src/.eslintrc.js",
+    "lint-fix": "npm run lint -- --fix",
+    "create-migration": "npx sequelize migration:create --options-path=src/.sequelizerc",
+    "migrations": "npx sequelize --options-path=src/.sequelizerc db:migrate",
+    "migrations-undo": "npx sequelize --opti-path=src/.sequelizerc db:migrate:undo",
+    "migrations-undo-all": "npx sequelize --options-path=src/.sequelizerc db:migrate:undo:all",
+    "migrations-reset": "npm run migrations-undo-all && npm run migrations",
+    "test": "jest --runInBand --detectOpenHandles --forceExit --coverage --colors --passWithNoTests",
+    "start:dev": "npm run migrations; nodemon --inspect=0.0.0.0 src/server.js",
+    "start:prod": "npm run migrations; node src/server.js",
+    "start:test": "npm run migrations-reset; npm test",
+    "development": "npm start",
+    "production": "docker-compose up -d --build",
+    "test-docker": "docker-compose -f docker-compose.testing.yml up --abort-on-container-exit --build",
+    "docker-stop-dev": "docker stop walkie-doggie-api-dev walkie-doggie-db-dev; docker rm walkie-doggie-api-dev walkie-doggie-db-dev",
+    "start-docker": "docker-compose -f docker-compose.development.yml up -d --build",
+    "build-docker": "docker-compose -f docker-compose.development.yml build",
+    "start": "node src/server.js",
+    "build": "npm run migrations"
+  },
+  "cacheDirectories": [
+    "node_modules"
+  ],
+  "homepage": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ".git"
+  },
+  "bugs": {
+    "url": "/issues"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.16.2",
+    "express-validator": "^6.5.0",
+    "factory-girl": "^5.0.4",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "moment-timezone": "^0.5.28",
+    "pg": "^8.0.2",
+    "pino": "^6.1.1",
+    "pino-pretty": "^4.0.0",
+    "sequelize": "^5.21.6",
+    "sequelize-cli": "^5.5.1",
+    "swagger-ui-express": "^4.1.4",
+    "telebot": "^1.3.0",
+    "umzug": "^2.3.0",
+    "uuidv4": "^6.0.7"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.32.0",
+    "eslint": "^6.8.0",
+    "eslint-config-wolox": "^4.0.0",
+    "eslint-config-wolox-node": "^3.0.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.19.0",
+    "husky": "^4.2.3",
+    "jest": "^25.3.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.15.3",
+    "prettier-eslint": "^9.0.1",
+    "supertest": "^4.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-fix;"
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/src/app/telegram/index.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/migrations/**",
+      "!**/config/**",
+      "!**/app/models/**",
+      "!**/tests/factories/**",
+      "!**/coverage/**",
+      "!**/server.js"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover",
+      "json-summary"
+    ],
+    "coverageDirectory": "./coverage"
+  }
+}
