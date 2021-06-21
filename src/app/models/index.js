@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 const config = require('../../config');
 
 const { url, dialect, username, password, port, database, host, logging } = config.database;
-const options = { logging: logging.toLowerCase() === 'true' };
+const options = { logging: logging.toLowerCase() === 'true', ssl: true };
 const connectionString = url || `${dialect}://${username}:${password}@${host}:${port}/${database}`;
 const basename = path.basename(__filename);
 const db = {};
