@@ -1,8 +1,9 @@
-name: Github Actions CI development
+name: Github Actions CI
 on:
   push:
     branches:
       - development
+      - master
 
 jobs:
   ci:
