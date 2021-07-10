@@ -17,14 +17,15 @@ const config = {
   },
   server: {
     port: process.env.PORT || 8080,
-    momentTimezone: process.env.MOMENT_TIMEZONE || 'America/Buenos_Aires',
-    initialPasswordAdmin: process.env.PASSWORD_ADMIN
+    momentTimezone: process.env.MOMENT_TIMEZONE || 'America/Buenos_Aires'
   },
   logger: {
     minLevel: process.env.LOGGER_MIN_LEVEL || 'debug'
   },
   session: {
-    secret: process.env.SECRET
+    secret: process.env.SECRET,
+    expirationTimeRefreshToken: process.env.EXPIRATION_TIME_REFRESH_TOKEN || 525600,
+    expirationTimeAccessToken: process.env.EXPIRATION_TIME_ACCESS_TOKEN || 15
   }
 };
 

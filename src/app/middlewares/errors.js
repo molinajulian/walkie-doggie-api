@@ -7,7 +7,9 @@ const statusCodes = {
   [errors.DATABASE_ERROR]: 503,
   [errors.INTERNAL_SERVER_ERROR]: 503,
   [errors.ALREADY_EXIST]: 400,
-  [errors.INVALID_PARAMS]: 400
+  [errors.INVALID_PARAMS]: 400,
+  [errors.NOT_FOUND]: 404,
+  [errors.INVALID_CREDENTIALS]: 400
 };
 
 // eslint-disable-next-line
