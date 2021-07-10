@@ -9,7 +9,8 @@ const config = {
     password: process.env.POSTGRES_PASSWORD,
     logging: process.env.POSTGRES_LOGGING || 'false',
     dialect: 'postgres',
-    url: process.env.DATABASE_URL
+    url: process.env.DATABASE_URL,
+    sslModeOn: process.env.SSL_MODE_ON || 'false'
   },
   migrations: {
     automaticallyUp: process.env.AUTOMATICALLY_UP || false

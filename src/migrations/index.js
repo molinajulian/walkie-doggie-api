@@ -30,7 +30,7 @@ const migrationsParams = [
 ];
 
 const umzugOptions = {
-  logging: logger.info,
+  logging: console.log,
   storage: 'sequelize',
   storageOptions: { sequelize },
   migrations: {
