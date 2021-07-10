@@ -15,6 +15,8 @@ jobs:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: walkie_doggie_test
+      SECRET: secret-key
+
 
     services:
       postgres:
