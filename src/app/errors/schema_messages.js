@@ -12,3 +12,4 @@ exports.password = `${stringMessage('password')} ${containedMessage('body')}`;
 exports.email = `${stringMessage('email')} ${containedMessage('body')}`;
 exports.lastName = `${stringMessage('last_name')} ${containedMessage('body')}`;
 exports.userType = `${oneOfMessage('type', Object.values(USER_TYPES))} ${containedMessage('body')}`;
+exports.refreshToken = jwtMessage('refresh_token', 'body');
