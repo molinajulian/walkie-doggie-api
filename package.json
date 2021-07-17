@@ -24,7 +24,7 @@
     "production": "docker-compose up -d --build",
     "docker-test": "docker-compose -f docker-compose.testing.yml up --abort-on-container-exit --build",
     "docker-stop-dev": "docker stop walkie-doggie-api-dev walkie-doggie-db-dev; docker rm walkie-doggie-api-dev walkie-doggie-db-dev",
-    "docker-start-dev": "docker-compose -f docker-compose.development.yml up -d --build",
+    "docker-start-dev": "docker-compose -f docker-compose.development.yml up --build",
     "build-docker": "docker-compose -f docker-compose.development.yml build",
     "start": "node src/server.js"
   },
@@ -51,8 +51,8 @@
     "express-validator": "^6.5.0",
     "factory-girl": "^5.0.4",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
-    "moment-timezone": "^0.5.28",
+    "lodash": "^4.17.21",
+    "moment-timezone": "^0.5.33",
     "pg": "^8.0.2",
     "pino": "^6.1.1",
     "pino-pretty": "^4.0.0",
@@ -93,8 +93,8 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 80,
-        "functions": 80,
+        "branches": 70,
+        "functions": 70,
         "lines": 80,
         "statements": 80
       }

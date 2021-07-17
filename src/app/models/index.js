@@ -4,20 +4,29 @@ const Sequelize = require('sequelize');
 
 const config = require('../../config');
 
-const { url, dialect, username, password, port, database, host, logging } = config.database;
+const { url, dialect, username, password, port, database, host, logging, sslModeOn } = config.database;
+const dialectConfiguration =
+  sslModeOn === 'true'
+    ? {
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false
+          }
+        }
+      }
+    : {};
 const options = {
   logging: logging.toLowerCase() === 'true',
   dialect: 'postgres',
   protocol: 'postgres',
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  }
+  ...dialectConfiguration
 };
 const connectionString =
-  url || `${dialect}://${username}:${password}@${host}:${port}/${database}?sslmode=require`;
+  url ||
+  `${dialect}://${username}:${password}@${host}:${port}/${database}${
+    sslModeOn === 'true' ? '?sslmode=require' : ''
+  }`;
 const basename = path.basename(__filename);
 const db = {};
 const sequelize = new Sequelize(connectionString, options);
