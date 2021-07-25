@@ -10,7 +10,7 @@ const truncateTable = (model, transaction) =>
 
 exports.truncateDatabase = () =>
   sequelizeInstance.transaction(transaction =>
-    Promise.all(tables.map(table => truncateTable(table, transaction)))
+    Promise.all(tables.map(table => truncateTable(table, transaction))),
   );
 
 exports.getResponse = ({ endpoint, headers = {}, query = {}, body = {}, method = 'put' }) =>

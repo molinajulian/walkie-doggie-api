@@ -10,23 +10,23 @@ const config = {
     logging: process.env.POSTGRES_LOGGING || 'false',
     dialect: 'postgres',
     url: process.env.DATABASE_URL,
-    sslModeOn: process.env.SSL_MODE_ON || 'false'
+    sslModeOn: process.env.SSL_MODE_ON || 'false',
   },
   migrations: {
-    automaticallyUp: process.env.AUTOMATICALLY_UP || false
+    automaticallyUp: process.env.AUTOMATICALLY_UP || false,
   },
   server: {
     port: process.env.PORT || 8080,
-    momentTimezone: process.env.MOMENT_TIMEZONE || 'America/Buenos_Aires'
+    momentTimezone: process.env.MOMENT_TIMEZONE || 'America/Buenos_Aires',
   },
   logger: {
-    minLevel: process.env.LOGGER_MIN_LEVEL || 'debug'
+    minLevel: process.env.LOGGER_MIN_LEVEL || 'debug',
   },
   session: {
     secret: process.env.SECRET,
     expirationTimeRefreshToken: process.env.EXPIRATION_TIME_REFRESH_TOKEN || 525600,
-    expirationTimeAccessToken: process.env.EXPIRATION_TIME_ACCESS_TOKEN || 15
-  }
+    expirationTimeAccessToken: process.env.EXPIRATION_TIME_ACCESS_TOKEN || 15,
+  },
 };
 
 module.exports = config;

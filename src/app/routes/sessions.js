@@ -13,6 +13,6 @@ exports.init = app => {
   sessionRouter.post(
     '/refresh',
     [validateSchemaAndFail(refreshSchema), checkTokenAndSetUser],
-    sessionsController.refresh
+    sessionsController.refresh,
   );
 };

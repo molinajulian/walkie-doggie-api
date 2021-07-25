@@ -3,7 +3,7 @@ const { email, password, refreshToken } = require('../errors/schema_messages');
 
 exports.loginSchema = {
   email: { in: ['body'], isString: true, trim: true, isEmail: true, errorMessage: email },
-  password: { in: ['body'], isString: true, errorMessage: password }
+  password: { in: ['body'], isString: true, errorMessage: password },
 };
 
 exports.refreshSchema = {
@@ -12,6 +12,6 @@ exports.refreshSchema = {
     in: ['body'],
     isJWT: true,
     trim: true,
-    errorMessage: refreshToken
-  }
+    errorMessage: refreshToken,
+  },
 };

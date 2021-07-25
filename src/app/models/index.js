@@ -4,23 +4,33 @@ const Sequelize = require('sequelize');
 
 const config = require('../../config');
 
-const { url, dialect, username, password, port, database, host, logging, sslModeOn } = config.database;
+const {
+  url,
+  dialect,
+  username,
+  password,
+  port,
+  database,
+  host,
+  logging,
+  sslModeOn,
+} = config.database;
 const dialectConfiguration =
   sslModeOn === 'true'
     ? {
         dialectOptions: {
           ssl: {
             require: true,
-            rejectUnauthorized: false
-          }
-        }
+            rejectUnauthorized: false,
+          },
+        },
       }
     : {};
 const options = {
   logging: logging.toLowerCase() === 'true',
   dialect: 'postgres',
   protocol: 'postgres',
-  ...dialectConfiguration
+  ...dialectConfiguration,
 };
 const connectionString =
   url ||

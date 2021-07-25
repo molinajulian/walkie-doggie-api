@@ -18,7 +18,7 @@ exports.createUser = attrs => {
       .then(([instance, created]) => {
         if (!created) throw alreadyExist('The provided user already exist');
         return instance;
-      })
+      }),
   );
 };
 
