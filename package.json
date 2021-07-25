@@ -80,6 +80,11 @@
     "prettier-eslint": "^9.0.1",
     "supertest": "^4.0.2"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-fix;"
+    }
+  },
   "jest": {
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
