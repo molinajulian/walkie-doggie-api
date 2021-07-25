@@ -10,7 +10,7 @@ const statusCodes = {
   [errors.INVALID_PARAMS]: 400,
   [errors.NOT_FOUND]: 404,
   [errors.INVALID_CREDENTIALS]: 400,
-  [errors.INVALID_TOKEN]: 400
+  [errors.INVALID_TOKEN]: 400,
 };
 
 // eslint-disable-next-line

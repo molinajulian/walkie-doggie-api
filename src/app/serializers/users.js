@@ -4,5 +4,5 @@ exports.createUserSerializer = user => ({
   last_name: user.lastName,
   email: user.email,
   type: user.type,
-  last_login: user.lastLogin
+  last_login: user.lastLogin,
 });

@@ -1,4 +1,4 @@
 exports.USER_TYPES = {
   WALKER: 'WALKER',
-  OWNER: 'OWNER'
+  OWNER: 'OWNER',
 };

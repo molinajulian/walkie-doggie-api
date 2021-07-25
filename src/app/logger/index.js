@@ -4,8 +4,8 @@ const logger = require('pino')({
   level: minLevel,
   prettyPrint: {
     translateTime: true,
-    colorize: true
-  }
+    colorize: true,
+  },
 });
 
 module.exports = logger;

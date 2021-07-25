@@ -5,6 +5,6 @@ exports.authorization = {
     in: ['headers'],
     isJWT: true,
     trim: true,
-    errorMessage: authorization
-  }
+    errorMessage: authorization,
+  },
 };

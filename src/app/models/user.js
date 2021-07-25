@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
       lastLogin: { type: DataTypes.DATE, allowNull: true },
       type: { type: DataTypes.STRING, allowNull: false },
       createdAt: { type: DataTypes.DATE, allowNull: false },
-      updatedAt: { type: DataTypes.DATE, allowNull: false }
+      updatedAt: { type: DataTypes.DATE, allowNull: false },
     },
-    { timestamps: true, underscored: true, paranoid: false, tableName: 'Users' }
+    { timestamps: true, underscored: true, paranoid: false, tableName: 'Users' },
   );
   return User;
 };
