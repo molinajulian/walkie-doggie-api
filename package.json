@@ -12,7 +12,7 @@
     "lint:fix": "eslint --ext .js src --fix",
     "create-migration": "npx sequelize migration:create --options-path=src/.sequelizerc",
     "migrations": "npx sequelize --options-path=src/.sequelizerc db:migrate",
-    "migrations-undo": "npx sequelize --opti-path=src/.sequelizerc db:migrate:undo",
+    "migrations-undo": "npx sequelize --options-path=src/.sequelizerc db:migrate:undo",
     "migrations-undo-all": "npx sequelize --options-path=src/.sequelizerc db:migrate:undo:all",
     "migrations-reset": "npm run migrations-undo-all && npm run migrations",
     "test": "jest --runInBand --detectOpenHandles --forceExit --coverage --colors --passWithNoTests",
