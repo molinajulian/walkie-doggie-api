@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Address.associate = ({ User }) => {
-    Address.belongsTo(User, { as: 'user', foreignKey: 'addressId' });
+    Address.belongsTo(User);
   };
+
   return Address;
 };

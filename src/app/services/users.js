@@ -3,6 +3,7 @@ const logger = require('../logger');
 const { hashString } = require('../utils/hashes');
 const { alreadyExist, databaseError, notFound } = require('../errors/builders');
 const { User } = require('../models');
+
 const { moment } = require('../utils/moment');
 
 exports.createUser = attrs => {
@@ -44,5 +45,14 @@ exports.updateLastLogin = user => {
     logger.error(inspect(err));
     /* istanbul ignore next */
     throw databaseError(`Error updating a user, reason: ${err.message}`);
+  });
+};
+
+exports.updateUser = async ({ data, id, options }) => {
+  const user = await User.findByPk(id);
+  if (!user) throw notFound('User not found');
+  return user.update(data, options).catch(error => {
+    logger.error('Error updating a user, reason:', error);
+    throw databaseError(error.message);
   });
 };
