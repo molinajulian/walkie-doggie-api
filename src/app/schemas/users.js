@@ -39,3 +39,19 @@ exports.createUserSchema = {
     errorMessage: userType,
   },
 };
+
+exports.onBoardingWalkerSchema = {
+  // phone: {
+  //   in: ['body'],
+  //   isString: true,
+  //   trim: true,
+  //   isLength: { options: { min: 1 } },
+  //   errorMessage: phone,
+  // },
+  // price_per_hour:
+  // {
+  //   in: ['body'],
+  //   trim: true,
+  //   errorMessage: pricePerHour,
+  // }
+};

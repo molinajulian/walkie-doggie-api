@@ -13,9 +13,9 @@ module.exports = {
       }),
       queryInterface.addColumn('users', 'profile_photo_uri', {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       }),
-      queryInterface.addColumn('users', 'phone', { type: Sequelize.STRING, allowNull: false }),
+      queryInterface.addColumn('users', 'phone', { type: Sequelize.STRING, allowNull: true }),
       queryInterface.addColumn('users', 'score', { type: Sequelize.DOUBLE, allowNull: true }),
       queryInterface.addColumn('users', 'is_promoted', {
         type: Sequelize.BOOLEAN,

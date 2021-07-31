@@ -1,7 +1,7 @@
 const { Router: createRouter } = require('express');
 
 const usersController = require('../controllers/users');
-const { createUserSchema } = require('../schemas/users');
+const { createUserSchema, onBoardingWalkerSchema } = require('../schemas/users');
 const { validateSchemaAndFail } = require('../middlewares/params_validator');
 
 const userRouter = createRouter();
@@ -9,4 +9,6 @@ const userRouter = createRouter();
 exports.init = app => {
   app.use('/users', userRouter);
   userRouter.post('/', [validateSchemaAndFail(createUserSchema)], usersController.createUser);
+  // TODO: set schema validator in the following endpoint
+  userRouter.put('/onboarding/walker/:id', [], usersController.onBoardingWalker);
 };
