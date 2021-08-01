@@ -26,7 +26,7 @@ exports.onBoardingWalker = async (req, res, next) => {
     });
     await bulkCreateRanges({ ranges, walkerId: updatedUser.id, options: { transaction } });
     transaction.commit();
-    res.status(200).json({ msg: 'User onboarded successfully' });
+    res.status(200).json({ message: 'User onboarded successfully' });
   } catch (error) {
     logger.error(error);
     transaction.rollback();
@@ -51,7 +51,7 @@ exports.onBoardingOwner = async (req, res, next) => {
     await bulkCreatePets({ pets, ownerId: updatedUser.id, options: { transaction } });
 
     transaction.commit();
-    res.status(200).json({ msg: 'User onboarded successfully' });
+    res.status(200).json({ message: 'User onboarded successfully' });
   } catch (error) {
     logger.error(error);
     transaction.rollback();

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Address.associate = ({ User }) => {
-    Address.belongsTo(User);
+    Address.hasMany(User, { as: 'users', foreignKey: 'addressId' });
   };
 
   return Address;

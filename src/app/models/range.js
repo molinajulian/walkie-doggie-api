@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Range.associate = ({ User }) => {
-    Range.belongsTo(User, { foreignKey: 'walkerId' });
+    Range.belongsTo(User, { as: 'user', foreignKey: 'walkerId' });
   };
   return Range;
 };

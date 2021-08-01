@@ -17,7 +17,7 @@ const dialectConfiguration =
       }
     : {};
 const options = {
-  logging: logging.toLowerCase() === 'true',
+  logging: true,
   dialect: 'postgres',
   protocol: 'postgres',
   ...dialectConfiguration,

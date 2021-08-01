@@ -33,7 +33,6 @@ exports.getUserBy = filters => {
       throw databaseError(`Error getting a user, reason: ${err.message}`);
     })
     .then(user => {
-      console.log(user);
       if (!user) throw notFound('User not found');
       return user;
     });

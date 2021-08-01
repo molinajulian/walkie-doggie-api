@@ -15,8 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       coverLetter: { type: DataTypes.STRING, allowNull: true },
       pricePerHour: { type: DataTypes.DOUBLE, allowNull: true },
       wasOnboarded: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
-      // Check if there is any way to avoid defining this addressId here
-      addressId: { type: DataTypes.INTEGER, allowNull: true },
+      addressId: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'addresses', key: 'id' } },
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
     },
@@ -24,9 +23,9 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.associate = ({ Address, Pet, Range }) => {
-    User.hasOne(Address, { foreignKey: 'addressId' });
-    User.hasMany(Pet);
-    User.hasMany(Range);
+    User.belongsTo(Address, { as: 'address', foreignKey: 'addressId' });
+    User.hasMany(Pet, { as: 'pets', foreignKey: 'ownerId' });
+    User.hasMany(Range, { as: 'ranges', foreignKey: 'walkerId' });
   };
   return User;
 };

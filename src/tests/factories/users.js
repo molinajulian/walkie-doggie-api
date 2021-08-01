@@ -4,7 +4,7 @@ const { factoryWithCustomizedValue } = require('./factory_by_models');
 
 const modelName = 'User';
 
-factoryWithCustomizedValue(modelName, { deletedAt: null });
+factoryWithCustomizedValue(modelName, { deletedAt: null, addressId: null });
 
 module.exports = {
   createUser: user => factory.create(modelName, user),
