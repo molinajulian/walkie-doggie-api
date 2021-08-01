@@ -10,9 +10,7 @@ exports.login = (req, res, next) =>
       compareHash(req.body.password, user.password).then(match => {
         if (!match) throw invalidCredentials();
         return generateTokens({ user, req }).then(({ accessToken, refreshToken }) =>
-          updateLastLogin(user).then(() =>
-            res.status(200).send(login({ accessToken, refreshToken })),
-          ),
+          updateLastLogin(user).then(() => res.status(200).send(login({ accessToken, refreshToken }))),
         );
       }),
     )
@@ -21,8 +19,6 @@ exports.login = (req, res, next) =>
 exports.refresh = (req, res, next) =>
   verifyAndCreateToken({ type: 'refresh', req })
     .then(newAccessToken =>
-      res
-        .status(200)
-        .send(refresh({ accessToken: newAccessToken, refreshToken: req.body.refresh_token })),
+      res.status(200).send(refresh({ accessToken: newAccessToken, refreshToken: req.body.refresh_token })),
     )
     .catch(next);

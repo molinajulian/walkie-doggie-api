@@ -42,9 +42,7 @@ const intValidation = (model, key) => {
   }
   if (model.rawAttributes[key].validate) {
     const { validate } = model.rawAttributes[key];
-    return (
-      generateIntByValidations(validate) || factory.chance('integer', { min: 1, max: 1000000 })
-    );
+    return generateIntByValidations(validate) || factory.chance('integer', { min: 1, max: 1000000 });
   }
   return factory.chance('integer', { min: 1, max: 1000000 });
 };

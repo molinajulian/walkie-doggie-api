@@ -3,11 +3,7 @@ const { promisifyAll } = require('bluebird');
 const { signAsync, verifyAsync } = promisifyAll(require('jsonwebtoken'));
 const { inspect } = require('util');
 const { moment } = require('../utils/moment');
-const {
-  expirationTimeAccessToken,
-  expirationTimeRefreshToken,
-  secret,
-} = require('../../config').session;
+const { expirationTimeAccessToken, expirationTimeRefreshToken, secret } = require('../../config').session;
 const logger = require('../logger');
 const { internalServerError } = require('../errors/builders');
 

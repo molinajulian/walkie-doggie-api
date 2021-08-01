@@ -6,9 +6,7 @@ const formatValidationErrors = validationErrors =>
 
 const throwValidationErrors = (req, _, next) => {
   const validationErrors = validationResult(req);
-  return next(
-    !validationErrors.isEmpty() && invalidParams(formatValidationErrors(validationErrors)),
-  );
+  return next(!validationErrors.isEmpty() && invalidParams(formatValidationErrors(validationErrors)));
 };
 
 exports.validateSchema = schema => checkSchema(schema);

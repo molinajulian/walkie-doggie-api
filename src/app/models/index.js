@@ -4,17 +4,7 @@ const Sequelize = require('sequelize');
 
 const config = require('../../config');
 
-const {
-  url,
-  dialect,
-  username,
-  password,
-  port,
-  database,
-  host,
-  logging,
-  sslModeOn,
-} = config.database;
+const { url, dialect, username, password, port, database, host, logging, sslModeOn } = config.database;
 const dialectConfiguration =
   sslModeOn === 'true'
     ? {
@@ -34,9 +24,7 @@ const options = {
 };
 const connectionString =
   url ||
-  `${dialect}://${username}:${password}@${host}:${port}/${database}${
-    sslModeOn === 'true' ? '?sslmode=require' : ''
-  }`;
+  `${dialect}://${username}:${password}@${host}:${port}/${database}${sslModeOn === 'true' ? '?sslmode=require' : ''}`;
 const basename = path.basename(__filename);
 const db = {};
 const sequelize = new Sequelize(connectionString, options);
