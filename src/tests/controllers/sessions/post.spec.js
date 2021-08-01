@@ -44,21 +44,15 @@ describe('POST /sessions/login', () => {
       expect(successfulResponse.statusCode).toEqual(200);
     });
     it('Should return the expected keys in body', () => {
-      expect(Object.keys(successfulResponse.body)).toStrictEqual(
-        expect.arrayContaining(expectedKeys),
-      );
+      expect(Object.keys(successfulResponse.body)).toStrictEqual(expect.arrayContaining(expectedKeys));
     });
     it('Should return jwt tokens in body', () => {
       Object.values(successfulResponse.body).forEach(token => {
-        expect(token).toMatch(
-          new RegExp(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/),
-        );
+        expect(token).toMatch(new RegExp(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/));
       });
     });
     it('Should update the last access field for the user', () => {
-      expect(moment(userCreated.lastAccess).format('YYYY-MM-DD HH:mm')).toBe(
-        moment().format('YYYY-MM-DD HH:mm'),
-      );
+      expect(moment(userCreated.lastAccess).format('YYYY-MM-DD HH:mm')).toBe(moment().format('YYYY-MM-DD HH:mm'));
     });
   });
   describe('Fail for invalid request', () => {
@@ -69,14 +63,10 @@ describe('POST /sessions/login', () => {
       expect(invalidParamsResponse.body.internal_code).toBe('invalid_params');
     });
     it('Should return an error indicating the provided email is not valid', () => {
-      expect(invalidParamsResponse.body.message).toContain(
-        'email must be a string and be contained in body',
-      );
+      expect(invalidParamsResponse.body.message).toContain('email must be a string and be contained in body');
     });
     it('Should return an error indicating the provided password is not valid', () => {
-      expect(invalidParamsResponse.body.message).toContain(
-        'password must be a string and be contained in body',
-      );
+      expect(invalidParamsResponse.body.message).toContain('password must be a string and be contained in body');
     });
   });
   describe("Fail because the user doesn't exist", () => {
@@ -151,9 +141,7 @@ describe('POST /sessions/refresh', () => {
     });
     it('Should return jwt tokens in body', () => {
       Object.values(successfulResponse.body).forEach(token => {
-        expect(token).toMatch(
-          new RegExp(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/),
-        );
+        expect(token).toMatch(new RegExp(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/));
       });
     });
   });
@@ -194,9 +182,7 @@ describe('POST /sessions/refresh', () => {
       expect(tokenTypeErrorResponse.body.internal_code).toBe('invalid_token');
     });
     it('Should return a message indicating the provided token is not an access token', () => {
-      expect(tokenTypeErrorResponse.body.message).toEqual(
-        'The provided token is not an access token',
-      );
+      expect(tokenTypeErrorResponse.body.message).toEqual('The provided token is not an access token');
     });
   });
 });

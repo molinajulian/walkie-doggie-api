@@ -1,10 +1,6 @@
 const { createUserSerializer } = require('../serializers/users');
-const { createUser, updateUser } = require('../services/users');
-const {
-  createUserMapper,
-  onBoardingWalkerMapper,
-  onBoardingOwnerMapper,
-} = require('../mappers/users');
+const { createUser, updateUser, getUserBy } = require('../services/users');
+const { createUserMapper, onBoardingWalkerMapper, onBoardingOwnerMapper } = require('../mappers/users');
 const { createAddress } = require('../services/addresses');
 const { bulkCreateRanges } = require('../services/ranges');
 const { bulkCreatePets } = require('../services/pets');
@@ -21,22 +17,20 @@ exports.onBoardingWalker = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { address: addressData, ranges, ...restData } = onBoardingWalkerMapper(req);
+    const user = await getUserBy({ id });
     const address = await createAddress({ data: { ...addressData }, options: { transaction } });
-    logger.info('Address created');
     const updatedUser = await updateUser({
-      id,
+      user,
       data: { addressId: address.get('id'), ...restData },
       options: { transaction },
     });
-    logger.info('User entity updated');
     await bulkCreateRanges({ ranges, walkerId: updatedUser.id, options: { transaction } });
-    logger.info('Ranges created succesfully');
     transaction.commit();
-    res.status(200).json(updatedUser);
+    res.status(200).json({ msg: 'User onboarded successfully' });
   } catch (error) {
-    logger.error('Error onboarding WALKER:', error);
+    logger.error(error);
     transaction.rollback();
-    res.status(500).json(error);
+    next(error);
   }
 };
 
@@ -44,11 +38,12 @@ exports.onBoardingOwner = async (req, res, next) => {
   const transaction = await sequelize.transaction();
   try {
     const { id } = req.params;
+    const user = await getUserBy({ id });
     const { address: addressData, pets, ...restData } = onBoardingOwnerMapper(req);
     const address = await createAddress({ data: { ...addressData }, options: { transaction } });
 
     const updatedUser = await updateUser({
-      id,
+      user,
       data: { addressId: address.get('id'), ...restData },
       options: { transaction },
     });
@@ -56,10 +51,10 @@ exports.onBoardingOwner = async (req, res, next) => {
     await bulkCreatePets({ pets, ownerId: updatedUser.id, options: { transaction } });
 
     transaction.commit();
-    res.status(200).json('User updated successfully');
+    res.status(200).json({ msg: 'User onboarded successfully' });
   } catch (error) {
-    logger.error('Error onboarding WALKER:' + error);
+    logger.error(error);
     transaction.rollback();
-    res.status(500).json(error);
+    next(error);
   }
 };

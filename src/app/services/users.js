@@ -33,6 +33,7 @@ exports.getUserBy = filters => {
       throw databaseError(`Error getting a user, reason: ${err.message}`);
     })
     .then(user => {
+      console.log(user);
       if (!user) throw notFound('User not found');
       return user;
     });
@@ -48,11 +49,9 @@ exports.updateLastLogin = user => {
   });
 };
 
-exports.updateUser = async ({ data, id, options }) => {
-  const user = await User.findByPk(id);
-  if (!user) throw notFound('User not found');
+exports.updateUser = async ({ user, data, options }) => {
   return user.update(data, options).catch(error => {
-    logger.error('Error updating a user, reason:', error);
-    throw databaseError(error.message);
+    logger.error(inspect(error));
+    throw databaseError(`Error updating a user, reason: ${error.message}`);
   });
 };

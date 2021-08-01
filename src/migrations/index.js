@@ -42,7 +42,5 @@ const umzugOptions = {
 
 exports.check = () => {
   const umzug = new Umzug(umzugOptions);
-  return umzug
-    .pending()
-    .then(migrations => (migrations.length ? pendingHandle(umzug) : Promise.resolve()));
+  return umzug.pending().then(migrations => (migrations.length ? pendingHandle(umzug) : Promise.resolve()));
 };

@@ -6,7 +6,6 @@ exports.bulkCreatePets = ({ pets, ownerId, options }) => {
   const petsToCreate = pets.map(pet => {
     return { ...pet, ownerId };
   });
-
   return Pets.bulkCreate(petsToCreate, options).catch(error => {
     logger.error('Error creating multiple pets, reason:' + error);
     databaseError(error.message);
