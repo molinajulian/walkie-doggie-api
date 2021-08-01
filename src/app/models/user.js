@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       isPromoted: { type: DataTypes.BOOLEAN, allowNull: true },
       coverLetter: { type: DataTypes.STRING, allowNull: true },
       pricePerHour: { type: DataTypes.DOUBLE, allowNull: true },
+      wasOnboarded: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
       // Check if there is any way to avoid defining this addressId here
       addressId: { type: DataTypes.INTEGER, allowNull: true },
       createdAt: { type: DataTypes.DATE, allowNull: false },

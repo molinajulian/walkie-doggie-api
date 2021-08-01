@@ -29,6 +29,10 @@ module.exports = {
         type: Sequelize.DOUBLE,
         allowNull: true,
       }),
+      queryInterface.addColumn('users', 'was_onboarded', {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      }),
     ]),
   down: (queryInterface, Sequelize) =>
     Promise.all([

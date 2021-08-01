@@ -24,6 +24,10 @@ exports.checkUserOwnerOnBoarding = (req, _, next) =>
         const errors = [`User must be of type ${expectedUserType}`];
         return next(invalidParams(errors));
       }
+      if (user.wasOnboarded) {
+        const errors = [`User was already onboarded`];
+        return next(invalidParams(errors));
+      }
       return next();
     })
     .catch(next);
@@ -34,6 +38,10 @@ exports.checkUserWalkerOnBoarding = (req, _, next) =>
       const expectedUserType = USER_TYPES.WALKER;
       if (user.type !== expectedUserType) {
         const errors = [`User must be of type ${expectedUserType}`];
+        return next(invalidParams(errors));
+      }
+      if (user.wasOnboarded) {
+        const errors = [`User was already onboarded`];
         return next(invalidParams(errors));
       }
       return next();

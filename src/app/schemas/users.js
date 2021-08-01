@@ -7,6 +7,7 @@ const {
   phone,
   pricePerHour,
   coverLetter,
+  profilePhotoUri,
   descriptionAddress,
   longitudeAddress,
   latitudeAddress,
@@ -14,8 +15,16 @@ const {
   dayOfWeek,
   startAt,
   endAt,
+  pets,
+  namePet,
+  breedPet,
+  birthYearPet,
+  genderPet,
+  weightPet,
+  photoUriPet,
+  descriptionPet,
 } = require('../errors/schema_messages');
-const { USER_TYPES, DAYS_OF_WEEK } = require('../utils/constants');
+const { USER_TYPES, DAYS_OF_WEEK, PET_GENDERS } = require('../utils/constants');
 const { REGEX_HOUR } = require('../utils/regex');
 
 exports.createUserSchema = {
@@ -74,7 +83,14 @@ exports.onBoardingWalkerSchema = {
     in: ['body'],
     isString: true,
     trim: true,
+    optional: { options: { nullable: true } },
     errorMessage: coverLetter,
+  },
+  profile_photo_uri: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: profilePhotoUri,
   },
   'address.description': {
     isString: true,
@@ -117,5 +133,79 @@ exports.onBoardingWalkerSchema = {
       options: REGEX_HOUR,
       errorMessage: endAt,
     },
+  },
+};
+
+exports.onBoardingOwnerSchema = {
+  phone: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    isLength: { options: { min: 1 } },
+    errorMessage: phone,
+  },
+  profile_photo_uri: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: profilePhotoUri,
+  },
+  'address.description': {
+    isString: true,
+    trim: true,
+    errorMessage: descriptionAddress,
+  },
+  'address.latitude': {
+    isString: true,
+    trim: true,
+    errorMessage: latitudeAddress,
+  },
+  'address.longitude': {
+    isString: true,
+    trim: true,
+    errorMessage: longitudeAddress,
+  },
+  pets: {
+    in: ['body'],
+    isArray: true,
+    isLength: { options: { min: 1 } },
+    errorMessage: pets,
+  },
+  'pets.*.name': {
+    isString: true,
+    trim: true,
+    errorMessage: namePet,
+  },
+  'pets.*.breed': {
+    isString: true,
+    trim: true,
+    errorMessage: breedPet,
+  },
+  'pets.*.birth_year': {
+    in: ['body'],
+    isNumeric: true,
+    errorMessage: birthYearPet,
+  },
+  'pets.*.gender': {
+    trim: true,
+    custom: {
+      options: value => Object.values(PET_GENDERS).includes(value),
+    },
+    errorMessage: genderPet,
+  },
+  'pets.*.weight': {
+    in: ['body'],
+    isNumeric: true,
+    errorMessage: weightPet,
+  },
+  'pets.*.photo_uri': {
+    isString: true,
+    trim: true,
+    errorMessage: photoUriPet,
+  },
+  'pets.*.description': {
+    isString: true,
+    trim: true,
+    errorMessage: descriptionPet,
   },
 };

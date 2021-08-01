@@ -21,7 +21,7 @@ exports.onBoardingWalker = async (req, res, next) => {
     const address = await createAddress({ data: { ...addressData }, options: { transaction } });
     const updatedUser = await updateUser({
       user,
-      data: { addressId: address.get('id'), ...restData },
+      data: { addressId: address.get('id'), wasOnboarded: true, ...restData },
       options: { transaction },
     });
     await bulkCreateRanges({ ranges, walkerId: updatedUser.id, options: { transaction } });
@@ -44,7 +44,7 @@ exports.onBoardingOwner = async (req, res, next) => {
 
     const updatedUser = await updateUser({
       user,
-      data: { addressId: address.get('id'), ...restData },
+      data: { addressId: address.get('id'), wasOnboarded: true, ...restData },
       options: { transaction },
     });
 
