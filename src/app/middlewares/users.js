@@ -1,4 +1,4 @@
-const { notFound, invalidToken, invalidParams } = require('../errors/builders');
+const { notFound, invalidToken, invalidParams, internalServerError } = require('../errors/builders');
 const { getUserBy } = require('../services/users');
 const { verifyAccessToken } = require('../services/sessions');
 const { USER_TYPES } = require('../utils/constants');
@@ -21,12 +21,10 @@ exports.checkUserOwnerOnBoarding = (req, _, next) =>
     .then(user => {
       const expectedUserType = USER_TYPES.OWNER;
       if (user.type !== expectedUserType) {
-        const errors = [`User must be of type ${expectedUserType}`];
-        return next(invalidParams(errors));
+        return next(internalServerError(`User must be of type ${expectedUserType}`));
       }
       if (user.wasOnboarded) {
-        const errors = [`User was already onboarded`];
-        return next(invalidParams(errors));
+        return next(internalServerError(`User was already onboarded`));
       }
       return next();
     })
@@ -37,12 +35,10 @@ exports.checkUserWalkerOnBoarding = (req, _, next) =>
     .then(user => {
       const expectedUserType = USER_TYPES.WALKER;
       if (user.type !== expectedUserType) {
-        const errors = [`User must be of type ${expectedUserType}`];
-        return next(invalidParams(errors));
+        return next(internalServerError(`User must be of type ${expectedUserType}`));
       }
       if (user.wasOnboarded) {
-        const errors = [`User was already onboarded`];
-        return next(invalidParams(errors));
+        return next(internalServerError(`User was already onboarded`));
       }
       return next();
     })

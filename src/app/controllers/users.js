@@ -16,8 +16,8 @@ exports.onBoardingWalker = async (req, res, next) => {
   const transaction = await sequelize.transaction();
   try {
     const { id } = req.params;
-    const { address: addressData, ranges, ...restData } = onBoardingWalkerMapper(req);
     const user = await getUserBy({ id });
+    const { address: addressData, ranges, ...restData } = onBoardingWalkerMapper(req);
     const address = await createAddress({ data: { ...addressData }, options: { transaction } });
     const updatedUser = await updateUser({
       user,
