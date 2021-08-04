@@ -29,7 +29,7 @@ describe('PUT /users/onboarding/owner', () => {
     // eslint-disable-next-line camelcase
     ({ access_token } = loginResponse.body);
   });
-  describe.only('Successful response', () => {
+  describe('Successful response', () => {
     beforeAll(async () => {
       successfulResponse = await getResponse({
         endpoint: `/users/onboarding/owner/${id}`,
@@ -65,7 +65,7 @@ describe('PUT /users/onboarding/owner', () => {
       expect(userCreated.pets[0].photoUri).toEqual(createFakeOwnerOnboardingParams.pets[0].photo_uri);
       expect(userCreated.pets[0].description).toEqual(createFakeOwnerOnboardingParams.pets[0].description);
     });
-    it.only('Should insert the expected address', () => {
+    it('Should insert the expected address', () => {
       expect(userCreated.address.description).toEqual(createFakeOwnerOnboardingParams.address.description);
       expect(userCreated.address.latitude).toEqual(createFakeOwnerOnboardingParams.address.latitude);
       expect(userCreated.address.longitude).toEqual(createFakeOwnerOnboardingParams.address.longitude);
@@ -74,7 +74,7 @@ describe('PUT /users/onboarding/owner', () => {
       expect(userCreated.wasOnboarded).toEqual(true);
     });
   });
-  describe.skip('Not Found response', () => {
+  describe('Not Found response', () => {
     beforeAll(async () => {
       notFoundResponse = await getResponse({
         endpoint: `/users/onboarding/owner/2`,
@@ -85,16 +85,16 @@ describe('PUT /users/onboarding/owner', () => {
     });
 
     it('Should return status code 404', () => {
-      expect(successfulResponse.statusCode).toEqual(404);
+      expect(notFoundResponse.statusCode).toEqual(404);
     });
-    it('Should return internal_code invalid_params', () => {
-      expect(invalidParamsResponse.body.internal_code).toBe('not_found');
+    it('Should return internal_code not_found', () => {
+      expect(notFoundResponse.body.internal_code).toBe('not_found');
     });
-    it('Should return an error indicating the provided user id is not valid', () => {
-      expect(invalidParamsResponse.body.message).toContain('User not found');
+    it('Should return an error indicating the provided user was not found', () => {
+      expect(notFoundResponse.body.message).toContain('User not found');
     });
   });
-  describe.skip('Invalid Params response', () => {
+  describe('Invalid Params response', () => {
     beforeAll(async () => {
       invalidParamsResponse = await getResponse({
         endpoint: `/users/onboarding/owner/${id}`,
@@ -105,15 +105,16 @@ describe('PUT /users/onboarding/owner', () => {
       userCreated = await User.findOne({ where: { id } });
     });
 
-    it('Should return status code 200', () => {
-      expect(successfulResponse.statusCode).toEqual(200);
+    it('Should return status code 400', () => {
+      expect(invalidParamsResponse.statusCode).toEqual(400);
     });
-    it('Should return the expected keys in body', () => {
-      expect(Object.keys(successfulResponse.body)).toStrictEqual(expect.arrayContaining(expectedKeys));
+    it('Should return internal_code invalid_params', () => {
+      expect(invalidParamsResponse.body.internal_code).toBe('invalid_params');
     });
-    it('Should insert the expected field values', () => {
-      expect(userCreated.phone).toEqual(createFakeOwnerOnboardingParams.phone);
-      expect(userCreated.profilePhotoUri).toEqual(createFakeOwnerOnboardingParams.profile_photo_uri);
+    it('Should return an error indicating there are invalid parameters', () => {
+      expect(invalidParamsResponse.body.message).toContain(
+        'longitude must be a string and be contained in body.address',
+      );
     });
   });
 });

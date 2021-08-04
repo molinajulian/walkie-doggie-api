@@ -93,7 +93,7 @@ describe('POST /sessions/login', () => {
   });
 });
 
-describe.skip('POST /sessions/refresh', () => {
+describe('POST /sessions/refresh', () => {
   let successfulResponse = {};
   let notFoundResponse = {};
   let invalidParamsResponse = {};
