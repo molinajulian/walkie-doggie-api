@@ -232,7 +232,6 @@ describe('PUT /users/onboarding/walker', () => {
     beforeAll(async () => {
       ({ id } = await createUser({ email, password: hashedPassword, type: USER_TYPES.WALKER }));
       const accessToken = await doFakeLogin(email, password);
-      console.log(fakeSuccessParams);
       successfulResponse = await getResponse({
         endpoint: `${endpontOnboardingWalker}/${id}`,
         headers: { Authorization: accessToken },
