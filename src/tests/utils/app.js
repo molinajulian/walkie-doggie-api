@@ -9,9 +9,7 @@ const truncateTable = (model, transaction) =>
   model.destroy({ truncate: true, cascade: true, force: true, restartIdentity: true, transaction });
 
 exports.truncateDatabase = () =>
-  sequelizeInstance.transaction(transaction =>
-    Promise.all(tables.map(table => truncateTable(table, transaction)))
-  );
+  sequelizeInstance.transaction(transaction => Promise.all(tables.map(table => truncateTable(table, transaction))));
 
 exports.getResponse = ({ endpoint, headers = {}, query = {}, body = {}, method = 'put' }) =>
   request(app)

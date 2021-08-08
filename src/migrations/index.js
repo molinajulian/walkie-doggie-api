@@ -8,7 +8,7 @@ const getError = () =>
   new Error(
     automaticallyUp
       ? 'There are pending migrations that could not be executed'
-      : 'Pending migrations, run: npm run migrations'
+      : 'Pending migrations, run: npm run migrations',
   );
 
 const pendingHandle = umzug => {
@@ -26,7 +26,7 @@ const migrationsParams = [
   sequelize.constructor,
   () => {
     throw new Error('Migration tried to use old style "done" callback.upgrade');
-  }
+  },
 ];
 
 const umzugOptions = {
@@ -36,8 +36,8 @@ const umzugOptions = {
   migrations: {
     params: migrationsParams,
     path: `${__dirname}/migrations`,
-    pattern: /\.js$/
-  }
+    pattern: /\.js$/,
+  },
 };
 
 exports.check = () => {

@@ -11,22 +11,20 @@ const dialectConfiguration =
         dialectOptions: {
           ssl: {
             require: true,
-            rejectUnauthorized: false
-          }
-        }
+            rejectUnauthorized: false,
+          },
+        },
       }
     : {};
 const options = {
   logging: logging.toLowerCase() === 'true',
   dialect: 'postgres',
   protocol: 'postgres',
-  ...dialectConfiguration
+  ...dialectConfiguration,
 };
 const connectionString =
   url ||
-  `${dialect}://${username}:${password}@${host}:${port}/${database}${
-    sslModeOn === 'true' ? '?sslmode=require' : ''
-  }`;
+  `${dialect}://${username}:${password}@${host}:${port}/${database}${sslModeOn === 'true' ? '?sslmode=require' : ''}`;
 const basename = path.basename(__filename);
 const db = {};
 const sequelize = new Sequelize(connectionString, options);

@@ -3,6 +3,7 @@ const logger = require('../logger');
 const { hashString } = require('../utils/hashes');
 const { alreadyExist, databaseError, notFound } = require('../errors/builders');
 const { User } = require('../models');
+
 const { moment } = require('../utils/moment');
 
 exports.createUser = attrs => {
@@ -18,7 +19,7 @@ exports.createUser = attrs => {
       .then(([instance, created]) => {
         if (!created) throw alreadyExist('The provided user already exist');
         return instance;
-      })
+      }),
   );
 };
 
@@ -44,5 +45,12 @@ exports.updateLastLogin = user => {
     logger.error(inspect(err));
     /* istanbul ignore next */
     throw databaseError(`Error updating a user, reason: ${err.message}`);
+  });
+};
+
+exports.updateUser = async ({ user, data, options }) => {
+  return user.update(data, options).catch(error => {
+    logger.error(inspect(error));
+    throw databaseError(`Error updating a user, reason: ${error.message}`);
   });
 };

@@ -8,16 +8,15 @@
   },
   "scripts": {
     "eslint-check": "eslint --print-config ./src/.eslintrc.js --ignore-pattern ./src/.eslintrc.js | eslint-config-prettier-check",
-    "lint": "eslint \"**/*.js\" --ignore-pattern ./src/.eslintrc.js",
-    "lint-diff": "git diff --diff-filter=ACM --name-only --cached --relative | grep \\\\.js$ | xargs eslint --ignore-pattern ./src/.eslintrc.js",
-    "lint-fix": "npm run lint -- --fix",
+    "lint": "eslint --ext .js src",
+    "lint:fix": "eslint --ext .js src --fix",
     "create-migration": "npx sequelize migration:create --options-path=src/.sequelizerc",
     "migrations": "npx sequelize --options-path=src/.sequelizerc db:migrate",
-    "migrations-undo": "npx sequelize --opti-path=src/.sequelizerc db:migrate:undo",
+    "migrations-undo": "npx sequelize --options-path=src/.sequelizerc db:migrate:undo",
     "migrations-undo-all": "npx sequelize --options-path=src/.sequelizerc db:migrate:undo:all",
     "migrations-reset": "npm run migrations-undo-all && npm run migrations",
-    "test": "jest --runInBand --detectOpenHandles --forceExit --coverage --colors --passWithNoTests",
-    "start:dev": "npm run migrations; nodemon --inspect=0.0.0.0 src/server.js",
+    "test": "jest  --detectOpenHandles --forceExit --coverage --colors --passWithNoTests",
+    "start:dev": "npm run migrations; nodemon --legacy-watch --inspect=0.0.0.0 src/server.js",
     "start:prod": "npm run migrations; node src/server.js",
     "start:test": "npm run migrations-reset; npm test",
     "development": "npm start",
@@ -66,6 +65,8 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.32.0",
     "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
     "eslint-config-wolox": "^4.0.0",
     "eslint-config-wolox-node": "^3.0.0",
     "eslint-plugin-import": "^2.17.3",
@@ -73,6 +74,7 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-standard": "^5.0.0",
     "husky": "^4.2.3",
     "jest": "^25.3.0",
     "nodemon": "^2.0.2",
@@ -82,7 +84,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint-fix;"
+      "pre-commit": "npm run lint:fix;"
     }
   },
   "jest": {
@@ -91,14 +93,6 @@
       "/node_modules/",
       "/src/app/telegram/index.js"
     ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 70,
-        "functions": 70,
-        "lines": 80,
-        "statements": 80
-      }
-    },
     "collectCoverageFrom": [
       "**/*.js",
       "!**/node_modules/**",

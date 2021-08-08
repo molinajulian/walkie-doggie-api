@@ -21,22 +21,22 @@ describe('POST /sessions/login', () => {
     successfulResponse = await getResponse({
       endpoint: '/sessions/login',
       method: 'post',
-      body: { email, password }
+      body: { email, password },
     });
     userCreated = await User.findOne({ where: { id } });
     invalidCredentialsResponse = await getResponse({
       endpoint: '/sessions/login',
       method: 'post',
-      body: { email, password: 'wrong' }
+      body: { email, password: 'wrong' },
     });
     notFoundResponse = await getResponse({
       endpoint: '/sessions/login',
       method: 'post',
-      body: { email: 'fake@domain.com', password: 'invalid-pass' }
+      body: { email: 'fake@domain.com', password: 'invalid-pass' },
     });
     invalidParamsResponse = await getResponse({
       endpoint: '/sessions/login',
-      method: 'post'
+      method: 'post',
     });
   });
   describe('Successful response', () => {
@@ -52,9 +52,7 @@ describe('POST /sessions/login', () => {
       });
     });
     it('Should update the last access field for the user', () => {
-      expect(moment(userCreated.lastAccess).format('YYYY-MM-DD HH:mm')).toBe(
-        moment().format('YYYY-MM-DD HH:mm')
-      );
+      expect(moment(userCreated.lastAccess).format('YYYY-MM-DD HH:mm')).toBe(moment().format('YYYY-MM-DD HH:mm'));
     });
   });
   describe('Fail for invalid request', () => {
@@ -68,9 +66,7 @@ describe('POST /sessions/login', () => {
       expect(invalidParamsResponse.body.message).toContain('email must be a string and be contained in body');
     });
     it('Should return an error indicating the provided password is not valid', () => {
-      expect(invalidParamsResponse.body.message).toContain(
-        'password must be a string and be contained in body'
-      );
+      expect(invalidParamsResponse.body.message).toContain('password must be a string and be contained in body');
     });
   });
   describe("Fail because the user doesn't exist", () => {
@@ -119,29 +115,29 @@ describe('POST /sessions/refresh', () => {
       endpoint: '/sessions/refresh',
       method: 'post',
       headers: { Authorization: accessTokenToInvalidate },
-      body: { refresh_token: validRefreshToken }
+      body: { refresh_token: validRefreshToken },
     });
     notFoundResponse = await getResponse({
       endpoint: '/sessions/refresh',
       method: 'post',
       headers: { Authorization: invalidAccessToken },
-      body: { refresh_token: validRefreshToken }
+      body: { refresh_token: validRefreshToken },
     });
     invalidParamsResponse = await getResponse({
       endpoint: '/sessions/refresh',
-      method: 'post'
+      method: 'post',
     });
     expiredTokenResponse = await getResponse({
       endpoint: '/sessions/refresh',
       method: 'post',
       headers: { Authorization: expiredAccessToken },
-      body: { refresh_token: validRefreshToken }
+      body: { refresh_token: validRefreshToken },
     });
     tokenTypeErrorResponse = await getResponse({
       endpoint: '/sessions/refresh',
       method: 'post',
       headers: { Authorization: validRefreshToken },
-      body: { refresh_token: validRefreshToken }
+      body: { refresh_token: validRefreshToken },
     });
   });
   describe('Successful response', () => {
@@ -166,12 +162,12 @@ describe('POST /sessions/refresh', () => {
     });
     it('Should return an error indicating the provided authorization header is not valid', () => {
       expect(invalidParamsResponse.body.message).toContain(
-        'Authorization must be a jwt token and must be contained in headers'
+        'Authorization must be a jwt token and must be contained in headers',
       );
     });
     it('Should return an error indicating the provided refresh_token is not valid', () => {
       expect(invalidParamsResponse.body.message).toContain(
-        'refresh_token must be a jwt token and must be contained in body'
+        'refresh_token must be a jwt token and must be contained in body',
       );
     });
   });

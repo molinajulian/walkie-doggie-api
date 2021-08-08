@@ -29,7 +29,7 @@ const generatorIntByValidations = (key, validate) => {
   }
   return {
     [MAX]: factory.chance('integer', { max: validate.max }),
-    [MIN]: factory.chance('integer', { min: validate.min })
+    [MIN]: factory.chance('integer', { min: validate.min }),
   }[key];
 };
 
@@ -52,7 +52,7 @@ const randomJsonCreate = () => {
   const attributeName = chance.string({ pool: 'abcdefghi' });
   const value = factory.chance('string', { pool: 'abcdefghi' });
   return {
-    [attributeName]: value
+    [attributeName]: value,
   };
 };
 
@@ -82,7 +82,7 @@ const generatorByDatatype = (type, model, key) => {
     [DATE]: factory.chance('date', { string: true }),
     [DATEONLY]: new Date(chance.date({ string: true })),
     [JSONTYPE]: randomJsonCreate(),
-    [FLOAT]: factory.chance('floating')
+    [FLOAT]: factory.chance('floating'),
   }[type];
 };
 

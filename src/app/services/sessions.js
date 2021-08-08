@@ -20,14 +20,14 @@ exports.generateAccessToken = (user, req) =>
       exp: moment()
         .clone()
         .add(parseInt(expirationTimeAccessToken), 'minutes')
-        .unix()
+        .unix(),
     },
     secret,
     {
       issuer: getIss(req),
       jwtid: uuid(),
-      subject: `${user.id}`
-    }
+      subject: `${user.id}`,
+    },
   );
 
 exports.generateTokens = async ({ req, user }) => {
@@ -43,14 +43,14 @@ exports.generateTokens = async ({ req, user }) => {
         exp: moment()
           .clone()
           .add(parseInt(expirationTimeRefreshToken), 'minutes')
-          .unix()
+          .unix(),
       },
       secret,
       {
         issuer: iss,
         jwtid: uuid(),
-        subject: `${user.id}`
-      }
+        subject: `${user.id}`,
+      },
     );
     return { accessToken, refreshToken };
   } catch (err) {

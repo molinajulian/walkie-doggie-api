@@ -5,12 +5,12 @@ const {
   INVALID_PARAMS,
   NOT_FOUND,
   INVALID_CREDENTIALS,
-  INVALID_TOKEN
+  INVALID_TOKEN,
 } = require('./internal_codes');
 
 const buildError = (message, internalCode) => ({
   message,
-  internalCode
+  internalCode,
 });
 
 exports.databaseError = message => buildError(message, DATABASE_ERROR);

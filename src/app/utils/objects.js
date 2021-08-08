@@ -12,5 +12,5 @@ exports.objectToSnakeCase = camelCaseObject =>
   changeCaseObject({
     originalObject: camelCaseObject,
     caseFunction: snakeCase,
-    nestedCaseFunction: exports.objectToSnakeCase
+    nestedCaseFunction: exports.objectToSnakeCase,
   });
