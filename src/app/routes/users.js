@@ -1,7 +1,7 @@
 const { Router: createRouter } = require('express');
 
 const usersController = require('../controllers/users');
-const { checkTokenAndSetUser } = require('../middlewares/authorization');
+const { checkTokenAndSetUser } = require('../middlewares/users');
 const { createUserSchema, onBoardingWalkerSchema, onBoardingOwnerSchema } = require('../schemas/users');
 const { validateSchemaAndFail } = require('../middlewares/params_validator');
 const { checkUserOwnerOnBoarding, checkUserWalkerOnBoarding } = require('../middlewares/users');

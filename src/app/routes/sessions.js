@@ -1,7 +1,7 @@
 const { Router: createRouter } = require('express');
 
 const sessionsController = require('../controllers/sessions');
-const { checkTokenAndSetUser } = require('../middlewares/authorization');
+const { checkRefreshTokenAndSetUser } = require('../middlewares/users');
 const { loginSchema, refreshSchema } = require('../schemas/sessions');
 const { validateSchemaAndFail } = require('../middlewares/params_validator');
 
@@ -12,7 +12,7 @@ exports.init = app => {
   sessionRouter.post('/login', [validateSchemaAndFail(loginSchema)], sessionsController.login);
   sessionRouter.post(
     '/refresh',
-    [validateSchemaAndFail(refreshSchema), checkTokenAndSetUser],
+    [validateSchemaAndFail(refreshSchema), checkRefreshTokenAndSetUser],
     sessionsController.refresh,
   );
 };

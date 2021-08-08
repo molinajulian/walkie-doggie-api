@@ -3,12 +3,12 @@ const { getUserBy } = require('../services/users');
 const { verifyAccessToken } = require('../services/sessions');
 const { USER_TYPES } = require('../utils/constants');
 
-exports.checkTokenAndSetUser = (req, _, next) =>
-  verifyAccessToken(req.headers.authorization)
+const checkToken = ({ token, tokenType, next, req }) =>
+  verifyAccessToken(token)
     .catch(err => next(invalidToken(err.message)))
     .then(decodedToken => {
-      if (decodedToken && decodedToken.token_use !== 'access') {
-        throw invalidParams('The provided token is not an access token');
+      if (decodedToken.token_use !== tokenType) {
+        throw invalidParams('The provided token type is not correct');
       }
       return getUserBy({ id: decodedToken.sub }).then(user => {
         if (!user) throw notFound('User not found');
@@ -17,6 +17,12 @@ exports.checkTokenAndSetUser = (req, _, next) =>
       });
     })
     .catch(next);
+
+exports.checkTokenAndSetUser = (req, _, next) =>
+  checkToken({ req, next, token: req.headers.authorization, tokenType: 'access' });
+
+exports.checkRefreshTokenAndSetUser = (req, _, next) =>
+  checkToken({ req, next, token: req.body.refresh_token, tokenType: 'refresh' });
 
 exports.checkUserOwnerOnBoarding = (req, _, next) =>
   getUserBy({ id: req.params.id })

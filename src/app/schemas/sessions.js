@@ -7,7 +7,6 @@ exports.loginSchema = {
 };
 
 exports.refreshSchema = {
-  ...authorization,
   refresh_token: {
     in: ['body'],
     isJWT: true,

@@ -101,27 +101,27 @@ describe('POST /sessions/refresh', () => {
   const invalidatedToken = {};
   let accessTokenToInvalidate = '';
   let validRefreshToken = '';
-  let invalidAccessToken = '';
-  let expiredAccessToken = '';
+  let invalidRefreshToken = '';
+  let expiredRefreshToken = '';
+  let invalidRefreshTokenType = '';
   let tokenTypeErrorResponse = {};
   beforeAll(async () => {
     accessTokenToInvalidate = await generateToken();
     validRefreshToken = await generateToken(1, 'refresh');
-    invalidAccessToken = await generateToken(20);
-    expiredAccessToken = await generateToken(1, 'access', '1 ms');
+    invalidRefreshToken = await generateToken(20, 'refresh');
+    invalidRefreshTokenType = await generateToken(1, 'access');
+    expiredRefreshToken = await generateToken(1, 'refresh', 100);
     await truncateDatabase();
     await createUser();
     successfulResponse = await getResponse({
       endpoint: '/sessions/refresh',
       method: 'post',
-      headers: { Authorization: accessTokenToInvalidate },
       body: { refresh_token: validRefreshToken },
     });
     notFoundResponse = await getResponse({
       endpoint: '/sessions/refresh',
       method: 'post',
-      headers: { Authorization: invalidAccessToken },
-      body: { refresh_token: validRefreshToken },
+      body: { refresh_token: invalidRefreshToken },
     });
     invalidParamsResponse = await getResponse({
       endpoint: '/sessions/refresh',
@@ -130,14 +130,12 @@ describe('POST /sessions/refresh', () => {
     expiredTokenResponse = await getResponse({
       endpoint: '/sessions/refresh',
       method: 'post',
-      headers: { Authorization: expiredAccessToken },
-      body: { refresh_token: validRefreshToken },
+      body: { refresh_token: expiredRefreshToken },
     });
     tokenTypeErrorResponse = await getResponse({
       endpoint: '/sessions/refresh',
       method: 'post',
-      headers: { Authorization: validRefreshToken },
-      body: { refresh_token: validRefreshToken },
+      body: { refresh_token: invalidRefreshTokenType },
     });
   });
   describe('Successful response', () => {
@@ -162,7 +160,7 @@ describe('POST /sessions/refresh', () => {
     });
     it('Should return an error indicating the provided authorization header is not valid', () => {
       expect(invalidParamsResponse.body.message).toContain(
-        'Authorization must be a jwt token and must be contained in headers',
+        'refresh_token must be a jwt token and must be contained in body',
       );
     });
     it('Should return an error indicating the provided refresh_token is not valid', () => {
@@ -190,7 +188,7 @@ describe('POST /sessions/refresh', () => {
       expect(tokenTypeErrorResponse.body.internal_code).toBe('invalid_params');
     });
     it('Should return a message indicating the provided token is not an access token', () => {
-      expect(tokenTypeErrorResponse.body.message).toEqual('The provided token is not an access token');
+      expect(tokenTypeErrorResponse.body.message).toEqual('The provided token type is not correct');
     });
   });
   describe('Fail because the access token is expired', () => {
