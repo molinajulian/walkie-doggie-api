@@ -80,3 +80,5 @@ In this mode you can connect your host machine to the database with the followin
 
 You have to run `npm run docker-test`.
 The container (in foreground) will be run the tests, print the coverage and finally will be stopped.
+
+.
