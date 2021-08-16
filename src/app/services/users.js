@@ -25,7 +25,8 @@ exports.createUser = attrs => {
 
 exports.getUserBy = filters => {
   logger.info(`Attempting to get user with filters: ${inspect(filters)}`);
-  return User.findOne({ where: filters })
+  return User.scope('complete')
+    .findOne({ where: filters })
     .catch(err => {
       /* istanbul ignore next */
       logger.error(inspect(err));

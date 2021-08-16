@@ -1,3 +1,4 @@
+const { authorization } = require('./utils');
 const {
   firstName,
   lastName,
@@ -23,6 +24,7 @@ const {
   weightPet,
   photoUriPet,
   descriptionPet,
+  idParam,
 } = require('../errors/schema_messages');
 const { USER_TYPES, DAYS_OF_WEEK, PET_GENDERS } = require('../utils/constants');
 const { REGEX_HOUR } = require('../utils/regex');
@@ -65,8 +67,21 @@ exports.createUserSchema = {
     errorMessage: userType,
   },
 };
+exports.idParamSchema = {
+  id: {
+    in: ['params'],
+    isInt: true,
+    toInt: true,
+    errorMessage: idParam,
+  },
+};
+exports.getUserSchema = {
+  ...authorization,
+  ...exports.idParamSchema,
+};
 
 exports.onBoardingWalkerSchema = {
+  ...exports.idParamSchema,
   phone: {
     in: ['body'],
     isString: true,
@@ -137,6 +152,7 @@ exports.onBoardingWalkerSchema = {
 };
 
 exports.onBoardingOwnerSchema = {
+  ...exports.idParamSchema,
   phone: {
     in: ['body'],
     isString: true,

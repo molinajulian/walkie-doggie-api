@@ -6,6 +6,7 @@ const { bulkCreateRanges } = require('../services/ranges');
 const { bulkCreatePets } = require('../services/pets');
 const { sequelizeInstance: sequelize } = require('../models');
 const logger = require('../logger');
+const { getUserSerializer } = require('../serializers/users');
 
 exports.createUser = (req, res, next) =>
   createUser(createUserMapper(req))
@@ -58,3 +59,8 @@ exports.onBoardingOwner = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.get = (req, res, next) =>
+  getUserBy({ id: req.params.id })
+    .then(user => res.status(200).json(getUserSerializer(user)))
+    .catch(next);

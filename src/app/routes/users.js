@@ -1,6 +1,7 @@
 const { Router: createRouter } = require('express');
 
 const usersController = require('../controllers/users');
+const { getUserSchema } = require('../schemas/users');
 const { checkTokenAndSetUser } = require('../middlewares/users');
 const { createUserSchema, onBoardingWalkerSchema, onBoardingOwnerSchema } = require('../schemas/users');
 const { validateSchemaAndFail } = require('../middlewares/params_validator');
@@ -21,4 +22,5 @@ exports.init = app => {
     [validateSchemaAndFail(onBoardingOwnerSchema), checkTokenAndSetUser, checkUserOwnerOnBoarding],
     usersController.onBoardingOwner,
   );
+  userRouter.get('/:id', [validateSchemaAndFail(getUserSchema), checkTokenAndSetUser], usersController.get);
 };

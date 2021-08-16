@@ -1,3 +1,9 @@
+const { Pet } = require('./pet');
+const { Address } = require('./address');
+const { Range } = require('./range');
+const { Achievement } = require('./achievement');
+const { Certification } = require('./certification');
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
@@ -19,13 +25,28 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
     },
-    { timestamps: true, underscored: true, paranoid: false, tableName: 'users' },
+    {
+      timestamps: true,
+      underscored: true,
+      paranoid: false,
+      tableName: 'users',
+    },
   );
-
-  User.associate = ({ Address, Pet, Range }) => {
-    User.belongsTo(Address, { as: 'address', foreignKey: 'addressId' });
-    User.hasMany(Pet, { as: 'pets', foreignKey: 'ownerId' });
-    User.hasMany(Range, { as: 'ranges', foreignKey: 'walkerId' });
+  User.addScope('complete', {
+    include: [
+      { model: sequelize.models.Address, as: 'address' },
+      { model: sequelize.models.Pet, as: 'pets' },
+      { model: sequelize.models.Range, as: 'ranges' },
+      { model: sequelize.models.Certification, as: 'certifications' },
+      { model: sequelize.models.Achievement, as: 'achievements' },
+    ],
+  });
+  User.associate = models => {
+    User.belongsTo(models.Address, { as: 'address', foreignKey: 'addressId' });
+    User.hasMany(models.Pet, { as: 'pets', foreignKey: 'ownerId' });
+    User.hasMany(models.Range, { as: 'ranges', foreignKey: 'walkerId' });
+    User.hasMany(models.Certification, { as: 'certifications', foreignKey: 'walkerId' });
+    User.hasMany(models.Achievement, { as: 'achievements', foreignKey: 'walkerId' });
   };
   return User;
 };
