@@ -25,6 +25,9 @@ const {
   photoUriPet,
   descriptionPet,
   idParam,
+  certificationDescription,
+  certificationFileUri,
+  certifications,
 } = require('../errors/schema_messages');
 const { USER_TYPES, DAYS_OF_WEEK, PET_GENDERS } = require('../utils/constants');
 const { REGEX_HOUR } = require('../utils/regex');
@@ -223,5 +226,28 @@ exports.onBoardingOwnerSchema = {
     isString: true,
     trim: true,
     errorMessage: descriptionPet,
+  },
+};
+
+exports.editOwnerSchema = {
+  ...exports.onBoardingOwnerSchema,
+};
+
+exports.editWalkerSchema = {
+  ...exports.onBoardingWalkerSchema,
+  certifications: {
+    optional: true,
+    isArray: { options: { min: 0 } },
+    errorMessage: certifications,
+  },
+  'certifications.*.description': {
+    isString: true,
+    trim: true,
+    errorMessage: certificationDescription,
+  },
+  'certifications.*.file_uri': {
+    isString: true,
+    trim: true,
+    errorMessage: certificationFileUri,
   },
 };

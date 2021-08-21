@@ -3,20 +3,22 @@ const { getUserBy } = require('../services/users');
 const { verifyAccessToken } = require('../services/sessions');
 const { USER_TYPES } = require('../utils/constants');
 
-const checkToken = ({ token, tokenType, next, req }) =>
-  verifyAccessToken(token)
-    .catch(err => next(invalidToken(err.message)))
-    .then(decodedToken => {
-      if (decodedToken.token_use !== tokenType) {
-        throw invalidParams('The provided token type is not correct');
-      }
-      return getUserBy({ id: decodedToken.sub }).then(user => {
-        if (!user) throw notFound('User not found');
-        req.user = user.dataValues;
-        return next();
-      });
-    })
-    .catch(next);
+const checkToken = async ({ token, tokenType, next, req }) => {
+  try {
+    const decodedToken = await verifyAccessToken(token).catch(err => {
+      throw invalidToken(err.message);
+    });
+    if (decodedToken.token_use !== tokenType) {
+      throw invalidParams('The provided token type is not correct');
+    }
+    const user = await getUserBy({ id: decodedToken.sub });
+    if (!user) throw notFound('User not found');
+    req.user = user;
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+};
 
 exports.checkTokenAndSetUser = (req, _, next) =>
   checkToken({ req, next, token: req.headers.authorization, tokenType: 'access' });

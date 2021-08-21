@@ -37,3 +37,13 @@ exports.onBoardingOwnerMapper = ({ body }) => ({
     };
   }),
 });
+
+exports.editOwnerMapper = exports.onBoardingOwnerMapper;
+
+exports.editWalkerMapper = req => ({
+  ...exports.onBoardingWalkerMapper(req),
+  certifications: req.body.certifications.map(certification => ({
+    description: certification.description,
+    fileUri: certification.file_uri,
+  })),
+});

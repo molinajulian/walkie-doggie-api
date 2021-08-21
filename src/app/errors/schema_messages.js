@@ -40,3 +40,9 @@ exports.genderPet = `${stringMessage('gender')} ${containedMessage('body')}`;
 exports.weightPet = `${numberMessage('weight')} ${containedMessage('body')}`;
 exports.photoUriPet = `${stringMessage('photo_uri')} ${containedMessage('body')}`;
 exports.descriptionPet = `${stringMessage('description')} ${containedMessage('body')}`;
+
+exports.certificationDescription = `${stringMessage('Every description for certifications')} ${containedMessage(
+  'body',
+)}`;
+exports.certificationFileUri = `${stringMessage('Every file_uri for certifications')} ${containedMessage('body')}`;
+exports.certifications = `${arrayMessage('certifications')} ${containedMessage('body')}`;

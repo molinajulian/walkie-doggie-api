@@ -5,3 +5,4 @@ exports.INVALID_PARAMS = 'invalid_params';
 exports.NOT_FOUND = 'not_found';
 exports.INVALID_CREDENTIALS = 'invalid_credentials';
 exports.INVALID_TOKEN = 'invalid_token';
+exports.FORBIDDEN = 'forbidden';

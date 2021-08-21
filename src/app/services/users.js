@@ -50,6 +50,7 @@ exports.updateLastLogin = user => {
 };
 
 exports.updateUser = async ({ user, data, options }) => {
+  delete data.email;
   return user.update(data, options).catch(error => {
     logger.error(inspect(error));
     throw databaseError(`Error updating a user, reason: ${error.message}`);

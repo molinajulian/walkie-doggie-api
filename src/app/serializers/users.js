@@ -13,6 +13,8 @@ exports.getUserSerializer = user => {
   const userData = this.createUserSerializer(user);
   const baseData = {
     ...userData,
+    phone: user.phone,
+    profile_photo_uri: user.profilePhotoUri,
     address: {
       id: user.address.id,
       latitude: user.address.latitude,
@@ -36,7 +38,7 @@ exports.getUserSerializer = user => {
       start_at: range.startAt,
       end_at: range.endAt,
     }));
-    return { ...baseData, certifications, achievements, ranges };
+    return { ...baseData, certifications, achievements, ranges, price_per_hour: user.pricePerHour };
   }
   const pets = user.pets.map(pet => ({
     id: pet.id,
