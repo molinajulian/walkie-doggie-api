@@ -28,6 +28,8 @@ const {
   certificationDescription,
   certificationFileUri,
   certifications,
+  firebaseTokenBody,
+  firebaseTokenPath,
 } = require('../errors/schema_messages');
 const { USER_TYPES, DAYS_OF_WEEK, PET_GENDERS } = require('../utils/constants');
 const { REGEX_HOUR } = require('../utils/regex');
@@ -236,6 +238,7 @@ exports.editOwnerSchema = {
 exports.editWalkerSchema = {
   ...exports.onBoardingWalkerSchema,
   certifications: {
+    in: ['body'],
     optional: true,
     isArray: { options: { min: 0 } },
     errorMessage: certifications,
@@ -249,5 +252,29 @@ exports.editWalkerSchema = {
     isString: true,
     trim: true,
     errorMessage: certificationFileUri,
+  },
+};
+
+exports.createFirebaseTokenSchema = {
+  ...authorization,
+  ...exports.idParamSchema,
+  firebase_token: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    isLength: { options: { min: 1 } },
+    errorMessage: firebaseTokenBody,
+  },
+};
+
+exports.deleteFirebaseTokenSchema = {
+  ...authorization,
+  ...exports.idParamSchema,
+  firebase_token: {
+    in: ['params'],
+    isString: true,
+    trim: true,
+    isLength: { options: { min: 1 } },
+    errorMessage: firebaseTokenPath,
   },
 };

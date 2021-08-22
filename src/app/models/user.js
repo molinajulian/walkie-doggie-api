@@ -47,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Range, { as: 'ranges', foreignKey: 'walkerId' });
     User.hasMany(models.Certification, { as: 'certifications', foreignKey: 'walkerId' });
     User.hasMany(models.Achievement, { as: 'achievements', foreignKey: 'walkerId' });
+    User.hasMany(models.FirebaseToken, { as: 'firebaseTokens', foreignKey: 'userId' });
   };
   return User;
 };

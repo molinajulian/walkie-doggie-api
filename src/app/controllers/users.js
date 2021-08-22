@@ -15,6 +15,7 @@ const logger = require('../logger');
 const { getUserSerializer } = require('../serializers/users');
 const { forbidden } = require('../errors/builders');
 const { deleteCertificationOfUser, bulkCreateCertifications } = require('../services/certifications');
+const { createFirebaseToken, deleteFirebaseToken } = require('../services/firebase_tokens');
 
 exports.createUser = (req, res, next) =>
   createUser(createUserMapper(req))
@@ -140,3 +141,15 @@ exports.editWalker = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.createFirebaseToken = (req, res, next) =>
+  getUserBy({ id: req.params.id })
+    .then(user => createFirebaseToken({ user, firebaseToken: req.body.firebase_token }))
+    .then(() => res.status(201).end())
+    .catch(next);
+
+exports.deleteFirebaseToken = (req, res, next) =>
+  getUserBy({ id: req.params.id })
+    .then(user => deleteFirebaseToken({ user, firebaseToken: req.params.firebase_token }))
+    .then(() => res.status(200).end())
+    .catch(next);

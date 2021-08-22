@@ -46,3 +46,5 @@ exports.certificationDescription = `${stringMessage('Every description for certi
 )}`;
 exports.certificationFileUri = `${stringMessage('Every file_uri for certifications')} ${containedMessage('body')}`;
 exports.certifications = `${arrayMessage('certifications')} ${containedMessage('body')}`;
+exports.firebaseTokenBody = `${stringMessage('firebase_token')} ${containedMessage('body')}`;
+exports.firebaseTokenPath = `${stringMessage('firebase_token')} ${containedMessage('the url')}`;
