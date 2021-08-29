@@ -19,7 +19,13 @@ services:
       - walkie-doggie
     depends_on:
       - walkie-doggie-db-test
-
+  walkie-doggie-redis-test:
+    image: redis
+    container_name: walkie-doggie-redis-test
+    expose:
+      - 6379
+    networks:
+      - walkie-doggie
   walkie-doggie-db-test:
     image: postgres:12-alpine
     container_name: walkie-doggie-db-test

@@ -27,6 +27,9 @@ const config = {
     expirationTimeRefreshToken: process.env.EXPIRATION_TIME_REFRESH_TOKEN || 525600,
     expirationTimeAccessToken: process.env.EXPIRATION_TIME_ACCESS_TOKEN || 15,
   },
+  redis: {
+    url: process.env.REDIS_URL,
+  },
 };
 
 module.exports = config;

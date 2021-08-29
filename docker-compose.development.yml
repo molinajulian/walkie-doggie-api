@@ -21,7 +21,14 @@ services:
       - walkie-doggie
     depends_on:
       - walkie-doggie-db-dev
-
+      - walkie-doggie-redis-dev
+  walkie-doggie-redis-dev:
+    image: redis
+    container_name: walkie-doggie-redis-dev
+    expose:
+      - 6379
+    networks:
+      - walkie-doggie
   walkie-doggie-db-dev:
     image: postgres:12-alpine
     container_name: walkie-doggie-db-dev
