@@ -1,8 +1,10 @@
 const throng = require('throng');
 const Queue = require('bull');
 
-// Connect to a local redis instance locally, and the Heroku-provided URL in production
 const { url } = require('../config').redis;
+
+// Connect to a local redis instance locally, and the Heroku-provided URL in production
+const REDIS_URL = url;
 
 // Spin up multiple processes to handle jobs to take advantage of more CPU cores
 // See: https://devcenter.heroku.com/articles/node-concurrency for more info
@@ -14,17 +16,35 @@ const workers = process.env.WEB_CONCURRENCY || 2;
 // to be much lower.
 const maxJobsPerWorker = 50;
 
-const start = async () => {
-  // Connect to the named work queue
-  const workQueue = new Queue('work', url);
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-  await workQueue.process(maxJobsPerWorker, async job => {
-    await Promise.resolve().then(() => {
-      console.log('---------------');
-    });
-    console.log(job);
+function start() {
+  // Connect to the named work queue
+  const workQueue = new Queue('work', REDIS_URL);
+
+  workQueue.process(maxJobsPerWorker, async job => {
+    // This is an example job that just slowly reports on progress
+    // while doing no work. Replace this with your own job logic.
+    let progress = 0;
+
+    // throw an error 5% of the time
+    if (Math.random() < 0.05) {
+      throw new Error('This job failed!');
+    }
+
+    while (progress < 100) {
+      await sleep(50);
+      progress += 1;
+      job.progress(progress);
+    }
+
+    // A job can return values that will be stored in Redis as JSON
+    // This return value is unused in this demo application.
+    return { value: 'This will be stored' };
   });
-};
+}
 
 // Initialize the clustered worker process
 // See: https://devcenter.heroku.com/articles/node-concurrency for more info
