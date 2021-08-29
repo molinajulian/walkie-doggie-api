@@ -2,7 +2,7 @@ const throng = require('throng');
 const Queue = require('bull');
 
 // Connect to a local redis instance locally, and the Heroku-provided URL in production
-const { url } = require('./config').redis;
+const { url } = require('../config').redis;
 
 // Spin up multiple processes to handle jobs to take advantage of more CPU cores
 // See: https://devcenter.heroku.com/articles/node-concurrency for more info
