@@ -45,7 +45,7 @@ function start() {
     return { value: 'This will be stored' };
   });
 }
-
+console.log('---------');
 // Initialize the clustered worker process
 // See: https://devcenter.heroku.com/articles/node-concurrency for more info
 throng({ workers, start });
