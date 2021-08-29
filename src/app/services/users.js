@@ -5,6 +5,7 @@ const { alreadyExist, databaseError, notFound } = require('../errors/builders');
 const { User } = require('../models');
 
 const { moment } = require('../utils/moment');
+const { USER_TYPES } = require('../utils/constants');
 
 exports.createUser = attrs => {
   logger.info(`Attempting to create user with attributes: ${inspect(attrs)}`);
@@ -54,5 +55,12 @@ exports.updateUser = async ({ user, data, options }) => {
   return user.update(data, options).catch(error => {
     logger.error(inspect(error));
     throw databaseError(`Error updating a user, reason: ${error.message}`);
+  });
+};
+
+exports.listWalkers = () => {
+  return User.findAndCountAll({ where: { type: USER_TYPES.WALKER } }).catch(error => {
+    logger.error(inspect(error));
+    throw databaseError(`Error listing the walkers, reason: ${error.message}`);
   });
 };

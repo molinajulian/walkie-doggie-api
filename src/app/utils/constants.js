@@ -17,3 +17,9 @@ exports.PET_GENDERS = {
   FEMALE: 'HEMBRA',
   MALE: 'MACHO',
 };
+
+exports.CENTER_TYPES = {
+  COLONY: 'COLONY',
+  SHELTER: 'SHELTER',
+  DAY_CARE: 'DAY_CARE',
+};

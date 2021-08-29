@@ -19,6 +19,7 @@ const userRouter = createRouter();
 exports.init = app => {
   app.use('/users', userRouter);
   userRouter.post('/', [validateSchemaAndFail(createUserSchema)], usersController.createUser);
+  userRouter.get('/walkers', [checkTokenAndSetUser], usersController.listWalkers);
   userRouter.put(
     '/onboarding/walker/:id',
     [validateSchemaAndFail(onBoardingWalkerSchema), checkTokenAndSetUser, checkUserWalkerOnBoarding],

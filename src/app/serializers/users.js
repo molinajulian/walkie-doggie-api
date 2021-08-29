@@ -5,6 +5,7 @@ exports.createUserSerializer = user => ({
   last_name: user.lastName,
   email: user.email,
   type: user.type,
+  phone: user.phone,
   last_login: user.lastLogin,
 });
 
@@ -52,3 +53,14 @@ exports.getUserSerializer = user => {
   }));
   return { ...baseData, pets };
 };
+
+exports.listWalkerSerializer = ({ count, rows }) => ({
+  count,
+  walkers: rows.map(user => ({
+    id: user.id,
+    first_name: user.firstName,
+    last_name: user.lastName,
+    email: user.email,
+    type: user.type,
+  })),
+});

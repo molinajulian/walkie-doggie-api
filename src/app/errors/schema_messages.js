@@ -1,4 +1,4 @@
-const { USER_TYPES, DAYS_OF_WEEK } = require('../utils/constants');
+const { USER_TYPES, DAYS_OF_WEEK, CENTER_TYPES } = require('../utils/constants');
 
 const stringMessage = field => `${field} must be a string`;
 const numberMessage = field => `${field} must be a number`;
@@ -48,3 +48,4 @@ exports.certificationFileUri = `${stringMessage('Every file_uri for certificatio
 exports.certifications = `${arrayMessage('certifications')} ${containedMessage('body')}`;
 exports.firebaseTokenBody = `${stringMessage('firebase_token')} ${containedMessage('body')}`;
 exports.firebaseTokenPath = `${stringMessage('firebase_token')} ${containedMessage('the url')}`;
+exports.centerTypeError = `${oneOfMessage('type', Object.values(CENTER_TYPES))} ${containedMessage('query')}`;

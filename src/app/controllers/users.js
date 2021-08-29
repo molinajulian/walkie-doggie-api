@@ -1,5 +1,5 @@
-const { createUserSerializer } = require('../serializers/users');
-const { createUser, updateUser, getUserBy } = require('../services/users');
+const { createUserSerializer, listWalkerSerializer } = require('../serializers/users');
+const { createUser, updateUser, getUserBy, listWalkers } = require('../services/users');
 const {
   createUserMapper,
   onBoardingWalkerMapper,
@@ -152,4 +152,9 @@ exports.deleteFirebaseToken = (req, res, next) =>
   getUserBy({ id: req.params.id })
     .then(user => deleteFirebaseToken({ user, firebaseToken: req.params.firebase_token }))
     .then(() => res.status(200).end())
+    .catch(next);
+
+exports.listWalkers = (req, res, next) =>
+  listWalkers()
+    .then(users => res.send(listWalkerSerializer(users)))
     .catch(next);
