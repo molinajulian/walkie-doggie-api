@@ -14,11 +14,14 @@ const workers = process.env.WEB_CONCURRENCY || 2;
 // to be much lower.
 const maxJobsPerWorker = 50;
 
-const start = () => {
+const start = async () => {
   // Connect to the named work queue
   const workQueue = new Queue('work', url);
 
-  workQueue.process(maxJobsPerWorker, async job => {
+  await workQueue.process(maxJobsPerWorker, async job => {
+    await Promise.resolve().then(() => {
+      console.log('---------------');
+    });
     console.log(job);
   });
 };
