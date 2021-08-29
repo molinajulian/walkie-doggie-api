@@ -28,7 +28,7 @@ const config = {
     expirationTimeAccessToken: process.env.EXPIRATION_TIME_ACCESS_TOKEN || 15,
   },
   redis: {
-    url: process.env.REDIS_URL,
+    url: process.env.REDISTOGO_URL,
   },
 };
 
