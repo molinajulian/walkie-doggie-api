@@ -30,6 +30,15 @@ const {
   certifications,
   firebaseTokenBody,
   firebaseTokenPath,
+  walkDate,
+  rangeId,
+  duration,
+  petId,
+  addressStartId,
+  addressEndId,
+  addressEndDescription,
+  addressEndLatitude,
+  addressEndLongitude,
 } = require('../errors/schema_messages');
 const { USER_TYPES, DAYS_OF_WEEK, PET_GENDERS } = require('../utils/constants');
 const { REGEX_HOUR } = require('../utils/regex');
@@ -96,7 +105,7 @@ exports.onBoardingWalkerSchema = {
   },
   price_per_hour: {
     in: ['body'],
-    isNumeric: true,
+    IsInt: true,
     errorMessage: pricePerHour,
   },
   cover_letter: {
@@ -204,7 +213,7 @@ exports.onBoardingOwnerSchema = {
   },
   'pets.*.birth_year': {
     in: ['body'],
-    isNumeric: true,
+    IsInt: true,
     errorMessage: birthYearPet,
   },
   'pets.*.gender': {
@@ -216,7 +225,7 @@ exports.onBoardingOwnerSchema = {
   },
   'pets.*.weight': {
     in: ['body'],
-    isNumeric: true,
+    IsInt: true,
     errorMessage: weightPet,
   },
   'pets.*.photo_uri': {
@@ -276,5 +285,73 @@ exports.deleteFirebaseTokenSchema = {
     trim: true,
     isLength: { options: { min: 1 } },
     errorMessage: firebaseTokenPath,
+  },
+};
+
+exports.createReservationSchema = {
+  walk_date: {
+    in: ['body'],
+    isISO8601: true,
+    trim: true,
+    errorMessage: walkDate,
+  },
+  range_id: {
+    in: ['body'],
+    isNumeric: true,
+    trim: true,
+    errorMessage: rangeId,
+  },
+  duration: {
+    in: ['body'],
+    isNumeric: true,
+    trim: true,
+    errorMessage: duration,
+  },
+  pet_id: {
+    in: ['body'],
+    isNumeric: true,
+    trim: true,
+    errorMessage: petId,
+  },
+  'address_start.description': {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: addressEndDescription,
+  },
+  'address_start.latitude': {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: addressEndLatitude,
+  },
+  'address_start.longitude': {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: addressEndLongitude,
+  },
+  'address_end.description': {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: addressEndDescription,
+  },
+  'address_end.latitude': {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: addressEndLatitude,
+  },
+  'address_end.longitude': {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: addressEndLongitude,
+  },
+  comments: {
+    in: ['body'],
+    isString: true,
+    isLength: { options: { min: 0, max: 255 } },
   },
 };

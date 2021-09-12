@@ -24,9 +24,9 @@ exports.createUser = attrs => {
   );
 };
 
-exports.getUserBy = filters => {
+exports.getUserBy = (filters, scopes = ['complete']) => {
   logger.info(`Attempting to get user with filters: ${inspect(filters)}`);
-  return User.scope('complete')
+  return User.scope(scopes)
     .findOne({ where: filters })
     .catch(err => {
       /* istanbul ignore next */

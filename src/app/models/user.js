@@ -1,9 +1,3 @@
-const { Pet } = require('./pet');
-const { Address } = require('./address');
-const { Range } = require('./range');
-const { Achievement } = require('./achievement');
-const { Certification } = require('./certification');
-
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
@@ -40,6 +34,9 @@ module.exports = (sequelize, DataTypes) => {
       { model: sequelize.models.Certification, as: 'certifications' },
       { model: sequelize.models.Achievement, as: 'achievements' },
     ],
+  });
+  User.addScope('withFirebaseTokens', {
+    include: [{ model: sequelize.models.FirebaseToken, as: 'firebaseTokens' }],
   });
   User.associate = models => {
     User.belongsTo(models.Address, { as: 'address', foreignKey: 'addressId' });

@@ -23,3 +23,33 @@ exports.deleteAddressesOfUser = ({ user }, { transaction }) => {
       }),
     );
 };
+
+exports.findOrCreateReservationAddresses = async ({ addressStart, addressEnd, options }) => {
+  const [addressStartDb] = await Address.findOrCreate({
+    where: {
+      latitude: addressStart.latitude,
+      longitude: addressStart.longitude,
+      description: addressStart.description,
+    },
+    defaults: {
+      latitude: addressStart.latitude,
+      longitude: addressStart.longitude,
+      description: addressStart.description,
+    },
+    ...options,
+  });
+  const [addressEndDb] = await Address.findOrCreate({
+    where: {
+      latitude: addressEnd.latitude,
+      longitude: addressEnd.longitude,
+      description: addressEnd.description,
+    },
+    defaults: {
+      latitude: addressEnd.latitude,
+      longitude: addressEnd.longitude,
+      description: addressEnd.description,
+    },
+    ...options,
+  });
+  return { addressStart: addressStartDb, addressEnd: addressEndDb };
+};

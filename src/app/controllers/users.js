@@ -6,16 +6,23 @@ const {
   onBoardingOwnerMapper,
   editOwnerMapper,
   editWalkerMapper,
+  createReservationMapper,
 } = require('../mappers/users');
-const { createAddress, deleteAddressesOfUser } = require('../services/addresses');
-const { bulkCreateRanges, deleteRangesOfUser } = require('../services/ranges');
-const { bulkCreatePets, deletePetsOfUser } = require('../services/pets');
+const { createAddress, deleteAddressesOfUser, findOrCreateReservationAddresses } = require('../services/addresses');
+const { bulkCreateRanges, deleteRangesOfUser, findBy: findRangeBy } = require('../services/ranges');
+const { bulkCreatePets, deletePetsOfUser, findBy: findPetBy } = require('../services/pets');
 const { sequelizeInstance: sequelize } = require('../models');
 const logger = require('../logger');
 const { getUserSerializer } = require('../serializers/users');
-const { forbidden } = require('../errors/builders');
+const { forbidden, notFound, invalidUserType } = require('../errors/builders');
 const { deleteCertificationOfUser, bulkCreateCertifications } = require('../services/certifications');
-const { createFirebaseToken, deleteFirebaseToken } = require('../services/firebase_tokens');
+const {
+  createFirebaseToken,
+  deleteFirebaseToken,
+  sendReservationCreatedNotification,
+} = require('../services/firebase_tokens');
+const { USER_TYPES } = require('../utils/constants');
+const { createReservation } = require('../services/reservations');
 
 exports.createUser = (req, res, next) =>
   createUser(createUserMapper(req))
@@ -158,3 +165,42 @@ exports.listWalkers = (req, res, next) =>
   listWalkers()
     .then(users => res.send(listWalkerSerializer(users)))
     .catch(next);
+
+exports.createReservation = async (req, res, next) => {
+  let transaction = {};
+  try {
+    transaction = await sequelize.transaction();
+    const reservationData = createReservationMapper(req);
+    const transactionOptions = { transaction };
+    const walker = await getUserBy({ id: reservationData.walkerId });
+    if (walker.type === USER_TYPES.OWNER) throw invalidUserType('The provided user must be walker');
+    const range = await findRangeBy({ where: { id: reservationData.rangeId }, options: transactionOptions });
+    if (!range) throw notFound('The provided range is invalid');
+    const pet = await findPetBy({ where: { id: reservationData.rangeId }, options: transactionOptions });
+    if (!pet) throw notFound('The provided pet is invalid');
+    const { addressStart, addressEnd } = await findOrCreateReservationAddresses({
+      addressStart: reservationData.addressStart,
+      addressEnd: reservationData.addressEnd,
+      options: transactionOptions,
+    });
+    const reservation = await createReservation({
+      reservationData: {
+        addressStart,
+        addressEnd,
+        range,
+        walker,
+        comments: reservationData.comments,
+        reservationDate: reservationData.reservationDate,
+        duration: reservationData.duration,
+        pet,
+      },
+      options: transactionOptions,
+    });
+    await sendReservationCreatedNotification({ reservation, users: req.user, range });
+    await transaction.commit();
+    return res.status(201).end();
+  } catch (e) {
+    if (transaction) await transaction.rollback();
+    return next(e);
+  }
+};

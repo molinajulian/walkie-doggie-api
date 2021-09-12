@@ -24,3 +24,4 @@ exports.notFound = message => buildError(message, NOT_FOUND);
 exports.invalidCredentials = () => buildError('The credentials are not correct', INVALID_CREDENTIALS);
 exports.invalidToken = message => buildError(message, INVALID_TOKEN);
 exports.forbidden = message => buildError(message, FORBIDDEN);
+exports.invalidUserType = message => buildError(message, INVALID_PARAMS);

@@ -3,6 +3,7 @@ const { USER_TYPES, DAYS_OF_WEEK, CENTER_TYPES } = require('../utils/constants')
 const stringMessage = field => `${field} must be a string`;
 const numberMessage = field => `${field} must be a number`;
 const arrayMessage = field => `${field} must be an array`;
+const dateMessage = field => `${field} must be a valid date`;
 const hourMessage = field => `${field} must be a valid hour`;
 
 const oneOfMessage = (field, values) => `${field} must be one of ${values.join(',')}`;
@@ -49,3 +50,14 @@ exports.certifications = `${arrayMessage('certifications')} ${containedMessage('
 exports.firebaseTokenBody = `${stringMessage('firebase_token')} ${containedMessage('body')}`;
 exports.firebaseTokenPath = `${stringMessage('firebase_token')} ${containedMessage('the url')}`;
 exports.centerTypeError = `${oneOfMessage('type', Object.values(CENTER_TYPES))} ${containedMessage('query')}`;
+
+exports.walkDate = `${dateMessage('walk_date')} ${containedMessage('body')}`;
+exports.rangeId = `${numberMessage('range_id')} ${containedMessage('body')}`;
+exports.duration = `${numberMessage('duration')} ${containedMessage('body')}`;
+exports.petId = `${numberMessage('pet_id')} ${containedMessage('body')}`;
+exports.addressStartDescription = `${stringMessage('address_start -> description')} ${containedMessage('body')}`;
+exports.addressStartLatitude = `${stringMessage('address_start -> latitude')} ${containedMessage('body')}`;
+exports.addressStartLongitude = `${stringMessage('address_start -> longitude')} ${containedMessage('body')}`;
+exports.addressEndDescription = `${stringMessage('address_end -> description')} ${containedMessage('body')}`;
+exports.addressEndLatitude = `${stringMessage('address_end -> latitude')} ${containedMessage('body')}`;
+exports.addressEndLongitude = `${stringMessage('address_end -> longitude')} ${containedMessage('body')}`;

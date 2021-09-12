@@ -7,6 +7,7 @@ const {
   editWalkerSchema,
   createFirebaseTokenSchema,
   deleteFirebaseTokenSchema,
+  createReservationSchema,
 } = require('../schemas/users');
 const { checkTokenAndSetUser } = require('../middlewares/users');
 const { createUserSchema, onBoardingWalkerSchema, onBoardingOwnerSchema } = require('../schemas/users');
@@ -49,6 +50,11 @@ exports.init = app => {
     '/:id/firebase-tokens/:firebase_token',
     [validateSchemaAndFail(deleteFirebaseTokenSchema), checkTokenAndSetUser],
     deleteFirebaseToken,
+  );
+  userRouter.post(
+    '/:id/reservations',
+    [validateSchemaAndFail(createReservationSchema), checkTokenAndSetUser],
+    usersController.createReservation,
   );
   userRouter.get('/:id', [validateSchemaAndFail(getUserSchema), checkTokenAndSetUser], usersController.get);
 };

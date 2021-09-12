@@ -1,3 +1,4 @@
+const { moment } = require('../utils/moment');
 exports.createUserMapper = ({ body }) => ({
   type: body.type,
   firstName: body.first_name,
@@ -12,6 +13,7 @@ exports.onBoardingWalkerMapper = ({ body }) => ({
   profilePhotoUri: body.profile_photo_uri,
   ranges: body.ranges.map(range => {
     return {
+      id: range.id,
       dayOfWeek: range.day_of_week,
       startAt: range.start_at,
       endAt: range.end_at,
@@ -46,4 +48,23 @@ exports.editWalkerMapper = req => ({
     description: certification.description,
     fileUri: certification.file_uri,
   })),
+});
+
+exports.createReservationMapper = ({ body, params }) => ({
+  walkerId: params.id,
+  walkDate: body.walk_date,
+  rangeId: body.range_id,
+  duration: body.duration,
+  petId: body.pet_id,
+  addressStart: {
+    description: body.address_start.description,
+    latitude: body.address_start.latitude,
+    longitude: body.address_start.longitude,
+  },
+  addressEnd: {
+    description: body.address_end.description,
+    latitude: body.address_end.latitude,
+    longitude: body.address_end.longitude,
+  },
+  comments: body.comments,
 });

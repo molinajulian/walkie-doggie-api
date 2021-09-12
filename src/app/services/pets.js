@@ -17,3 +17,9 @@ exports.deletePetsOfUser = ({ user }, { transaction }) =>
     logger.error('Error deleting addresses, reason:', error);
     throw databaseError(error.message);
   });
+
+exports.findBy = ({ where, options }) =>
+  Pet.findOne({ where, ...options }).catch(error => {
+    logger.error('Error getting one pet, reason:', error);
+    throw databaseError(error.message);
+  });

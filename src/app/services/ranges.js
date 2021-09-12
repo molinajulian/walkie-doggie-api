@@ -18,3 +18,9 @@ exports.deleteRangesOfUser = ({ user }, { transaction }) =>
     logger.error('Error deleting multiple ranges, reason:', error);
     throw databaseError(error.message);
   });
+
+exports.findBy = ({ where, options }) =>
+  Ranges.findOne({ where, ...options }).catch(error => {
+    logger.error('Error getting one range, reason:', error);
+    throw databaseError(error.message);
+  });
