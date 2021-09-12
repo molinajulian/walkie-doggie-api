@@ -11,7 +11,13 @@ exports.createCompleteWalker = async () => {
   const { email, password } = await buildUser();
   const hashedPassword = await hashString(password);
   const address = await createAddress();
-  const user = await createUser({ email, password: hashedPassword, addressId: address.id, type: USER_TYPES.WALKER });
+  const user = await createUser({
+    email,
+    password: hashedPassword,
+    addressId: address.id,
+    type: USER_TYPES.WALKER,
+    wasOnboarded: true,
+  });
   await createCertification({ walkerId: user.id });
   await createAchievement({ walkerId: user.id });
   return user;
@@ -21,7 +27,13 @@ exports.createCompleteOwner = async () => {
   const { email, password } = await buildUser();
   const hashedPassword = await hashString(password);
   const address = await createAddress();
-  const user = await createUser({ email, password: hashedPassword, addressId: address.id, type: USER_TYPES.OWNER });
+  const user = await createUser({
+    email,
+    password: hashedPassword,
+    addressId: address.id,
+    type: USER_TYPES.OWNER,
+    wasOnboarded: true,
+  });
   await createPet({ ownerId: user.id });
   return user;
 };
