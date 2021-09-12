@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     { timestamps: true, underscored: true, paranoid: false, tableName: 'complaints' },
   );
   Complaint.associate = models => {
-    Complaint.hasOne(models.User, { as: 'reporter', foreignKey: 'userReporterId' });
+    Complaint.belongsTo(models.User, { as: 'reporter', foreignKey: 'userReporterId' });
     Complaint.hasMany(models.ComplaintFile, { as: 'complaintFiles', foreignKey: 'complaintId' });
   };
 

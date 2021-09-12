@@ -1,3 +1,4 @@
+const Bluebird = require('bluebird');
 const { Expo } = require('expo-server-sdk');
 const { FirebaseToken } = require('../models');
 const logger = require('../logger');
@@ -17,19 +18,25 @@ exports.deleteFirebaseToken = ({ user, firebaseToken }, options = {}) =>
     });
 
 exports.createFirebaseToken = ({ user, firebaseToken }, options = {}) =>
-  FirebaseToken.create({ userId: user.id, token: firebaseToken }, options).catch(error => {
+  FirebaseToken.findOrCreate({
+    where: { userId: user.id, token: firebaseToken },
+    defaults: { userId: user.id, token: firebaseToken },
+    ...options,
+  }).catch(error => {
     logger.error('Error creating a firebase token, reason:', error);
     throw databaseError(error.message);
   });
 
 exports.sendReservationCreatedNotification = async ({ user, reservation, range }) => {
   const messages = [];
-  const reservationDateFormatted = moment(reservation.date, 'YYYYMMDD').format('L');
+  const reservationDateFormatted = moment(reservation.reservationDate).format('DD/MM/YYYY');
+  const rangeStartAt = moment(range.startAt, 'HH:mm:ss').format('HH:mm');
+  const rangeEndAt = moment(range.endAt, 'HH:mm:ss').format('HH:mm');
   const defaultMessage = {
     title: 'Nueva reserva disponible',
     body:
       `${user.firstName} ${user.lastName} quiere concretar un paseo contigo el día ${reservationDateFormatted} ` +
-      `en la franja horaria ${range.startAt} - ${range.endAt} hs`,
+      `en la franja horaria ${rangeStartAt} - ${rangeEndAt} hs`,
     data: { reservationId: reservation.id },
   };
   user.firebaseTokens.forEach(ft => {
@@ -42,7 +49,7 @@ exports.sendReservationCreatedNotification = async ({ user, reservation, range }
     }
   });
   const messagesChunk = expo.chunkPushNotifications(messages);
-  const sendPushNotificationPromises = await Promise.map(
+  const sendPushNotificationPromises = await Bluebird.Promise.map(
     messagesChunk,
     async messageChunk => {
       return expo.sendPushNotificationsAsync(messageChunk).catch(error => {
@@ -52,5 +59,6 @@ exports.sendReservationCreatedNotification = async ({ user, reservation, range }
     },
     { concurrency: 5 },
   );
-  await Promise.all(sendPushNotificationPromises);
+  const tickets = await Promise.all(sendPushNotificationPromises);
+  console.log(tickets);
 };

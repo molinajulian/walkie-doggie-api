@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       { model: sequelize.models.Certification, as: 'certifications' },
       { model: sequelize.models.Achievement, as: 'achievements' },
     ],
+    subQuery: false,
   });
   User.addScope('withFirebaseTokens', {
     include: [{ model: sequelize.models.FirebaseToken, as: 'firebaseTokens' }],
@@ -45,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Certification, { as: 'certifications', foreignKey: 'walkerId' });
     User.hasMany(models.Achievement, { as: 'achievements', foreignKey: 'walkerId' });
     User.hasMany(models.FirebaseToken, { as: 'firebaseTokens', foreignKey: 'userId' });
+    User.hasMany(models.Complaint, { as: 'complaints', foreignKey: 'userReporterId' });
   };
   return User;
 };

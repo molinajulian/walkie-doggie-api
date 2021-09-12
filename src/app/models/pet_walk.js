@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   PetWalk.associate = models => {
     PetWalk.belongsTo(models.Address, { as: 'addressStart', foreignKey: 'addressStartId' });
-    PetWalk.hasOne(models.User, { as: 'petWalker', foreignKey: 'walkerId' });
+    PetWalk.belongsTo(models.User, { as: 'petWalker', foreignKey: 'walkerId' });
   };
 
   return PetWalk;

@@ -67,4 +67,5 @@ exports.createReservationMapper = ({ body, params }) => ({
     longitude: body.address_end.longitude,
   },
   comments: body.comments,
+  reservationDate: body.walk_date,
 });

@@ -42,6 +42,7 @@ const {
 } = require('../errors/schema_messages');
 const { USER_TYPES, DAYS_OF_WEEK, PET_GENDERS } = require('../utils/constants');
 const { REGEX_HOUR } = require('../utils/regex');
+const { moment } = require('../utils/moment');
 
 exports.createUserSchema = {
   first_name: {
@@ -84,7 +85,7 @@ exports.createUserSchema = {
 exports.idParamSchema = {
   id: {
     in: ['params'],
-    isInt: true,
+    isNumeric: true,
     toInt: true,
     errorMessage: idParam,
   },
@@ -105,7 +106,7 @@ exports.onBoardingWalkerSchema = {
   },
   price_per_hour: {
     in: ['body'],
-    IsInt: true,
+    isNumeric: true,
     errorMessage: pricePerHour,
   },
   cover_letter: {
@@ -213,7 +214,7 @@ exports.onBoardingOwnerSchema = {
   },
   'pets.*.birth_year': {
     in: ['body'],
-    IsInt: true,
+    isNumeric: true,
     errorMessage: birthYearPet,
   },
   'pets.*.gender': {
@@ -225,7 +226,7 @@ exports.onBoardingOwnerSchema = {
   },
   'pets.*.weight': {
     in: ['body'],
-    IsInt: true,
+    isNumeric: true,
     errorMessage: weightPet,
   },
   'pets.*.photo_uri': {
@@ -291,7 +292,9 @@ exports.deleteFirebaseTokenSchema = {
 exports.createReservationSchema = {
   walk_date: {
     in: ['body'],
-    isISO8601: true,
+    custom: {
+      options: value => moment(value, 'YYYYMMDD', true).isValid(),
+    },
     trim: true,
     errorMessage: walkDate,
   },
@@ -352,6 +355,7 @@ exports.createReservationSchema = {
   comments: {
     in: ['body'],
     isString: true,
+    optional: true,
     isLength: { options: { min: 0, max: 255 } },
   },
 };

@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     { timestamps: true, underscored: true, paranoid: false, tableName: 'reviews' },
   );
   Review.associate = models => {
-    Review.hasOne(models.User, { as: 'reviewer', foreignKey: 'ownerId' });
-    Review.hasOne(models.PetWalk, { as: 'petWalk', foreignKey: 'petWalkId' });
+    Review.belongsTo(models.User, { as: 'reviewer', foreignKey: 'ownerId' });
+    Review.belongsTo(models.PetWalk, { as: 'petWalk', foreignKey: 'petWalkId' });
   };
 
   return Review;

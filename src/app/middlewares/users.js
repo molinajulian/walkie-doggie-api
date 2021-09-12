@@ -11,7 +11,7 @@ const checkToken = async ({ token, tokenType, next, req }) => {
     if (decodedToken.token_use !== tokenType) {
       throw invalidParams('The provided token type is not correct');
     }
-    const user = await getUserBy({ id: decodedToken.sub }, ['withFirebaseTokens']);
+    const user = await getUserBy({ id: decodedToken.sub });
     if (!user) throw notFound('User not found');
     req.user = user;
     return next();

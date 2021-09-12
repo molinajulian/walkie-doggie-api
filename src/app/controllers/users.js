@@ -77,7 +77,7 @@ exports.onBoardingOwner = async (req, res, next) => {
 };
 
 exports.get = (req, res, next) =>
-  getUserBy({ id: req.params.id })
+  getUserBy({ id: req.params.id, wasOnboarded: true })
     .then(user => res.status(200).json(getUserSerializer(user)))
     .catch(next);
 
@@ -172,8 +172,9 @@ exports.createReservation = async (req, res, next) => {
     transaction = await sequelize.transaction();
     const reservationData = createReservationMapper(req);
     const transactionOptions = { transaction };
-    const walker = await getUserBy({ id: reservationData.walkerId });
-    if (walker.type === USER_TYPES.OWNER) throw invalidUserType('The provided user must be walker');
+    const walker = await getUserBy({ id: reservationData.walkerId }, ['withFirebaseTokens']);
+    if (walker.type === USER_TYPES.OWNER || req.user.type === USER_TYPES.WALKER)
+      throw invalidUserType('The provided user must be walker and the logged user must be owner');
     const range = await findRangeBy({ where: { id: reservationData.rangeId }, options: transactionOptions });
     if (!range) throw notFound('The provided range is invalid');
     const pet = await findPetBy({ where: { id: reservationData.rangeId }, options: transactionOptions });
@@ -196,7 +197,7 @@ exports.createReservation = async (req, res, next) => {
       },
       options: transactionOptions,
     });
-    await sendReservationCreatedNotification({ reservation, users: req.user, range });
+    await sendReservationCreatedNotification({ reservation, user: walker, range });
     await transaction.commit();
     return res.status(201).end();
   } catch (e) {

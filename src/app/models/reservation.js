@@ -12,14 +12,15 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
       petWalkId: { type: DataTypes.INTEGER, allowNull: true },
+      duration: { type: DataTypes.INTEGER, allowNull: false },
     },
     { timestamps: true, underscored: true, paranoid: false, tableName: 'reservations' },
   );
   Reservation.associate = models => {
     Reservation.belongsTo(models.Address, { as: 'addressStart', foreignKey: 'addressStartId' });
     Reservation.belongsTo(models.Address, { as: 'addressEnd', foreignKey: 'addressEndId' });
-    Reservation.hasOne(models.Range, { as: 'reservationRange', foreignKey: 'rangeId' });
-    Reservation.hasOne(models.Pet, { as: 'reservationPet', foreignKey: 'petId' });
+    Reservation.belongsTo(models.Range, { as: 'reservationRange', foreignKey: 'rangeId' });
+    Reservation.belongsTo(models.Pet, { as: 'reservationPet', foreignKey: 'petId' });
     Reservation.belongsTo(models.PetWalk, { as: 'reservationPetWalk', foreignKey: 'petWalkId' });
   };
 
