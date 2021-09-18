@@ -24,6 +24,7 @@ const {
 const { USER_TYPES } = require('../utils/constants');
 const { createReservation, getReservationsOfUser } = require('../services/reservations');
 const { reservationsListSerializer } = require('../serializers/reservations');
+const { reservationListMapper } = require('../mappers/reservations');
 
 exports.createUser = (req, res, next) =>
   createUser(createUserMapper(req))
@@ -208,7 +209,9 @@ exports.createReservation = async (req, res, next) => {
   }
 };
 
-exports.getMyReservations = (req, res, next) =>
-  getReservationsOfUser({ pathUserId: req.params.id, loggedUser: req.user })
+exports.getMyReservations = (req, res, next) => {
+  const data = reservationListMapper(req);
+  return getReservationsOfUser(data)
     .then(reservations => res.send(reservationsListSerializer(reservations)))
     .catch(next);
+};

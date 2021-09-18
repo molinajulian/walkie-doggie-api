@@ -26,9 +26,11 @@ exports.createReservation = ({ reservationData, options }) => {
   });
 };
 
-exports.getReservationsOfUser = ({ pathUserId, loggedUser }) => {
-  if (parseInt(pathUserId) !== loggedUser.id) throw forbidden('The provided user cannot access to this resource');
+exports.getReservationsOfUser = ({ userId, loggedUser, reservationDate, reservationStatus }) => {
+  if (parseInt(userId) !== loggedUser.id) throw forbidden('The provided user cannot access to this resource');
   const where = loggedUser.type === USER_TYPES.WALKER ? { walkerId: loggedUser.id } : { ownerId: loggedUser.id };
+  if (reservationDate) where.reservationDate = reservationDate;
+  if (reservationStatus) where.status = reservationStatus;
   return Reservation.findAll({
     where,
     include: [
