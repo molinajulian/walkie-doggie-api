@@ -27,7 +27,7 @@ exports.createFirebaseToken = ({ user, firebaseToken }, options = {}) =>
     throw databaseError(error.message);
   });
 
-exports.sendReservationCreatedNotification = async ({ user, reservation, range }) => {
+exports.sendReservationCreatedNotification = async ({ walker, owner, reservation, range }) => {
   const messages = [];
   const reservationDateFormatted = moment(reservation.reservationDate).format('DD/MM/YYYY');
   const rangeStartAt = moment(range.startAt, 'HH:mm:ss').format('HH:mm');
@@ -35,11 +35,11 @@ exports.sendReservationCreatedNotification = async ({ user, reservation, range }
   const defaultMessage = {
     title: 'Nueva reserva disponible',
     body:
-      `${user.firstName} ${user.lastName} quiere concretar un paseo contigo el día ${reservationDateFormatted} ` +
+      `${owner.firstName} ${owner.lastName} quiere concretar un paseo contigo el día ${reservationDateFormatted} ` +
       `en la franja horaria ${rangeStartAt} - ${rangeEndAt} hs`,
     data: { reservationId: reservation.id },
   };
-  user.firebaseTokens.forEach(ft => {
+  walker.firebaseTokens.forEach(ft => {
     const token = ft.token;
     if (Expo.isExpoPushToken(token)) {
       messages.push({

@@ -7,13 +7,13 @@ const {
   editWalkerSchema,
   createFirebaseTokenSchema,
   deleteFirebaseTokenSchema,
-  createReservationSchema,
 } = require('../schemas/users');
 const { checkTokenAndSetUser } = require('../middlewares/users');
 const { createUserSchema, onBoardingWalkerSchema, onBoardingOwnerSchema } = require('../schemas/users');
 const { validateSchemaAndFail } = require('../middlewares/params_validator');
 const { checkUserOwnerOnBoarding, checkUserWalkerOnBoarding } = require('../middlewares/users');
 const { createFirebaseToken, deleteFirebaseToken } = require('../controllers/users');
+const { getReservationsSchema, createReservationSchema } = require('../schemas/reservations');
 
 const userRouter = createRouter();
 
@@ -55,6 +55,11 @@ exports.init = app => {
     '/:id/reservations',
     [validateSchemaAndFail(createReservationSchema), checkTokenAndSetUser],
     usersController.createReservation,
+  );
+  userRouter.get(
+    '/:id/reservations',
+    [validateSchemaAndFail(getReservationsSchema), checkTokenAndSetUser],
+    usersController.getMyReservations,
   );
   userRouter.get('/:id', [validateSchemaAndFail(getUserSchema), checkTokenAndSetUser], usersController.get);
 };

@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
       petWalkId: { type: DataTypes.INTEGER, allowNull: true },
+      walkerId: { type: DataTypes.INTEGER, allowNull: true },
+      ownerId: { type: DataTypes.INTEGER, allowNull: true },
       duration: { type: DataTypes.INTEGER, allowNull: false },
     },
     { timestamps: true, underscored: true, paranoid: false, tableName: 'reservations' },
@@ -22,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     Reservation.belongsTo(models.Range, { as: 'reservationRange', foreignKey: 'rangeId' });
     Reservation.belongsTo(models.Pet, { as: 'reservationPet', foreignKey: 'petId' });
     Reservation.belongsTo(models.PetWalk, { as: 'reservationPetWalk', foreignKey: 'petWalkId' });
+    Reservation.belongsTo(models.User, { as: 'reservationWalker', foreignKey: 'walkerId' });
+    Reservation.belongsTo(models.User, { as: 'reservationOwner', foreignKey: 'ownerId' });
   };
 
   return Reservation;

@@ -1,4 +1,4 @@
-const { USER_TYPES, DAYS_OF_WEEK, CENTER_TYPES } = require('../utils/constants');
+const { USER_TYPES, DAYS_OF_WEEK, CENTER_TYPES, RESERVATION_STATUS } = require('../utils/constants');
 
 const stringMessage = field => `${field} must be a string`;
 const numberMessage = field => `${field} must be a number`;
@@ -61,3 +61,8 @@ exports.addressStartLongitude = `${stringMessage('address_start -> longitude')} 
 exports.addressEndDescription = `${stringMessage('address_end -> description')} ${containedMessage('body')}`;
 exports.addressEndLatitude = `${stringMessage('address_end -> latitude')} ${containedMessage('body')}`;
 exports.addressEndLongitude = `${stringMessage('address_end -> longitude')} ${containedMessage('body')}`;
+
+exports.queryReservationDate = `${dateMessage('date')} ${containedMessage('query')}`;
+exports.queryReservationStatus = `${oneOfMessage('status', Object.values(RESERVATION_STATUS))} ${containedMessage(
+  'query',
+)}`;

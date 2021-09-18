@@ -22,7 +22,8 @@ const {
   sendReservationCreatedNotification,
 } = require('../services/firebase_tokens');
 const { USER_TYPES } = require('../utils/constants');
-const { createReservation } = require('../services/reservations');
+const { createReservation, getReservationsOfUser } = require('../services/reservations');
+const { reservationsListSerializer } = require('../serializers/reservations');
 
 exports.createUser = (req, res, next) =>
   createUser(createUserMapper(req))
@@ -194,10 +195,11 @@ exports.createReservation = async (req, res, next) => {
         reservationDate: reservationData.reservationDate,
         duration: reservationData.duration,
         pet,
+        owner: req.user,
       },
       options: transactionOptions,
     });
-    await sendReservationCreatedNotification({ reservation, user: walker, range });
+    await sendReservationCreatedNotification({ reservation, walker, owner: req.user, range });
     await transaction.commit();
     return res.status(201).end();
   } catch (e) {
@@ -205,3 +207,8 @@ exports.createReservation = async (req, res, next) => {
     return next(e);
   }
 };
+
+exports.getMyReservations = (req, res, next) =>
+  getReservationsOfUser({ pathUserId: req.params.id, loggedUser: req.user })
+    .then(reservations => res.send(reservationsListSerializer(reservations)))
+    .catch(next);
