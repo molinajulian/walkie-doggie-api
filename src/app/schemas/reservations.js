@@ -99,7 +99,7 @@ exports.getReservationsSchema = {
   status: {
     in: ['query'],
     custom: {
-      options: value => value && isString(value) && RESERVATION_STATUS.includes(value),
+      options: value => value && isString(value) && Object.values(RESERVATION_STATUS).includes(value),
     },
     trim: true,
     errorMessage: queryReservationStatus,
