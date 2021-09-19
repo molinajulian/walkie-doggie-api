@@ -9,6 +9,8 @@ const {
   addressEndLongitude,
   queryReservationDate,
   queryReservationStatus,
+  addressStartDescription,
+  addressStartLongitude,
 } = require('../errors/schema_messages');
 const { isString } = require('lodash');
 const { RESERVATION_STATUS } = require('../utils/constants');
@@ -44,19 +46,19 @@ exports.createReservationSchema = {
     in: ['body'],
     isString: true,
     trim: true,
-    errorMessage: addressEndDescription,
+    errorMessage: addressStartDescription,
   },
   'address_start.latitude': {
     in: ['body'],
     isString: true,
     trim: true,
-    errorMessage: addressEndLatitude,
+    errorMessage: addressStartLongitude,
   },
   'address_start.longitude': {
     in: ['body'],
     isString: true,
     trim: true,
-    errorMessage: addressEndLongitude,
+    errorMessage: addressStartLongitude,
   },
   'address_end.description': {
     in: ['body'],

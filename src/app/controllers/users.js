@@ -179,7 +179,7 @@ exports.createReservation = async (req, res, next) => {
       throw invalidUserType('The provided user must be walker and the logged user must be owner');
     const range = await findRangeBy({ where: { id: reservationData.rangeId }, options: transactionOptions });
     if (!range) throw notFound('The provided range is invalid');
-    const pet = await findPetBy({ where: { id: reservationData.rangeId }, options: transactionOptions });
+    const pet = await findPetBy({ where: { id: reservationData.petId }, options: transactionOptions });
     if (!pet) throw notFound('The provided pet is invalid');
     const { addressStart, addressEnd } = await findOrCreateReservationAddresses({
       addressStart: reservationData.addressStart,
