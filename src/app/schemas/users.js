@@ -34,8 +34,6 @@ const {
   rangeId,
   duration,
   petId,
-  addressStartId,
-  addressEndId,
   addressEndDescription,
   addressEndLatitude,
   addressEndLongitude,
@@ -242,10 +240,38 @@ exports.onBoardingOwnerSchema = {
 };
 
 exports.editOwnerSchema = {
+  first_name: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    isLength: { options: { min: 1 } },
+    errorMessage: firstName,
+  },
+  last_name: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    isLength: { options: { min: 1 } },
+    errorMessage: lastName,
+  },
   ...exports.onBoardingOwnerSchema,
 };
 
 exports.editWalkerSchema = {
+  first_name: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    isLength: { options: { min: 1 } },
+    errorMessage: firstName,
+  },
+  last_name: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    isLength: { options: { min: 1 } },
+    errorMessage: lastName,
+  },
   ...exports.onBoardingWalkerSchema,
   certifications: {
     in: ['body'],

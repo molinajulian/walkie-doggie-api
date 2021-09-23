@@ -1,4 +1,4 @@
-const { Address } = require('../models');
+const { Address, Reservation } = require('../models');
 const logger = require('../logger');
 const { databaseError } = require('../errors/builders');
 
@@ -9,22 +9,22 @@ exports.createAddress = async ({ data, options }) => {
   });
 };
 
-exports.deleteAddressesOfUser = ({ user }, { transaction }) => {
+exports.deleteAddressesOfUser = async ({ user }, { transaction }) => {
   return user
     .update({ addressId: null }, { transaction })
     .catch(error => {
       logger.error('Error updating a user, reason:', error);
       throw databaseError(error.message);
     })
-    .then(userUpdated =>
-      Address.destroy({ where: { id: userUpdated.addressId }, transaction }).catch(error => {
+    .then(() =>
+      Address.destroy({ where: { id: user.addressId }, transaction }).catch(error => {
         logger.error('Error deleting addresses, reason:', error);
         throw databaseError(error.message);
       }),
     );
 };
 
-exports.findOrCreateReservationAddresses = async ({ addressStart, addressEnd, options }) => {
+exports.editAddress = exports.findOrCreateReservationAddresses = async ({ addressStart, addressEnd, options }) => {
   const [addressStartDb] = await Address.findOrCreate({
     where: {
       latitude: addressStart.latitude,
@@ -52,4 +52,17 @@ exports.findOrCreateReservationAddresses = async ({ addressStart, addressEnd, op
     ...options,
   });
   return { addressStart: addressStartDb, addressEnd: addressEndDb };
+};
+
+exports.editAddressOfUser = ({ data, options, loggedUser }) => {
+  loggedUser.address.description = data.description;
+  loggedUser.address.latitude = data.latitude;
+  loggedUser.address.longitude = data.longitude;
+  return loggedUser.address
+    .save(options)
+    .catch(error => {
+      logger.error('Error editing an addresses, reason:', error);
+      throw databaseError(error.message);
+    })
+    .then(() => loggedUser.address);
 };

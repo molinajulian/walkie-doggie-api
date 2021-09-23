@@ -40,10 +40,18 @@ exports.onBoardingOwnerMapper = ({ body }) => ({
   }),
 });
 
-exports.editOwnerMapper = exports.onBoardingOwnerMapper;
+exports.editOwnerMapper = req => ({
+  address: req.body.address,
+  phone: req.body.phone,
+  profilePhotoUri: req.body.profile_photo_uri,
+  firstName: req.body.first_name,
+  lastName: req.body.last_name,
+});
 
 exports.editWalkerMapper = req => ({
   ...exports.onBoardingWalkerMapper(req),
+  firstName: req.body.first_name,
+  lastName: req.body.last_name,
   certifications: req.body.certifications.map(certification => ({
     description: certification.description,
     fileUri: certification.file_uri,

@@ -3,7 +3,8 @@ exports.reservationsListSerializer = reservations => {
   return reservations.map(
     ({
       reservationPet,
-      reservationRange,
+      startHour,
+      endHour,
       reservationWalker,
       reservationOwner,
       addressStart,
@@ -13,12 +14,6 @@ exports.reservationsListSerializer = reservations => {
       reservationDate,
       duration,
     }) => ({
-      range: {
-        id: reservationRange.id,
-        day_of_week: reservationRange.dayOfWeek,
-        start_at: reservationRange.startAt,
-        end_at: reservationRange.endAt,
-      },
       pet: {
         id: reservationPet.id,
         name: reservationPet.name,
@@ -59,6 +54,8 @@ exports.reservationsListSerializer = reservations => {
       observations,
       reservationDate: moment(reservationDate).format('YYYYMMDD'),
       duration,
+      start_at: startHour,
+      end_at: endHour,
     }),
   );
 };

@@ -8,7 +8,12 @@ const {
   editWalkerMapper,
   createReservationMapper,
 } = require('../mappers/users');
-const { createAddress, deleteAddressesOfUser, findOrCreateReservationAddresses } = require('../services/addresses');
+const {
+  createAddress,
+  deleteAddressesOfUser,
+  findOrCreateReservationAddresses,
+  editAddressOfUser,
+} = require('../services/addresses');
 const { bulkCreateRanges, deleteRangesOfUser, findBy: findRangeBy } = require('../services/ranges');
 const { bulkCreatePets, deletePetsOfUser, findBy: findPetBy } = require('../services/pets');
 const { sequelizeInstance: sequelize } = require('../models');
@@ -91,17 +96,18 @@ exports.editOwner = async (req, res, next) => {
       return next(forbidden('The provided user cannot access to this resource'));
     }
     const editOwnerData = editOwnerMapper(req);
-    await deleteAddressesOfUser({ user: req.user }, { transaction });
-    await deletePetsOfUser({ user: req.user }, { transaction });
-    const address = await createAddress({ data: { ...editOwnerData.address }, options: { transaction } });
+    const address = await editAddressOfUser({
+      data: { ...editOwnerData.address },
+      options: { transaction },
+      loggedUser: req.user,
+    });
     const updatedUser = await updateUser({
       user: req.user,
       data: { addressId: address.get('id'), ...editOwnerData },
       options: { transaction },
     });
-    const pets = await bulkCreatePets({ pets: editOwnerData.pets, ownerId: updatedUser.id, options: { transaction } });
     updatedUser.address = address;
-    updatedUser.pets = pets;
+    updatedUser.pets = req.user.pets;
     await transaction.commit();
     return res.send(getUserSerializer(updatedUser));
   } catch (error) {
@@ -119,10 +125,13 @@ exports.editWalker = async (req, res, next) => {
       return next(forbidden('The provided user cannot access to this resource'));
     }
     const editWalkerData = editWalkerMapper(req);
-    await deleteAddressesOfUser({ user: req.user }, { transaction });
     await deleteCertificationOfUser({ user: req.user }, { transaction });
     await deleteRangesOfUser({ user: req.user }, { transaction });
-    const address = await createAddress({ data: { ...editWalkerData.address }, options: { transaction } });
+    const address = await editAddressOfUser({
+      data: { ...editWalkerData.address },
+      options: { transaction },
+      loggedUser: req.user,
+    });
     const updatedUser = await updateUser({
       user: req.user,
       data: { addressId: address.get('id'), ...editWalkerData },

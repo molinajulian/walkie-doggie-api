@@ -7,7 +7,7 @@ const config = {
     database: process.env.POSTGRES_DB,
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
-    logging: process.env.POSTGRES_LOGGING || 'false',
+    logging: 'true',
     dialect: 'postgres',
     url: process.env.DATABASE_URL,
     sslModeOn: process.env.SSL_MODE_ON || 'false',

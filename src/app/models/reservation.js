@@ -4,10 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       observations: { type: DataTypes.STRING, allowNull: true },
       status: { type: DataTypes.STRING, allowNull: false },
+      startHour: { type: DataTypes.STRING, allowNull: true },
+      endHour: { type: DataTypes.STRING, allowNull: true },
       addressStartId: { type: DataTypes.INTEGER, allowNull: false },
       addressEndId: { type: DataTypes.INTEGER, allowNull: false },
       petId: { type: DataTypes.INTEGER, allowNull: true },
-      rangeId: { type: DataTypes.INTEGER, allowNull: false },
       reservationDate: { type: DataTypes.DATE, allowNull: false },
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
@@ -21,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
   Reservation.associate = models => {
     Reservation.belongsTo(models.Address, { as: 'addressStart', foreignKey: 'addressStartId' });
     Reservation.belongsTo(models.Address, { as: 'addressEnd', foreignKey: 'addressEndId' });
-    Reservation.belongsTo(models.Range, { as: 'reservationRange', foreignKey: 'rangeId' });
     Reservation.belongsTo(models.Pet, { as: 'reservationPet', foreignKey: 'petId' });
     Reservation.belongsTo(models.PetWalk, { as: 'reservationPetWalk', foreignKey: 'petWalkId' });
     Reservation.belongsTo(models.User, { as: 'reservationWalker', foreignKey: 'walkerId' });

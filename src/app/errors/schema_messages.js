@@ -20,6 +20,7 @@ exports.lastName = `${stringMessage('last_name')} ${containedMessage('body')}`;
 exports.userType = `${oneOfMessage('type', Object.values(USER_TYPES))} ${containedMessage('body')}`;
 exports.refreshToken = jwtMessage('refresh_token', 'body');
 exports.idParam = `${numberMessage('id')} ${containedMessage('the url')}`;
+exports.petIdParam = `${numberMessage('petId')} ${containedMessage('the url')}`;
 
 // Onboarding
 exports.pricePerHour = `${numberMessage('price_per_hour')} ${containedMessage('body')}`;

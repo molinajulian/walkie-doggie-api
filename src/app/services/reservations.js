@@ -11,7 +11,8 @@ exports.createReservation = ({ reservationData, options }) => {
       petId: reservationData.pet.id,
       walkerId: reservationData.walker.id,
       ownerId: reservationData.owner.id,
-      rangeId: reservationData.range.id,
+      startHour: reservationData.range.startAt,
+      endHour: reservationData.range.endAt,
       addressStartId: reservationData.addressStart.id,
       addressEndId: reservationData.addressEnd.id,
       reservationDate: moment(reservationData.reservationDate, 'YYYYMMDD'),
@@ -35,7 +36,6 @@ exports.getReservationsOfUser = ({ userId, loggedUser, reservationDate, reservat
     where,
     include: [
       { model: Pet, as: 'reservationPet', paranoid: false },
-      { model: Range, as: 'reservationRange', paranoid: false },
       { model: User, as: 'reservationWalker' },
       { model: User, as: 'reservationOwner' },
       { model: Address, as: 'addressStart', paranoid: false },

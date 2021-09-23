@@ -17,12 +17,12 @@ module.exports = {
         },
         allowNull: false,
       },
-      range_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'ranges',
-          key: 'id',
-        },
+      hour_start: {
+        type: Sequelize.TIME,
+        allowNull: false,
+      },
+      hour_end: {
+        type: Sequelize.TIME,
         allowNull: false,
       },
       address_start_id: {

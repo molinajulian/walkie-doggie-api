@@ -1,6 +1,7 @@
 const { Router: createRouter } = require('express');
 
 const usersController = require('../controllers/users');
+const petsController = require('../controllers/pets');
 const {
   getUserSchema,
   editOwnerSchema,
@@ -14,6 +15,7 @@ const { validateSchemaAndFail } = require('../middlewares/params_validator');
 const { checkUserOwnerOnBoarding, checkUserWalkerOnBoarding } = require('../middlewares/users');
 const { createFirebaseToken, deleteFirebaseToken } = require('../controllers/users');
 const { getReservationsSchema, createReservationSchema } = require('../schemas/reservations');
+const { editPetSchema, createPetSchema } = require('../schemas/pets');
 
 const userRouter = createRouter();
 
@@ -60,6 +62,16 @@ exports.init = app => {
     '/:id/reservations',
     [validateSchemaAndFail(getReservationsSchema), checkTokenAndSetUser],
     usersController.getMyReservations,
+  );
+  userRouter.post(
+    '/:id/pets',
+    [validateSchemaAndFail(createPetSchema), checkTokenAndSetUser],
+    petsController.createPet,
+  );
+  userRouter.put(
+    '/:id/pets/:petId',
+    [validateSchemaAndFail(editPetSchema), checkTokenAndSetUser],
+    petsController.editPet,
   );
   userRouter.get('/:id', [validateSchemaAndFail(getUserSchema), checkTokenAndSetUser], usersController.get);
 };
