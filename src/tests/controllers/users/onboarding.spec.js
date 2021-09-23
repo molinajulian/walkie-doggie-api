@@ -169,7 +169,7 @@ describe('PUT /users/onboarding/owner', () => {
         body: createFakeOwnerOnboardingParams(),
       });
 
-      expect(alreadyOnboardedResponse.statusCode).toEqual(500);
+      expect(alreadyOnboardedResponse.statusCode).toEqual(400);
       expect(alreadyOnboardedResponse.body.internal_code).toBe('internal_server_error');
       expect(alreadyOnboardedResponse.body.message).toContain(
         'There was an unexpected error, reason: User was already onboarded',
@@ -192,7 +192,7 @@ describe('PUT /users/onboarding/owner', () => {
         body: createFakeOwnerOnboardingParams(),
       });
 
-      expect(invalidUserTypeResponse.statusCode).toEqual(500);
+      expect(invalidUserTypeResponse.statusCode).toEqual(400);
       expect(invalidUserTypeResponse.body.internal_code).toBe('internal_server_error');
       expect(invalidUserTypeResponse.body.message).toContain(
         `There was an unexpected error, reason: User must be of type ${USER_TYPES.OWNER}`,
@@ -404,7 +404,7 @@ describe('PUT /users/onboarding/walker', () => {
         body: createFakeWalkerOnboardingParams(),
       });
 
-      expect(alreadyOnboardedResponse.statusCode).toEqual(500);
+      expect(alreadyOnboardedResponse.statusCode).toEqual(400);
       expect(alreadyOnboardedResponse.body.internal_code).toBe('internal_server_error');
       expect(alreadyOnboardedResponse.body.message).toContain(
         'There was an unexpected error, reason: User was already onboarded',
@@ -427,7 +427,7 @@ describe('PUT /users/onboarding/walker', () => {
         body: createFakeWalkerOnboardingParams(),
       });
 
-      expect(invalidUserTypeResponse.statusCode).toEqual(500);
+      expect(invalidUserTypeResponse.statusCode).toEqual(400);
       expect(invalidUserTypeResponse.body.internal_code).toBe('internal_server_error');
       expect(invalidUserTypeResponse.body.message).toContain(
         `There was an unexpected error, reason: User must be of type ${USER_TYPES.WALKER}`,
