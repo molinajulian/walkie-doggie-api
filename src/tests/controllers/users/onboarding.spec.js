@@ -171,9 +171,7 @@ describe('PUT /users/onboarding/owner', () => {
 
       expect(alreadyOnboardedResponse.statusCode).toEqual(400);
       expect(alreadyOnboardedResponse.body.internal_code).toBe('invalid_params');
-      expect(alreadyOnboardedResponse.body.message).toContain(
-        'There was an unexpected error, reason: User was already onboarded',
-      );
+      expect(alreadyOnboardedResponse.body.message).toContain('User was already onboarded');
     });
   });
 
@@ -194,9 +192,7 @@ describe('PUT /users/onboarding/owner', () => {
 
       expect(invalidUserTypeResponse.statusCode).toEqual(400);
       expect(invalidUserTypeResponse.body.internal_code).toBe('invalid_params');
-      expect(invalidUserTypeResponse.body.message).toContain(
-        `There was an unexpected error, reason: User must be of type ${USER_TYPES.OWNER}`,
-      );
+      expect(invalidUserTypeResponse.body.message).toContain(`User must be of type ${USER_TYPES.OWNER}`);
     });
   });
 
@@ -406,9 +402,7 @@ describe('PUT /users/onboarding/walker', () => {
 
       expect(alreadyOnboardedResponse.statusCode).toEqual(400);
       expect(alreadyOnboardedResponse.body.internal_code).toBe('invalid_params');
-      expect(alreadyOnboardedResponse.body.message).toContain(
-        'There was an unexpected error, reason: User was already onboarded',
-      );
+      expect(alreadyOnboardedResponse.body.message).toContain('User was already onboarded');
     });
   });
 
@@ -429,9 +423,7 @@ describe('PUT /users/onboarding/walker', () => {
 
       expect(invalidUserTypeResponse.statusCode).toEqual(400);
       expect(invalidUserTypeResponse.body.internal_code).toBe('invalid_params');
-      expect(invalidUserTypeResponse.body.message).toContain(
-        `There was an unexpected error, reason: User must be of type ${USER_TYPES.WALKER}`,
-      );
+      expect(invalidUserTypeResponse.body.message).toContain(`User must be of type ${USER_TYPES.WALKER}`);
     });
   });
 
