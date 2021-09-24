@@ -34,6 +34,8 @@ exports.createPet = async (req, res, next) => {
   try {
     transaction = await sequelize.transaction();
     if (req.params.id !== req.user.id) {
+      console.log(req.params.id);
+      console.log(req.user.id);
       return next(forbidden('The provided user cannot access to this resource'));
     }
     if (req.user.type !== USER_TYPES.OWNER) {
