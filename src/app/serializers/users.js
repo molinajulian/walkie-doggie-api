@@ -61,6 +61,7 @@ exports.listWalkerSerializer = ({ count, rows }) => ({
     first_name: user.firstName,
     last_name: user.lastName,
     email: user.email,
+    score: user.score,
     type: user.type,
   })),
 });
