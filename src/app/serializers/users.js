@@ -73,5 +73,7 @@ exports.listWalkerSerializer = ({ count, rows }) => ({
     score: user.score,
     type: user.type,
     pet_walks_amount: user.petWalksAmount,
+    phone: user.phone,
+    profile_photo_uri: user.profilePhotoUri,
   })),
 });
