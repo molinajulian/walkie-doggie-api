@@ -46,6 +46,8 @@ exports.getUserSerializer = user => {
       ranges,
       price_per_hour: user.pricePerHour,
       cover_letter: user.coverLetter,
+      pet_walks_amount: user.petWalksAmount,
+      score: user.score,
     };
   }
   const pets = user.pets.map(pet => ({
