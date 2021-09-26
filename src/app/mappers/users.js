@@ -77,3 +77,9 @@ exports.createReservationMapper = ({ body, params }) => ({
   comments: body.comments,
   reservationDate: body.walk_date,
 });
+
+exports.listWalkerMapper = req => ({
+  completeName: req.query.complete_name,
+  score: req.query.score,
+  petWalksAmount: req.query.pet_walks_amount,
+});

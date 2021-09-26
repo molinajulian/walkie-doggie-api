@@ -2,6 +2,7 @@ const { USER_TYPES, DAYS_OF_WEEK, CENTER_TYPES, RESERVATION_STATUS } = require('
 
 const stringMessage = field => `${field} must be a string`;
 const numberMessage = field => `${field} must be a number`;
+const floatMessage = field => `${field} must be a float number`;
 const arrayMessage = field => `${field} must be an array`;
 const dateMessage = field => `${field} must be a valid date`;
 const hourMessage = field => `${field} must be a valid hour`;
@@ -67,3 +68,7 @@ exports.queryReservationDate = `${dateMessage('date')} ${containedMessage('query
 exports.queryReservationStatus = `${oneOfMessage('status', Object.values(RESERVATION_STATUS))} ${containedMessage(
   'query',
 )}`;
+
+exports.completeNameQuery = `${stringMessage('complete_name')} ${containedMessage('query')}`;
+exports.scoreQuery = `${floatMessage('score')} ${containedMessage('query')}`;
+exports.petWalksAmountQuery = `${numberMessage('pet_walks_amount')} ${containedMessage('query')}`;

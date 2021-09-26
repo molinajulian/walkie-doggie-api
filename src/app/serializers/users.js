@@ -39,7 +39,14 @@ exports.getUserSerializer = user => {
       start_at: range.startAt,
       end_at: range.endAt,
     }));
-    return { ...baseData, certifications, achievements, ranges, price_per_hour: user.pricePerHour };
+    return {
+      ...baseData,
+      certifications,
+      achievements,
+      ranges,
+      price_per_hour: user.pricePerHour,
+      cover_letter: user.coverLetter,
+    };
   }
   const pets = user.pets.map(pet => ({
     id: pet.id,
@@ -63,5 +70,6 @@ exports.listWalkerSerializer = ({ count, rows }) => ({
     email: user.email,
     score: user.score,
     type: user.type,
+    pet_walks_amount: user.petWalksAmount,
   })),
 });

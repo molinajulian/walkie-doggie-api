@@ -7,6 +7,7 @@ const {
   editOwnerMapper,
   editWalkerMapper,
   createReservationMapper,
+  listWalkerMapper,
 } = require('../mappers/users');
 const {
   createAddress,
@@ -173,7 +174,7 @@ exports.deleteFirebaseToken = (req, res, next) =>
     .catch(next);
 
 exports.listWalkers = (req, res, next) =>
-  listWalkers()
+  listWalkers(listWalkerMapper(req))
     .then(users => res.send(listWalkerSerializer(users)))
     .catch(next);
 
