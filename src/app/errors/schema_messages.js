@@ -72,3 +72,7 @@ exports.queryReservationStatus = `${oneOfMessage('status', Object.values(RESERVA
 exports.completeNameQuery = `${stringMessage('complete_name')} ${containedMessage('query')}`;
 exports.scoreQuery = `${floatMessage('score')} ${containedMessage('query')}`;
 exports.petWalksAmountQuery = `${numberMessage('pet_walks_amount')} ${containedMessage('query')}`;
+
+exports.complaintDescription = `${stringMessage('description')} ${containedMessage('body')}`;
+exports.complaintFileUris = `${arrayMessage('file_uris')} ${containedMessage('body')}`;
+exports.complaintFileUrisDescription = `${stringMessage('file_uris -> description')} ${containedMessage('body')}`;
