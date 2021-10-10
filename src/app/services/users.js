@@ -6,6 +6,8 @@ const { User } = require('../models');
 
 const { moment } = require('../utils/moment');
 const { USER_TYPES } = require('../utils/constants');
+const { Op, where, fn, col } = require('sequelize');
+const lodash = require('lodash');
 
 exports.createUser = attrs => {
   logger.info(`Attempting to create user with attributes: ${inspect(attrs)}`);
@@ -58,8 +60,22 @@ exports.updateUser = async ({ user, data, options }) => {
   });
 };
 
-exports.listWalkers = () => {
-  return User.findAndCountAll({ where: { type: USER_TYPES.WALKER } }).catch(error => {
+exports.listWalkers = filters => {
+  const andClause = [{ type: USER_TYPES.WALKER }];
+  if (filters.completeName) {
+    andClause.push(
+      where(fn('unaccent', fn('trim', fn('concat', col('"User"."first_name"'), ' ', col('"User"."last_name"')))), {
+        [Op.iLike]: `%${lodash.deburr(filters.completeName.toLowerCase())}%`,
+      }),
+    );
+  }
+  if (filters.score) {
+    andClause.push({ score: { [Op.gte]: filters.score } });
+  }
+  if (filters.petWalksAmount) {
+    andClause.push({ petWalksAmount: { [Op.gte]: filters.petWalksAmount } });
+  }
+  return User.findAndCountAll({ where: { [Op.and]: andClause } }).catch(error => {
     logger.error(inspect(error));
     throw databaseError(`Error listing the walkers, reason: ${error.message}`);
   });

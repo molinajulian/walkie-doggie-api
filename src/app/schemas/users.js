@@ -37,6 +37,9 @@ const {
   addressEndDescription,
   addressEndLatitude,
   addressEndLongitude,
+  completeNameQuery,
+  scoreQuery,
+  petWalksAmountQuery,
 } = require('../errors/schema_messages');
 const { USER_TYPES, DAYS_OF_WEEK, PET_GENDERS } = require('../utils/constants');
 const { REGEX_HOUR } = require('../utils/regex');
@@ -289,6 +292,7 @@ exports.editWalkerSchema = {
     trim: true,
     errorMessage: certificationFileUri,
   },
+  cover_letter: {},
 };
 
 exports.createFirebaseTokenSchema = {
@@ -383,5 +387,32 @@ exports.createReservationSchema = {
     isString: true,
     optional: true,
     isLength: { options: { min: 0, max: 255 } },
+  },
+};
+
+exports.listWalkerSchema = {
+  complete_name: {
+    in: ['query'],
+    isString: true,
+    trim: true,
+    optional: true,
+    isLength: { options: { min: 1, max: 255 } },
+    errorMessage: completeNameQuery,
+  },
+  score: {
+    in: ['query'],
+    isFloat: true,
+    toFloat: true,
+    optional: true,
+    trim: true,
+    errorMessage: scoreQuery,
+  },
+  pet_walks_amount: {
+    in: ['query'],
+    isNumeric: true,
+    toInt: true,
+    optional: true,
+    trim: true,
+    errorMessage: petWalksAmountQuery,
   },
 };

@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       pricePerHour: { type: DataTypes.DOUBLE, allowNull: true },
       wasOnboarded: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
       addressId: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'addresses', key: 'id' } },
+      petWalksAmount: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
     },
