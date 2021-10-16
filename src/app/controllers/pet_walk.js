@@ -16,7 +16,7 @@ exports.createPetWalk = async (req, res, next) => {
     const reservations = await createPetWalk({ user: req.user, params, options: { transaction } });
     await sendNewPetWalkNotification({ user: req.user, reservations });
     await transaction.commit();
-    return res.send();
+    return res.sendStatus(201);
   } catch (error) {
     logger.error(error);
     if (transaction) await transaction.rollback();

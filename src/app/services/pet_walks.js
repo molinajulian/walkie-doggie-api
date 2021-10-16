@@ -9,7 +9,14 @@ const { redis } = require('../../config');
 
 exports.createPetWalk = async ({ params, options, user }) => {
   const reservations = await Reservation.findAll({
-    include: [{ model: User, as: 'reservationOwner', required: true, include: [FirebaseToken] }],
+    include: [
+      {
+        model: User,
+        as: 'reservationOwner',
+        required: true,
+        include: [{ model: FirebaseToken, as: 'firebaseTokens' }],
+      },
+    ],
     where: { id: params.reservationIds },
     ...options,
   }).catch(error => {

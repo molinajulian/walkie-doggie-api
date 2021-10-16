@@ -13,7 +13,9 @@ exports.reservationsListSerializer = reservations => {
       observations,
       reservationDate,
       duration,
+      id,
     }) => ({
+      id,
       pet: {
         id: reservationPet.id,
         name: reservationPet.name,

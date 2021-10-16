@@ -7,6 +7,22 @@ const { moment } = require('../utils/moment');
 
 const expo = new Expo();
 
+const sendPushNotifications = async messages => {
+  const messagesChunk = expo.chunkPushNotifications(messages);
+  const sendPushNotificationPromises = await Bluebird.Promise.map(
+    messagesChunk,
+    async messageChunk => {
+      return expo.sendPushNotificationsAsync(messageChunk).catch(error => {
+        console.log('There was an error sending push notification');
+        console.log(error);
+      });
+    },
+    { concurrency: 5 },
+  );
+  const tickets = await Promise.all(sendPushNotificationPromises);
+  console.log(tickets);
+};
+
 exports.deleteFirebaseToken = ({ user, firebaseToken }, options = {}) =>
   FirebaseToken.destroy({ where: { token: firebaseToken, userId: user.id }, ...options })
     .catch(error => {
@@ -48,34 +64,36 @@ exports.sendReservationCreatedNotification = async ({ walker, owner, reservation
       });
     }
   });
-  const messagesChunk = expo.chunkPushNotifications(messages);
-  const sendPushNotificationPromises = await Bluebird.Promise.map(
-    messagesChunk,
-    async messageChunk => {
-      return expo.sendPushNotificationsAsync(messageChunk).catch(error => {
-        console.log('There was an error sending push notification');
-        console.log(error);
-      });
-    },
-    { concurrency: 5 },
-  );
-  const tickets = await Promise.all(sendPushNotificationPromises);
-  console.log(tickets);
+  await sendPushNotifications(messages);
 };
 
 exports.sendNewPetWalkNotification = async ({ user, reservations }) => {
-  const getNewPetWalkNotificationByOwnerName = ({ reservationDate }) => {
-    // const rangeStartAt = moment(range.startAt, 'HH:mm:ss').format('HH:mm');
-    // const rangeEndAt = moment(range.endAt, 'HH:mm:ss').format('HH:mm');
+  const getNewPetWalkNotificationByReservation = ({ reservationDate, startHour, endHour, id }) => {
+    const startAt = moment(startHour, 'HH:mm:ss').format('HH:mm');
+    const endAt = moment(endHour, 'HH:mm:ss').format('HH:mm');
     return {
-      title: 'Nuevo paseo',
+      title: 'Nuevo paseo programado',
       body: `${user.firstName} ${user.lastName} ha programado un paseo contigo el día ${moment(reservationDate).format(
         'DD/MM/YYYY',
-      )} `,
-      // + `en la franja horaria ${rangeStartAt} - ${rangeEndAt} hs`,
+      )} en la franja horaria ${startAt} - ${endAt} hs. Por favor, póngase en contacto para últimar detalles y confirme su asistencia`,
       data: {
-        // reservationId: reservation.id,
+        reservationId: id,
       },
     };
   };
+  const messages = [];
+  console.log(messages);
+  reservations.forEach(reservation => {
+    reservation.reservationOwner.firebaseTokens.forEach(ft => {
+      const message = getNewPetWalkNotificationByReservation(reservation);
+      const token = ft.token;
+      if (Expo.isExpoPushToken(token)) {
+        messages.push({
+          ...message,
+          to: token,
+        });
+      }
+    });
+  });
+  await sendPushNotifications(messages);
 };
