@@ -4,8 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       observations: { type: DataTypes.STRING, allowNull: true },
       status: { type: DataTypes.STRING, allowNull: false },
-      startHour: { type: DataTypes.STRING, allowNull: true },
-      endHour: { type: DataTypes.STRING, allowNull: true },
+      startHour: { type: DataTypes.STRING, allowNull: true, field: 'hour_start' },
+      endHour: { type: DataTypes.STRING, allowNull: true, field: 'hour_end' },
       addressStartId: { type: DataTypes.INTEGER, allowNull: false },
       addressEndId: { type: DataTypes.INTEGER, allowNull: false },
       petId: { type: DataTypes.INTEGER, allowNull: true },
