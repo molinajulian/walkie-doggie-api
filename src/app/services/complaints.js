@@ -35,6 +35,7 @@ exports.listComplaints = () =>
       { model: User, as: 'reporter', required: true },
       { model: ComplaintFile, as: 'complaintFiles' },
     ],
+    order: [['createdAt', 'desc']],
   }).catch(error => {
     logger.error('Error getting complaints, reason:', error);
     throw databaseError(error.message);

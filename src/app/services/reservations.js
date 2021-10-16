@@ -41,6 +41,7 @@ exports.getReservationsOfUser = ({ userId, loggedUser, reservationDate, reservat
       { model: Address, as: 'addressStart', paranoid: false },
       { model: Address, as: 'addressEnd', paranoid: false },
     ],
+    order: [['reservationDate', 'asc']],
   }).catch(error => {
     logger.error('Error getting reservations, reason:', error);
     throw databaseError(error.message);
