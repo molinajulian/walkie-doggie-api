@@ -62,3 +62,20 @@ exports.sendReservationCreatedNotification = async ({ walker, owner, reservation
   const tickets = await Promise.all(sendPushNotificationPromises);
   console.log(tickets);
 };
+
+exports.sendNewPetWalkNotification = async ({ user, reservations }) => {
+  const getNewPetWalkNotificationByOwnerName = ({ reservationDate }) => {
+    // const rangeStartAt = moment(range.startAt, 'HH:mm:ss').format('HH:mm');
+    // const rangeEndAt = moment(range.endAt, 'HH:mm:ss').format('HH:mm');
+    return {
+      title: 'Nuevo paseo',
+      body: `${user.firstName} ${user.lastName} ha programado un paseo contigo el día ${moment(reservationDate).format(
+        'DD/MM/YYYY',
+      )} `,
+      // + `en la franja horaria ${rangeStartAt} - ${rangeEndAt} hs`,
+      data: {
+        // reservationId: reservation.id,
+      },
+    };
+  };
+};

@@ -17,6 +17,8 @@ const { checkUserOwnerOnBoarding, checkUserWalkerOnBoarding } = require('../midd
 const { createFirebaseToken, deleteFirebaseToken } = require('../controllers/users');
 const { getReservationsSchema, createReservationSchema } = require('../schemas/reservations');
 const { editPetSchema, createPetSchema } = require('../schemas/pets');
+const { createPetWalkSchema } = require('../schemas/pet_walks');
+const { createPetWalk } = require('../controllers/pet_walk');
 
 const userRouter = createRouter();
 
@@ -73,6 +75,7 @@ exports.init = app => {
     [validateSchemaAndFail(createPetSchema), checkTokenAndSetUser],
     petsController.createPet,
   );
+  userRouter.post('/:id/pet-walks', [validateSchemaAndFail(createPetWalkSchema), checkTokenAndSetUser], createPetWalk);
   userRouter.put(
     '/:id/pets/:petId',
     [validateSchemaAndFail(editPetSchema), checkTokenAndSetUser],

@@ -76,3 +76,9 @@ exports.petWalksAmountQuery = `${numberMessage('pet_walks_amount')} ${containedM
 exports.complaintDescription = `${stringMessage('description')} ${containedMessage('body')}`;
 exports.complaintFileUris = `${arrayMessage('file_uris')} ${containedMessage('body')}`;
 exports.complaintFileUrisDescription = `${stringMessage('file_uris -> description')} ${containedMessage('body')}`;
+
+exports.petWalkStartDate = `${dateMessage('start_date')} ${containedMessage('body')}`;
+exports.reservationIds = `${arrayMessage('reservation_ids')} ${containedMessage('body')}`;
+exports.petWalkReservationId = `${numberMessage('every reservation_id in reservation_ids array')} ${containedMessage(
+  'body',
+)}`;

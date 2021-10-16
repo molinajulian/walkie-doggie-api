@@ -25,3 +25,4 @@ exports.invalidCredentials = () => buildError('The credentials are not correct',
 exports.invalidToken = message => buildError(message, INVALID_TOKEN);
 exports.forbidden = message => buildError(message, FORBIDDEN);
 exports.invalidUserType = message => buildError(message, INVALID_PARAMS);
+exports.badRequest = message => buildError(message, INVALID_PARAMS);

@@ -25,8 +25,8 @@ services:
   walkie-doggie-redis-dev:
     image: redis
     container_name: walkie-doggie-redis-dev
-    expose:
-      - 6379
+    ports:
+      - "6379:6379"
     networks:
       - walkie-doggie
   walkie-doggie-db-dev:
