@@ -11,4 +11,5 @@ exports.complaintSerializer = complaint => ({
       }))) ||
     [],
   reporter: createUserSerializer(complaint.reporter),
+  created_at: complaint.createdAt,
 });

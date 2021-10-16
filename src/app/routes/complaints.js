@@ -15,4 +15,5 @@ exports.init = app => {
     complaintsController.createComplaint,
   );
   complaintRouter.get('/', [checkTokenAndSetUser], complaintsController.listComplaints);
+  complaintRouter.get('/:id', [checkTokenAndSetUser], complaintsController.getComplaint);
 };

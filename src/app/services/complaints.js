@@ -4,6 +4,7 @@ const logger = require('../logger');
 const { inspect } = require('util');
 const { Complaint, ComplaintFile, User } = require('../models');
 const { databaseError } = require('../errors/builders');
+const { getComplaint } = require('./complaints');
 
 exports.createComplaint = async ({ loggedUser, data }) => {
   logger.info(`Attempting to create complaint with attributes: ${inspect(data)}`);
@@ -36,5 +37,17 @@ exports.listComplaints = () =>
     ],
   }).catch(error => {
     logger.error('Error getting complaints, reason:', error);
+    throw databaseError(error.message);
+  });
+
+exports.getComplaint = id =>
+  Complaint.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'reporter', required: true },
+      { model: ComplaintFile, as: 'complaintFiles' },
+    ],
+  }).catch(error => {
+    logger.error('Error getting complaint, reason:', error);
     throw databaseError(error.message);
   });
