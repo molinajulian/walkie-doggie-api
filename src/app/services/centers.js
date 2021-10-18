@@ -11,3 +11,13 @@ exports.listCenters = ({ type }) => {
       throw databaseError(`Error listing the centers, reason: ${error.message}`);
     });
 };
+
+exports.getCenterById = id =>
+  Center.scope('base')
+    .findOne({
+      where: { id },
+    })
+    .catch(error => {
+      logger.error('Error getting center, reason:', error);
+      throw databaseError(error.message);
+    });

@@ -14,4 +14,6 @@ exports.init = app => {
     [validateSchemaAndFail(listCentersSchema), checkTokenAndSetUser],
     centersController.listCenters,
   );
+
+  centersRouter.get('/:id', [checkTokenAndSetUser], centersController.getCenter);
 };
