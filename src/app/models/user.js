@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       petWalksAmount: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
+      allowsTracking: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
     },
     {
       timestamps: true,

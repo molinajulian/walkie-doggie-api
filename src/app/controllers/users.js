@@ -9,14 +9,9 @@ const {
   createReservationMapper,
   listWalkerMapper,
 } = require('../mappers/users');
-const {
-  createAddress,
-  deleteAddressesOfUser,
-  findOrCreateReservationAddresses,
-  editAddressOfUser,
-} = require('../services/addresses');
+const { createAddress, findOrCreateReservationAddresses, editAddressOfUser } = require('../services/addresses');
 const { bulkCreateRanges, deleteRangesOfUser, findBy: findRangeBy } = require('../services/ranges');
-const { bulkCreatePets, deletePetsOfUser, findBy: findPetBy } = require('../services/pets');
+const { bulkCreatePets, findBy: findPetBy } = require('../services/pets');
 const { sequelizeInstance: sequelize } = require('../models');
 const logger = require('../logger');
 const { getUserSerializer } = require('../serializers/users');
@@ -28,9 +23,20 @@ const {
   sendReservationCreatedNotification,
 } = require('../services/firebase_tokens');
 const { USER_TYPES } = require('../utils/constants');
-const { createReservation, getReservationsOfUser } = require('../services/reservations');
+const {
+  createReservation,
+  getReservationsOfUser,
+  updateReservationStatus,
+  getOwnerReservation,
+  updateReservationStatusByOwner,
+  updateReservationStatusByWalker,
+} = require('../services/reservations');
 const { reservationsListSerializer } = require('../serializers/reservations');
-const { reservationListMapper } = require('../mappers/reservations');
+const {
+  reservationListMapper,
+  changeStatusOfReservationOwnerMapper,
+  changeStatusOfReservationWalkerMapper,
+} = require('../mappers/reservations');
 
 exports.createUser = (req, res, next) =>
   createUser(createUserMapper(req))
@@ -224,4 +230,36 @@ exports.getMyReservations = (req, res, next) => {
   return getReservationsOfUser(data)
     .then(reservations => res.send(reservationsListSerializer(reservations)))
     .catch(next);
+};
+
+exports.changeStatusOfReservationByOwner = async (req, res, next) => {
+  let transaction = {};
+  try {
+    transaction = await sequelize.transaction();
+    const params = changeStatusOfReservationOwnerMapper(req);
+    const options = { transaction };
+    const reservation = await getOwnerReservation({ ...params, loggedUser: req.user, options });
+    if (!reservation) throw notFound('The provided reservation id is invalid');
+    await updateReservationStatus({ reservation, status: params.status, options });
+    await transaction.commit();
+    return res.status(200).end();
+  } catch (e) {
+    if (transaction) await transaction.rollback();
+    return next(e);
+  }
+};
+
+exports.changeStatusOfReservationByWalker = async (req, res, next) => {
+  let transaction = {};
+  try {
+    transaction = await sequelize.transaction();
+    const params = changeStatusOfReservationWalkerMapper(req);
+    const options = { transaction };
+    await updateReservationStatusByWalker({ ...params, loggedUser: req.user, options });
+    await transaction.commit();
+    return res.status(200).end();
+  } catch (e) {
+    if (transaction) await transaction.rollback();
+    return next(e);
+  }
 };

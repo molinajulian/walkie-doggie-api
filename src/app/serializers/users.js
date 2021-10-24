@@ -48,6 +48,7 @@ exports.getUserSerializer = user => {
       cover_letter: user.coverLetter,
       pet_walks_amount: user.petWalksAmount,
       score: user.score,
+      allows_tracking: user.allowsTracking,
     };
   }
   const pets = user.pets.map(pet => ({

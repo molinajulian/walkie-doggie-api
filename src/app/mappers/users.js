@@ -1,4 +1,3 @@
-const { moment } = require('../utils/moment');
 exports.createUserMapper = ({ body }) => ({
   type: body.type,
   firstName: body.first_name,
@@ -11,6 +10,7 @@ exports.onBoardingWalkerMapper = ({ body }) => ({
   phone: body.phone,
   pricePerHour: body.price_per_hour,
   profilePhotoUri: body.profile_photo_uri,
+  allows_tracking: body.allowsTracking,
   ranges: body.ranges.map(range => {
     return {
       id: range.id,
@@ -50,6 +50,7 @@ exports.editOwnerMapper = req => ({
 
 exports.editWalkerMapper = req => ({
   ...exports.onBoardingWalkerMapper(req),
+  allowsTracking: req.body.allows_tracking,
   firstName: req.body.first_name,
   lastName: req.body.last_name,
   certifications: req.body.certifications.map(certification => ({

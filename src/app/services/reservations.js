@@ -1,6 +1,6 @@
 const logger = require('../logger');
 const { Reservation, Pet, Range, Address, User } = require('../models');
-const { databaseError, forbidden } = require('../errors/builders');
+const { databaseError, forbidden, badRequest } = require('../errors/builders');
 const { RESERVATION_STATUS, USER_TYPES } = require('../utils/constants');
 const { moment } = require('../utils/moment');
 
@@ -44,6 +44,57 @@ exports.getReservationsOfUser = ({ userId, loggedUser, reservationDate, reservat
     order: [['reservationDate', 'asc']],
   }).catch(error => {
     logger.error('Error getting reservations, reason:', error);
+    throw databaseError(error.message);
+  });
+};
+
+exports.getOwnerReservation = ({ reservationId, loggedUser, userId, options }) => {
+  if (parseInt(userId) !== loggedUser.id) throw forbidden('The provided user cannot access to this resource');
+  return Reservation.findOne({
+    where: { ownerId: loggedUser.id, id: reservationId, status: RESERVATION_STATUS.ACCEPTED_BY_WALKER },
+    include: [
+      { model: Pet, as: 'reservationPet', paranoid: false },
+      { model: User, as: 'reservationWalker' },
+      { model: User, as: 'reservationOwner' },
+      { model: Address, as: 'addressStart', paranoid: false },
+      { model: Address, as: 'addressEnd', paranoid: false },
+    ],
+    ...options,
+  }).catch(error => {
+    logger.error('Error getting reservations, reason:', error);
+    throw databaseError(error.message);
+  });
+};
+
+exports.updateReservationStatus = ({ reservation, status, options }) =>
+  reservation.update({ status }, options).catch(error => {
+    logger.error('Error updating a reservation, reason:', error);
+    throw databaseError(error.message);
+  });
+
+exports.updateReservationStatusByWalker = async ({ reservationIds, userId, options, loggedUser }) => {
+  if (parseInt(userId) !== loggedUser.id) throw forbidden('The provided user cannot access to this resource');
+  const amountOfReservations = await Reservation.count({
+    where: {
+      id: reservationIds,
+      walkerId: loggedUser.id,
+      status: RESERVATION_STATUS.PENDING,
+    },
+    ...options,
+  }).catch(error => {
+    logger.error('Error counting the reservations, reason:', error);
+    throw databaseError(error.message);
+  });
+  console.log(amountOfReservations);
+  console.log(reservationIds);
+  if (parseInt(amountOfReservations) !== parseInt(reservationIds.length)) {
+    throw badRequest('The provided reservation ids are invalid');
+  }
+  await Reservation.update(
+    { status: RESERVATION_STATUS.REJECTED_BY_WALKER },
+    { where: { id: reservationIds }, ...options },
+  ).catch(error => {
+    logger.error('Error updating a reservation, reason:', error);
     throw databaseError(error.message);
   });
 };

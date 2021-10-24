@@ -15,7 +15,14 @@ const { createUserSchema, onBoardingWalkerSchema, onBoardingOwnerSchema } = requ
 const { validateSchemaAndFail } = require('../middlewares/params_validator');
 const { checkUserOwnerOnBoarding, checkUserWalkerOnBoarding } = require('../middlewares/users');
 const { createFirebaseToken, deleteFirebaseToken } = require('../controllers/users');
-const { getReservationsSchema, createReservationSchema } = require('../schemas/reservations');
+const {
+  getReservationsSchema,
+  createReservationSchema,
+  changeStatusOfReservationByOwnerMapper,
+  changeStatusOfReservationByWalkerMapper,
+  changeStatusOfReservationByOwnerSchema,
+  changeStatusOfReservationByWalkerSchema,
+} = require('../schemas/reservations');
 const { editPetSchema, createPetSchema } = require('../schemas/pets');
 const { createPetWalkSchema } = require('../schemas/pet_walks');
 const { createPetWalk } = require('../controllers/pet_walk');
@@ -80,6 +87,16 @@ exports.init = app => {
     '/:id/pets/:petId',
     [validateSchemaAndFail(editPetSchema), checkTokenAndSetUser],
     petsController.editPet,
+  );
+  userRouter.put(
+    '/:id/walker/reservations/reject',
+    [validateSchemaAndFail(changeStatusOfReservationByWalkerSchema), checkTokenAndSetUser],
+    usersController.changeStatusOfReservationByWalker,
+  );
+  userRouter.put(
+    '/:id/owner/reservations/:reservation_id/status',
+    [validateSchemaAndFail(changeStatusOfReservationByOwnerSchema), checkTokenAndSetUser],
+    usersController.changeStatusOfReservationByOwner,
   );
   userRouter.get('/:id', [validateSchemaAndFail(getUserSchema), checkTokenAndSetUser], usersController.get);
 };

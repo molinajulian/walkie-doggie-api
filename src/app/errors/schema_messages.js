@@ -1,6 +1,7 @@
 const { USER_TYPES, DAYS_OF_WEEK, CENTER_TYPES, RESERVATION_STATUS } = require('../utils/constants');
 
 const stringMessage = field => `${field} must be a string`;
+const booleanMessage = field => `${field} must be boolean`;
 const numberMessage = field => `${field} must be a number`;
 const floatMessage = field => `${field} must be a float number`;
 const arrayMessage = field => `${field} must be an array`;
@@ -82,3 +83,11 @@ exports.reservationIds = `${arrayMessage('reservation_ids')} ${containedMessage(
 exports.petWalkReservationId = `${numberMessage('every reservation_id in reservation_ids array')} ${containedMessage(
   'body',
 )}`;
+
+exports.bodyReservationStatus = `${oneOfMessage('status', [
+  RESERVATION_STATUS.ACCEPTED_BY_OWNER,
+  RESERVATION_STATUS.REJECTED_BY_OWNER,
+])} ${containedMessage('body')}`;
+
+exports.reservationIdParam = `${numberMessage('reservation_id')} ${containedMessage('the url')}`;
+exports.allowsTracking = `${booleanMessage('allows_tracking')} ${containedMessage('body')}`;

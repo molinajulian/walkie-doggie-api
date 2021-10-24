@@ -40,6 +40,7 @@ const {
   completeNameQuery,
   scoreQuery,
   petWalksAmountQuery,
+  allowsTracking,
 } = require('../errors/schema_messages');
 const { USER_TYPES, DAYS_OF_WEEK, PET_GENDERS } = require('../utils/constants');
 const { REGEX_HOUR } = require('../utils/regex');
@@ -274,6 +275,14 @@ exports.editWalkerSchema = {
     trim: true,
     isLength: { options: { min: 1 } },
     errorMessage: lastName,
+  },
+  allows_tracking: {
+    in: ['body'],
+    isBoolean: true,
+    trim: true,
+    toBoolean: true,
+    optional: true,
+    errorMessage: allowsTracking,
   },
   ...exports.onBoardingWalkerSchema,
   certifications: {

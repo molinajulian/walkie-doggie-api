@@ -11,9 +11,16 @@ const {
   queryReservationStatus,
   addressStartDescription,
   addressStartLongitude,
+  bodyReservationStatus,
+  idParam,
+  reservationIdParam,
+  reservationIds,
+  petWalkReservationId,
+  bodyOwnerReservationStatus,
 } = require('../errors/schema_messages');
 const { isString } = require('lodash');
 const { RESERVATION_STATUS } = require('../utils/constants');
+const { idParamSchema } = require('./users');
 
 exports.createReservationSchema = {
   walk_date: {
@@ -104,5 +111,41 @@ exports.getReservationsSchema = {
     trim: true,
     errorMessage: queryReservationStatus,
     optional: true,
+  },
+};
+
+exports.changeStatusOfReservationByOwnerSchema = {
+  ...idParamSchema,
+  reservation_id: {
+    in: ['params'],
+    isNumeric: true,
+    toInt: true,
+    errorMessage: reservationIdParam,
+  },
+  status: {
+    in: ['body'],
+    custom: {
+      options: value =>
+        value &&
+        value.length &&
+        [RESERVATION_STATUS.ACCEPTED_BY_OWNER, RESERVATION_STATUS.REJECTED_BY_OWNER].includes(value.toUpperCase()),
+    },
+    trim: true,
+    errorMessage: bodyOwnerReservationStatus,
+  },
+};
+
+exports.changeStatusOfReservationByWalkerSchema = {
+  ...idParamSchema,
+  reservation_ids: {
+    in: ['body'],
+    IsArray: true,
+    errorMessage: reservationIds,
+  },
+  'reservation_ids.*': {
+    in: ['body'],
+    isNumeric: true,
+    toInt: true,
+    errorMessage: petWalkReservationId,
   },
 };
