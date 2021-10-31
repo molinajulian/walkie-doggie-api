@@ -1,5 +1,5 @@
 const logger = require('../logger');
-const { Reservation, Pet, Range, Address, User } = require('../models');
+const { Reservation, Pet, PetWalk, Address, User } = require('../models');
 const { databaseError, forbidden, badRequest } = require('../errors/builders');
 const { RESERVATION_STATUS, USER_TYPES } = require('../utils/constants');
 const { moment } = require('../utils/moment');
@@ -41,6 +41,14 @@ exports.getReservationsOfUser = ({ userId, loggedUser, reservationDate, reservat
       { model: User, as: 'reservationOwner' },
       { model: Address, as: 'addressStart', paranoid: false },
       { model: Address, as: 'addressEnd', paranoid: false },
+      {
+        model: PetWalk,
+        as: 'reservationPetWalk',
+        include: [
+          { model: User, as: 'petWalker', required: true },
+          { model: Address, as: 'addressStart', required: true },
+        ],
+      },
     ],
     order: [['reservationDate', 'asc']],
   }).catch(error => {
