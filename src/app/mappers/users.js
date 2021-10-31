@@ -10,7 +10,7 @@ exports.onBoardingWalkerMapper = ({ body }) => ({
   phone: body.phone,
   pricePerHour: body.price_per_hour,
   profilePhotoUri: body.profile_photo_uri,
-  allows_tracking: body.allowsTracking,
+  allowsTracking: body.allows_tracking,
   ranges: body.ranges.map(range => {
     return {
       id: range.id,
