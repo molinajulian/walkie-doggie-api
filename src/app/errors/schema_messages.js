@@ -91,3 +91,5 @@ exports.bodyReservationStatus = `${oneOfMessage('status', [
 
 exports.reservationIdParam = `${numberMessage('reservation_id')} ${containedMessage('the url')}`;
 exports.allowsTracking = `${booleanMessage('allows_tracking')} ${containedMessage('body')}`;
+exports.latitude = `${stringMessage('latitude')} ${containedMessage('body')}`;
+exports.longitude = `${stringMessage('longitude')} ${containedMessage('body')}`;

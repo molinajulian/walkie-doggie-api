@@ -15,3 +15,9 @@ exports.changeStatusOfReservationWalkerMapper = req => ({
   reservationIds: req.body.reservation_ids,
   userId: req.user.id,
 });
+
+exports.getBestPathOfReservationsMapper = req => ({
+  startLatitude: req.body.start_latitude,
+  startLongitude: req.body.start_longitude,
+  reservationIds: req.body.reservation_ids,
+});

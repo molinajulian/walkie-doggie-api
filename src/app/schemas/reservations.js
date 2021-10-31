@@ -17,6 +17,10 @@ const {
   reservationIds,
   petWalkReservationId,
   bodyOwnerReservationStatus,
+  latitudeAddress,
+  longitudeAddress,
+  latitude,
+  longitude,
 } = require('../errors/schema_messages');
 const { isString } = require('lodash');
 const { RESERVATION_STATUS } = require('../utils/constants');
@@ -137,6 +141,32 @@ exports.changeStatusOfReservationByOwnerSchema = {
 
 exports.changeStatusOfReservationByWalkerSchema = {
   ...idParamSchema,
+  reservation_ids: {
+    in: ['body'],
+    IsArray: true,
+    errorMessage: reservationIds,
+  },
+  'reservation_ids.*': {
+    in: ['body'],
+    isNumeric: true,
+    toInt: true,
+    errorMessage: petWalkReservationId,
+  },
+};
+
+exports.bestPathOfReservationsSchema = {
+  start_latitude: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: latitude,
+  },
+  start_longitude: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    errorMessage: longitude,
+  },
   reservation_ids: {
     in: ['body'],
     IsArray: true,

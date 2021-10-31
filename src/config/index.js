@@ -18,6 +18,7 @@ const config = {
   server: {
     port: process.env.PORT || 8080,
     momentTimezone: process.env.MOMENT_TIMEZONE || 'America/Buenos_Aires',
+    reservationCheckerMinutes: parseInt(process.env.RESERVATION_CHECKER_MINUTES) || 60,
   },
   logger: {
     minLevel: process.env.LOGGER_MIN_LEVEL || 'debug',

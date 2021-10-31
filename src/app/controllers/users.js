@@ -30,12 +30,14 @@ const {
   getOwnerReservation,
   updateReservationStatusByOwner,
   updateReservationStatusByWalker,
+  getReservationsBy,
 } = require('../services/reservations');
 const { reservationsListSerializer } = require('../serializers/reservations');
 const {
   reservationListMapper,
   changeStatusOfReservationOwnerMapper,
   changeStatusOfReservationWalkerMapper,
+  getBestPathOfReservationsMapper,
 } = require('../mappers/reservations');
 
 exports.createUser = (req, res, next) =>

@@ -97,3 +97,68 @@ exports.sendNewPetWalkNotification = async ({ user, reservations }) => {
   });
   await sendPushNotifications(messages);
 };
+
+exports.sendOwnerBeganPetWalkNotification = async ({ owners, petWalk }) => {
+  const notification = {
+    title: `Tu paseo con ${petWalk.petWalker.firstName}, ${petWalk.petWalker.lastName} ha comenzado.`,
+    body: 'Revisa tus paseos en curso para ver mas detalles.',
+    data: {
+      petWalkId: petWalk.id,
+    },
+  };
+  const messages = [];
+  owners.forEach(owner => {
+    owner.firebaseTokens.forEach(ft => {
+      const token = ft.token;
+      if (Expo.isExpoPushToken(token)) {
+        messages.push({
+          ...notification,
+          to: token,
+        });
+      }
+    });
+  });
+  await sendPushNotifications(messages);
+};
+
+exports.sendWalkerBeganPetWalkNotification = async ({ petWalk }) => {
+  const notification = {
+    title: `Tu paseo programado para las ${moment(petWalk.reservationDate).format('HH:mm')} hs ha comenzado.`,
+    body: 'Revisa tus paseos en curso para ver mas detalles.',
+    data: {
+      petWalkId: petWalk.id,
+    },
+  };
+  const messages = [];
+  petWalk.petWalker.firebaseTokens.forEach(ft => {
+    const token = ft.token;
+    if (Expo.isExpoPushToken(token)) {
+      messages.push({
+        ...notification,
+        to: token,
+      });
+    }
+  });
+  await sendPushNotifications(messages);
+};
+
+exports.sendPetWalkCancelledNotification = async ({ petWalk }) => {
+  const notification = {
+    title: `Tu paseo programado para las ${moment(petWalk.reservationDate).format('HH:mm')} fue cancelado.`,
+    body: 'Hemos cancelado tu paseo debido a que ningún dueño lo ha aceptado.',
+    data: {
+      petWalkId: petWalk.id,
+    },
+  };
+  const messages = [];
+  petWalk.petWalker.firebaseTokens.forEach(ft => {
+    const token = ft.token;
+    if (Expo.isExpoPushToken(token)) {
+      messages.push({
+        ...notification,
+        to: token,
+      });
+    }
+  });
+  await sendPushNotifications(messages);
+};

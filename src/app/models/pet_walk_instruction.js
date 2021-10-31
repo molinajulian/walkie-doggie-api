@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       addressLatitude: { type: DataTypes.STRING, allowNull: false },
       addressLongitude: { type: DataTypes.STRING, allowNull: false },
       addressDescription: { type: DataTypes.STRING, allowNull: false },
-      order: { type: DataTypes.INTEGER, allowNull: false },
+      position: { type: DataTypes.INTEGER, allowNull: false },
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
     },

@@ -1,5 +1,8 @@
 const throng = require('throng');
 const Queue = require('bull');
+const { JOB_TYPE } = require('../app/utils/constants');
+const { cancelPendingReservationsOfPetWalk } = require('../app/services/reservations');
+const { beginPetWalk } = require('../app/services/pet_walks');
 
 // Connect to a local redis instance locally, and the Heroku-provided URL in production
 const { url } = require('../config').redis;
@@ -19,8 +22,13 @@ const start = () => {
   const workQueue = new Queue('work', url);
 
   workQueue.process(maxJobsPerWorker, async job => {
-    console.log(job);
-    job.remove();
+    const data = job.data;
+    if (data.event === JOB_TYPE.RESERVATION_CHECKER) {
+      await cancelPendingReservationsOfPetWalk({ reservationIds: data.reservationIds });
+    }
+    if (data.event === JOB_TYPE.PET_WALK_CREATOR) {
+      await beginPetWalk({ reservationIds: data.reservationIds, petWalkId: data.petWalkId });
+    }
   });
 };
 
