@@ -1,4 +1,4 @@
-const { USER_TYPES, DAYS_OF_WEEK, CENTER_TYPES, RESERVATION_STATUS } = require('../utils/constants');
+const { USER_TYPES, DAYS_OF_WEEK, CENTER_TYPES, RESERVATION_STATUS, PET_WALK_STATUS } = require('../utils/constants');
 
 const stringMessage = field => `${field} must be a string`;
 const booleanMessage = field => `${field} must be boolean`;
@@ -93,3 +93,5 @@ exports.reservationIdParam = `${numberMessage('reservation_id')} ${containedMess
 exports.allowsTracking = `${booleanMessage('allows_tracking')} ${containedMessage('body')}`;
 exports.latitude = `${stringMessage('latitude')} ${containedMessage('body')}`;
 exports.longitude = `${stringMessage('longitude')} ${containedMessage('body')}`;
+exports.queryPetWalkStatus = `${oneOfMessage('status', Object.values(PET_WALK_STATUS))} ${containedMessage('query')}`;
+exports.petWalkIdParam = `${numberMessage('pet_walk_id')} ${containedMessage('the url')}`;

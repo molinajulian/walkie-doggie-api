@@ -10,8 +10,14 @@ const {
   sequelizeInstance: sequelize,
 } = require('../models');
 const logger = require('../logger');
-const { databaseError, badRequest } = require('../errors/builders');
-const { RESERVATION_STATUS, PET_WALK_STATUS, JOB_TYPE, PET_WALK_INSTRUCTION } = require('../utils/constants');
+const { databaseError, badRequest, notFound } = require('../errors/builders');
+const {
+  RESERVATION_STATUS,
+  PET_WALK_STATUS,
+  JOB_TYPE,
+  PET_WALK_INSTRUCTION,
+  USER_TYPES,
+} = require('../utils/constants');
 const { createAddress } = require('./addresses');
 const { moment } = require('../utils/moment');
 const Queue = require('bull');
@@ -180,4 +186,59 @@ exports.beginPetWalk = async ({ petWalkId, reservationIds }) => {
     logger.error(e);
     await transaction.rollback();
   }
+};
+
+exports.getPetWalks = async ({ params, options, user }) => {
+  const where = {};
+  const include = [
+    { model: Address, as: 'addressStart', required: true },
+    { model: User, as: 'petWalker', required: true },
+  ];
+  if (user.type === USER_TYPES.OWNER) {
+    include.push({
+      model: Reservation,
+      required: true,
+      as: 'petWalkReservations',
+      where: { ownerId: user.id },
+    });
+  } else {
+    where.walkerId = user.id;
+  }
+  if (params.status) {
+    where.status = params.status;
+  }
+  return PetWalk.findAll({
+    include,
+    where: Object.values(where).length ? where : undefined,
+    ...options,
+  }).catch(error => {
+    logger.error('Error getting pet walks, reason:', error);
+    throw databaseError(error.message);
+  });
+};
+
+exports.getPetWalk = async ({ params, options, user }) => {
+  const petWalk = await PetWalk.findOne({
+    where: {
+      id: params.petWalkId,
+    },
+    include: [
+      { model: Address, as: 'addressStart', required: true },
+      { model: User, as: 'petWalker', required: true },
+      {
+        model: PetWalkInstruction,
+        as: 'petWalkInstructions',
+        required: true,
+        include: [{ model: Pet, as: 'petWalkInstructionPet' }],
+      },
+    ],
+    order: [[{ model: PetWalkInstruction, as: 'petWalkInstructions' }, 'position', 'asc']],
+    subQuery: false,
+    ...options,
+  }).catch(error => {
+    logger.error('Error getting pet walk, reason:', error);
+    throw databaseError(error.message);
+  });
+  if (!petWalk) throw notFound('The provided pet walk does not exist');
+  return petWalk;
 };

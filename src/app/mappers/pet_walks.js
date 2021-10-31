@@ -8,3 +8,13 @@ exports.createPetWalkMapper = req => ({
     description: req.body.address_start.description,
   },
 });
+
+exports.getPetWalksMapper = req => ({
+  userId: req.params.id,
+  status: req.query.status,
+});
+
+exports.getPetWalkMapper = req => ({
+  userId: req.params.id,
+  petWalkId: req.params.pet_walk_id,
+});

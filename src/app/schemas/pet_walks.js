@@ -6,8 +6,13 @@ const {
   addressStartDescription,
   addressStartLongitude,
   addressStartLatitude,
+  queryReservationStatus,
+  petWalkIdParam,
+  queryPetWalkStatus,
 } = require('../errors/schema_messages');
 const { idParamSchema } = require('./users');
+const { isString } = require('lodash');
+const { RESERVATION_STATUS, PET_WALK_STATUS } = require('../utils/constants');
 
 exports.createPetWalkSchema = {
   ...idParamSchema,
@@ -47,5 +52,28 @@ exports.createPetWalkSchema = {
     isString: true,
     trim: true,
     errorMessage: addressStartLongitude,
+  },
+};
+
+exports.getPetWalksSchema = {
+  ...idParamSchema,
+  status: {
+    in: ['query'],
+    custom: {
+      options: value => value && isString(value) && Object.values(PET_WALK_STATUS).includes(value),
+    },
+    trim: true,
+    errorMessage: queryPetWalkStatus,
+    optional: true,
+  },
+};
+
+exports.petWalkSchema = {
+  ...idParamSchema,
+  pet_walk_id: {
+    in: ['params'],
+    isNumeric: true,
+    toInt: true,
+    errorMessage: petWalkIdParam,
   },
 };

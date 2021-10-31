@@ -1,4 +1,5 @@
 const { moment } = require('../utils/moment');
+const { petWalkSerializer } = require('./pet_walks');
 
 exports.reservationsListSerializer = reservations => {
   return reservations.map(
@@ -60,25 +61,7 @@ exports.reservationsListSerializer = reservations => {
       duration,
       start_at: startHour,
       end_at: endHour,
-      pet_walk: reservationPetWalk
-        ? {
-            address_start: {
-              id: reservationPetWalk.addressStart.id,
-              latitude: reservationPetWalk.addressStart.latitude,
-              longitude: reservationPetWalk.addressStart.longitude,
-              description: reservationPetWalk.addressStart.description,
-            },
-            walker: {
-              id: reservationPetWalk.petWalker.id,
-              first_name: reservationPetWalk.petWalker.firstName,
-              last_name: reservationPetWalk.petWalker.lastName,
-              email: reservationPetWalk.petWalker.email,
-              phone: reservationPetWalk.petWalker.phone,
-            },
-            status: reservationPetWalk.status,
-            start_date: reservationPetWalk.startDate,
-          }
-        : {},
+      pet_walk: reservationPetWalk ? petWalkSerializer(reservationPetWalk) : {},
     }),
   );
 };

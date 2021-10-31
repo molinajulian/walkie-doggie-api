@@ -24,8 +24,8 @@ const {
   changeStatusOfReservationByWalkerSchema,
 } = require('../schemas/reservations');
 const { editPetSchema, createPetSchema } = require('../schemas/pets');
-const { createPetWalkSchema } = require('../schemas/pet_walks');
-const { createPetWalk } = require('../controllers/pet_walk');
+const { createPetWalkSchema, getPetWalksSchema, petWalkSchema } = require('../schemas/pet_walks');
+const { createPetWalk, getPetWalks, getPetWalk } = require('../controllers/pet_walk');
 
 const userRouter = createRouter();
 
@@ -83,6 +83,12 @@ exports.init = app => {
     petsController.createPet,
   );
   userRouter.post('/:id/pet-walks', [validateSchemaAndFail(createPetWalkSchema), checkTokenAndSetUser], createPetWalk);
+  userRouter.get('/:id/pet-walks', [validateSchemaAndFail(getPetWalksSchema), checkTokenAndSetUser], getPetWalks);
+  userRouter.get(
+    '/:id/pet-walks/:pet_walk_id',
+    [validateSchemaAndFail(petWalkSchema), checkTokenAndSetUser],
+    getPetWalk,
+  );
   userRouter.put(
     '/:id/pets/:petId',
     [validateSchemaAndFail(editPetSchema), checkTokenAndSetUser],
