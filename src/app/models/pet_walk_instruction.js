@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       position: { type: DataTypes.INTEGER, allowNull: false },
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
+      done: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     },
     { timestamps: true, underscored: true, paranoid: false, tableName: 'pet_walk_instructions' },
   );
