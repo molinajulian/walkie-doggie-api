@@ -1,6 +1,7 @@
 const { petSerializer } = require('./pets');
 
 exports.petWalkSerializer = petWalk => ({
+  id: petWalk.id,
   address_start: {
     id: petWalk.addressStart.id,
     latitude: petWalk.addressStart.latitude,
