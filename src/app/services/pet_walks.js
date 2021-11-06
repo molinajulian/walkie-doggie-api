@@ -228,7 +228,7 @@ exports.getPetWalk = async ({ params, options, user }) => {
       {
         model: PetWalkInstruction,
         as: 'petWalkInstructions',
-        required: true,
+        required: false,
         include: [{ model: Pet, as: 'petWalkInstructionPet' }],
       },
     ],
