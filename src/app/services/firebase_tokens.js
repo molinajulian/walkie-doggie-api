@@ -76,7 +76,7 @@ exports.sendNewPetWalkNotification = async ({ user, reservations }) => {
       title: 'Nuevo paseo programado',
       body: `${user.firstName} ${user.lastName} ha programado un paseo contigo el día ${moment(reservationDate).format(
         'DD/MM/YYYY',
-      )} en la franja horaria ${startAt} - ${endAt} hs. Por favor, póngase en contacto para últimar detalles y confirme su asistencia`,
+      )} en la franja horaria ${startAt} - ${endAt} hs. Por favor, póngase en contacto para últimar detalles y confirme su asistencia.`,
       data: {
         reservationId: id,
         type: NOTICIATION_TYPES.NEW_PET_WALK,
@@ -126,7 +126,9 @@ exports.sendOwnerBeganPetWalkNotification = async ({ owners, petWalk }) => {
 
 exports.sendWalkerBeganPetWalkNotification = async ({ petWalk }) => {
   const notification = {
-    title: `Tu paseo programado para las ${moment(petWalk.reservationDate).format('HH:mm')} hs ha comenzado.`,
+    title: `Tu paseo programado para las ${moment(petWalk.reservationDate)
+      .add(1, 'minutes')
+      .format('HH:mm')} hs ha comenzado.`,
     body: 'Revisa tus paseos en curso para ver mas detalles.',
     data: {
       petWalkId: petWalk.id,
@@ -148,7 +150,9 @@ exports.sendWalkerBeganPetWalkNotification = async ({ petWalk }) => {
 
 exports.sendPetWalkCancelledNotification = async ({ petWalk }) => {
   const notification = {
-    title: `Tu paseo programado para las ${moment(petWalk.reservationDate).format('HH:mm')} fue cancelado.`,
+    title: `Tu paseo programado para las ${moment(petWalk.reservationDate)
+      .add(1, 'minutes')
+      .format('HH:mm')} fue cancelado.`,
     body: 'Hemos cancelado tu paseo debido a que ningún dueño lo ha aceptado.',
     data: {
       petWalkId: petWalk.id,
