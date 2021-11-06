@@ -4,6 +4,7 @@ const { FirebaseToken } = require('../models');
 const logger = require('../logger');
 const { databaseError, notFound } = require('../errors/builders');
 const { moment } = require('../utils/moment');
+const { NOTICIATION_TYPES } = require('../utils/constants');
 
 const expo = new Expo();
 
@@ -53,7 +54,7 @@ exports.sendReservationCreatedNotification = async ({ walker, owner, reservation
     body:
       `${owner.firstName} ${owner.lastName} quiere concretar un paseo contigo el día ${reservationDateFormatted} ` +
       `en la franja horaria ${rangeStartAt} - ${rangeEndAt} hs`,
-    data: { reservationId: reservation.id },
+    data: { reservationId: reservation.id, type: NOTICIATION_TYPES.NEW_RESERVATION },
   };
   walker.firebaseTokens.forEach(ft => {
     const token = ft.token;
@@ -78,6 +79,7 @@ exports.sendNewPetWalkNotification = async ({ user, reservations }) => {
       )} en la franja horaria ${startAt} - ${endAt} hs. Por favor, póngase en contacto para últimar detalles y confirme su asistencia`,
       data: {
         reservationId: id,
+        type: NOTICIATION_TYPES.NEW_PET_WALK,
       },
     };
   };
@@ -104,6 +106,7 @@ exports.sendOwnerBeganPetWalkNotification = async ({ owners, petWalk }) => {
     body: 'Revisa tus paseos en curso para ver mas detalles.',
     data: {
       petWalkId: petWalk.id,
+      type: NOTICIATION_TYPES.OWNER_PET_WALK_STARTED,
     },
   };
   const messages = [];
@@ -127,6 +130,7 @@ exports.sendWalkerBeganPetWalkNotification = async ({ petWalk }) => {
     body: 'Revisa tus paseos en curso para ver mas detalles.',
     data: {
       petWalkId: petWalk.id,
+      type: NOTICIATION_TYPES.WALKER_PET_WALK_STARTED,
     },
   };
   const messages = [];
@@ -148,6 +152,7 @@ exports.sendPetWalkCancelledNotification = async ({ petWalk }) => {
     body: 'Hemos cancelado tu paseo debido a que ningún dueño lo ha aceptado.',
     data: {
       petWalkId: petWalk.id,
+      type: NOTICIATION_TYPES.PET_WALK_CANCELLED,
     },
   };
   const messages = [];
