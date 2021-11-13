@@ -1,5 +1,5 @@
 const logger = require('../logger');
-const { Reservation, Pet, PetWalk, Address, User } = require('../models');
+const { Reservation, Pet, PetWalk, Address, User, FirebaseToken } = require('../models');
 const { databaseError, forbidden, badRequest } = require('../errors/builders');
 const { RESERVATION_STATUS, USER_TYPES } = require('../utils/constants');
 const { moment } = require('../utils/moment');
@@ -127,4 +127,18 @@ exports.getReservationsBy = conditions => {
     logger.error('Error getting reservations, reason:', error);
     throw databaseError(error.message);
   });
+};
+
+exports.checkReservationCode = async ({ code, options, petWalk }) => {
+  const reservation = await Reservation.findOne({
+    where: { petWalkId: petWalk.id, code: code },
+    include: [{ model: User, as: 'reservationOwner', required: true, include: [FirebaseToken] }],
+    ...options,
+    subQuery: false,
+  }).catch(error => {
+    logger.error('Error checking reservation code, reason:', error);
+    throw databaseError(error.message);
+  });
+  if (!reservation) throw badRequest('The provided code is invalid');
+  return reservation;
 };

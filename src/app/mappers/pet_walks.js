@@ -18,3 +18,9 @@ exports.getPetWalkMapper = req => ({
   userId: req.params.id,
   petWalkId: req.params.pet_walk_id,
 });
+
+exports.doPetWalkInstructionMapper = req => ({
+  petWalkId: req.params.pet_walk_id,
+  petWalkInstructionId: req.params.pet_walk_instruction_id,
+  code: req.query.code,
+});

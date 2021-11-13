@@ -9,6 +9,8 @@ const {
   queryReservationStatus,
   petWalkIdParam,
   queryPetWalkStatus,
+  petWalkInstructionIdParam,
+  reservationCode,
 } = require('../errors/schema_messages');
 const { idParamSchema } = require('./users');
 const { isString } = require('lodash');
@@ -75,5 +77,26 @@ exports.petWalkSchema = {
     isNumeric: true,
     toInt: true,
     errorMessage: petWalkIdParam,
+  },
+};
+
+exports.doPetWalkInstructionSchema = {
+  pet_walk_id: {
+    in: ['params'],
+    isNumeric: true,
+    toInt: true,
+    errorMessage: petWalkIdParam,
+  },
+  pet_walk_instruction_id: {
+    in: ['params'],
+    isNumeric: true,
+    toInt: true,
+    errorMessage: petWalkInstructionIdParam,
+  },
+  code: {
+    in: ['query'],
+    isNumeric: true,
+    toInt: true,
+    errorMessage: reservationCode,
   },
 };

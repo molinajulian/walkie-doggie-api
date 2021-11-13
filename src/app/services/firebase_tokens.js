@@ -4,7 +4,7 @@ const { FirebaseToken } = require('../models');
 const logger = require('../logger');
 const { databaseError, notFound } = require('../errors/builders');
 const { moment } = require('../utils/moment');
-const { NOTICIATION_TYPES } = require('../utils/constants');
+const { NOTICIATION_TYPES, PET_WALK_INSTRUCTION } = require('../utils/constants');
 
 const expo = new Expo();
 
@@ -170,4 +170,28 @@ exports.sendPetWalkCancelledNotification = async ({ petWalk }) => {
     }
   });
   await sendPushNotifications(messages);
+};
+
+exports.sendOwnerFinishedPetWalk = async ({ petWalk, walker, owner }) => {
+  if (petWalk.instruction === PET_WALK_INSTRUCTION.LEAVE) {
+    const notification = {
+      title: `Tu paseo con ${walker.firstName}, ${walker.lastName} ha finalizado.`,
+      body: 'No olvides dejar una reseña y contar tu experiencia.',
+      data: {
+        petWalkId: petWalk.id,
+        type: NOTICIATION_TYPES.PET_WALK_FINISHED,
+      },
+    };
+    const messages = [];
+    owner.firebaseTokens.forEach(ft => {
+      const token = ft.token;
+      if (Expo.isExpoPushToken(token)) {
+        messages.push({
+          ...notification,
+          to: token,
+        });
+      }
+    });
+    await sendPushNotifications(messages);
+  }
 };

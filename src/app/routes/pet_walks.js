@@ -1,17 +1,17 @@
 const { Router: createRouter } = require('express');
 
-const centersController = require('../controllers/centers');
+const petWalkController = require('../controllers/pet_walk');
 const { checkTokenAndSetUser } = require('../middlewares/users');
 const { validateSchemaAndFail } = require('../middlewares/params_validator');
-const { listCentersSchema } = require('../schemas/centers');
+const { doPetWalkInstructionSchema } = require('../schemas/pet_walks');
 
 const centersRouter = createRouter();
 
 exports.init = app => {
   app.use('/pet-walks', centersRouter);
   centersRouter.patch(
-    '/:id/instructions/:instruction_id',
-    [validateSchemaAndFail(listCentersSchema), checkTokenAndSetUser],
-    centersController.listCenters,
+    '/:pet_walk_id/instructions/:pet_walk_instruction_id',
+    [validateSchemaAndFail(doPetWalkInstructionSchema), checkTokenAndSetUser],
+    petWalkController.doPetWalkInstruction,
   );
 };

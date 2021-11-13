@@ -95,3 +95,5 @@ exports.latitude = `${stringMessage('latitude')} ${containedMessage('body')}`;
 exports.longitude = `${stringMessage('longitude')} ${containedMessage('body')}`;
 exports.queryPetWalkStatus = `${oneOfMessage('status', Object.values(PET_WALK_STATUS))} ${containedMessage('query')}`;
 exports.petWalkIdParam = `${numberMessage('pet_walk_id')} ${containedMessage('the url')}`;
+exports.petWalkInstructionIdParam = `${numberMessage('pet_walk_instruction_id')} ${containedMessage('the url')}`;
+exports.reservationCode = `${numberMessage('code')} ${containedMessage('query')}`;

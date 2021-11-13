@@ -1,10 +1,23 @@
-const { createPetWalkMapper, getPetWalksMapper, getPetWalkMapper } = require('../mappers/pet_walks');
+const {
+  createPetWalkMapper,
+  getPetWalksMapper,
+  getPetWalkMapper,
+  doPetWalkInstructionMapper,
+} = require('../mappers/pet_walks');
 const { sequelizeInstance: sequelize } = require('../models');
 const { forbidden } = require('../errors/builders');
 const logger = require('../logger');
-const { createPetWalk, getPetWalks, getPetWalk } = require('../services/pet_walks');
-const { sendNewPetWalkNotification } = require('../services/firebase_tokens');
+const {
+  createPetWalk,
+  getPetWalks,
+  getPetWalk,
+  getPetWalkInstruction,
+  checkPreviousInstructions,
+  doPetWalkInstruction,
+} = require('../services/pet_walks');
+const { sendNewPetWalkNotification, sendOwnerFinishedPetWalk } = require('../services/firebase_tokens');
 const { petWalkListSerializer, completePetWalkSerializer } = require('../serializers/pet_walks');
+const { checkReservationCode } = require('../services/reservations');
 
 exports.createPetWalk = async (req, res, next) => {
   let transaction = {};
@@ -54,6 +67,26 @@ exports.getPetWalk = async (req, res, next) => {
     const petWalk = await getPetWalk({ user: req.user, params, options: { transaction } });
     await transaction.commit();
     return res.send(completePetWalkSerializer(petWalk));
+  } catch (error) {
+    logger.error(error);
+    if (transaction) await transaction.rollback();
+    return next(error);
+  }
+};
+
+exports.doPetWalkInstruction = async (req, res, next) => {
+  let transaction = {};
+  try {
+    transaction = await sequelize.transaction();
+    const options = { transaction };
+    const params = doPetWalkInstructionMapper(req);
+    const petWalkInstruction = await getPetWalkInstruction({ user: req.user, params, options });
+    const reservation = await checkReservationCode({ code: params.code, petWalk: petWalkInstruction.petWalk, options });
+    await checkPreviousInstructions({ petWalkInstruction, options });
+    await doPetWalkInstruction({ petWalkInstruction, options });
+    await sendOwnerFinishedPetWalk({ walker: req.user, owner: reservation.user, petWalkInstruction });
+    await transaction.commit();
+    return res.sendStatus(200);
   } catch (error) {
     logger.error(error);
     if (transaction) await transaction.rollback();

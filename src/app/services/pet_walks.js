@@ -10,7 +10,7 @@ const {
   sequelizeInstance: sequelize,
 } = require('../models');
 const logger = require('../logger');
-const { databaseError, badRequest, notFound } = require('../errors/builders');
+const { databaseError, badRequest, notFound, forbidden } = require('../errors/builders');
 const {
   RESERVATION_STATUS,
   PET_WALK_STATUS,
@@ -246,3 +246,49 @@ exports.getPetWalk = async ({ params, options, user }) => {
   if (!petWalk) throw notFound('The provided pet walk does not exist');
   return petWalk;
 };
+
+exports.getPetWalkInstruction = async ({ params, options, user }) => {
+  const petWalkInstruction = await PetWalkInstruction.findOne({
+    where: { id: params.petWalkInstructionId },
+    include: [
+      {
+        model: PetWalk,
+        as: 'petWalk',
+        required: true,
+        where: { id: params.petWalkId, walkerId: user.id },
+      },
+    ],
+    ...options,
+    subQuery: false,
+  }).catch(error => {
+    logger.error('Error getting pet walk instruction, reason:', error);
+    throw databaseError(error.message);
+  });
+  if (!petWalkInstruction) throw notFound('The provided pet walk instruction does not exist');
+  return petWalkInstruction;
+};
+
+exports.checkPreviousInstructions = async ({ petWalkInstruction, options }) => {
+  if (petWalkInstruction.instruction === PET_WALK_INSTRUCTION.LEAVE) {
+    const isPreviousInstructionDone =
+      (await PetWalkInstruction.count({
+        where: {
+          petId: petWalkInstruction.id,
+          petWalkId: petWalkInstruction.petWalkId,
+          instruction: PET_WALK_INSTRUCTION.PICK_UP,
+          done: true,
+        },
+        ...options,
+      }).catch(error => {
+        logger.error('Error counting pet walk instructions, reason:', error);
+        throw databaseError(error.message);
+      })) > 0;
+    if (!isPreviousInstructionDone) throw forbidden('You must do the previous instruction');
+  }
+};
+
+exports.doPetWalkInstruction = async ({ petWalkInstruction, options }) =>
+  petWalkInstruction.update({ done: true }, options).catch(error => {
+    logger.error('Error updating pet walk instruction, reason:', error);
+    throw databaseError(error.message);
+  });
