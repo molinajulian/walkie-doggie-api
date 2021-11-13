@@ -177,6 +177,7 @@ exports.beginPetWalk = async ({ petWalkId, reservationIds }) => {
             { transaction },
           );
         });
+        await petWalk.walker.update({ petWalksAmount: petWalk.walker.petWalksAmount + 1 });
         await petWalk.update({ status: PET_WALK_STATUS.IN_PROGRESS }, { transaction });
         await sendOwnerBeganPetWalkNotification({ petWalk, owners });
         await sendWalkerBeganPetWalkNotification({ petWalk });
@@ -292,3 +293,22 @@ exports.doPetWalkInstruction = async ({ petWalkInstruction, options }) =>
     logger.error('Error updating pet walk instruction, reason:', error);
     throw databaseError(error.message);
   });
+
+exports.getPetWalkOfOwner = async ({ params, options, user }) => {
+  const petWalk = await PetWalk.findOne({
+    where: {
+      id: params.petWalkId,
+    },
+    include: [
+      { model: Reservation, as: 'petWalkReservations', required: true, where: { ownerId: user.id } },
+      { model: User, as: 'petWalker', required: true },
+    ],
+    subQuery: false,
+    ...options,
+  }).catch(error => {
+    logger.error('Error getting pet walk, reason:', error);
+    throw databaseError(error.message);
+  });
+  if (!petWalk) throw notFound('The provided pet walk does not exist');
+  return petWalk;
+};

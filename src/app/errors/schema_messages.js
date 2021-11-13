@@ -97,3 +97,5 @@ exports.queryPetWalkStatus = `${oneOfMessage('status', Object.values(PET_WALK_ST
 exports.petWalkIdParam = `${numberMessage('pet_walk_id')} ${containedMessage('the url')}`;
 exports.petWalkInstructionIdParam = `${numberMessage('pet_walk_instruction_id')} ${containedMessage('the url')}`;
 exports.reservationCode = `${numberMessage('code')} ${containedMessage('query')}`;
+exports.score = `${numberMessage('number')} ${containedMessage('body')}`;
+exports.descriptionReview = `${stringMessage('description')} ${containedMessage('body')}`;

@@ -47,7 +47,7 @@ exports.getUserSerializer = user => {
       price_per_hour: user.pricePerHour,
       cover_letter: user.coverLetter,
       pet_walks_amount: user.petWalksAmount,
-      score: user.score,
+      score: Math.round((user.score / user.petWalksAmount) * 10) / 10,
       allows_tracking: user.allowsTracking,
     };
   }

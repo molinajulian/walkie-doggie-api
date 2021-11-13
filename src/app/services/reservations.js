@@ -140,5 +140,8 @@ exports.checkReservationCode = async ({ code, options, petWalk }) => {
     throw databaseError(error.message);
   });
   if (!reservation) throw badRequest('The provided code is invalid');
-  return reservation;
+  return reservation.update({ status: RESERVATION_STATUS.PENDING_REVIEW }, options).catch(error => {
+    logger.error('Error updating reservation, reason:', error);
+    throw databaseError(error.message);
+  });
 };

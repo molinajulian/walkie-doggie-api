@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
       allowsTracking: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+      reviewsAmount: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
     },
     {
       timestamps: true,

@@ -84,7 +84,7 @@ exports.doPetWalkInstruction = async (req, res, next) => {
     const reservation = await checkReservationCode({ code: params.code, petWalk: petWalkInstruction.petWalk, options });
     await checkPreviousInstructions({ petWalkInstruction, options });
     await doPetWalkInstruction({ petWalkInstruction, options });
-    await sendOwnerFinishedPetWalk({ walker: req.user, owner: reservation.user, petWalkInstruction });
+    await sendOwnerFinishedPetWalk({ walker: req.user, reservation, petWalkInstruction });
     await transaction.commit();
     return res.sendStatus(200);
   } catch (error) {
