@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       description: { type: DataTypes.STRING, allowNull: true },
       score: { type: DataTypes.INTEGER, allowNull: false },
       petWalkId: { type: DataTypes.INTEGER, allowNull: true },
-      ownerId: { type: DataTypes.DATE, allowNull: false },
+      ownerId: { type: DataTypes.INTEGER, allowNull: false },
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },
     },

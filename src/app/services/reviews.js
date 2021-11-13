@@ -4,12 +4,6 @@ const { databaseError } = require('../errors/builders');
 const { RESERVATION_STATUS } = require('../utils/constants');
 
 exports.createReview = async ({ petWalk, options, params, user }) => {
-  console.log({
-    score: params.score,
-    description: params.description,
-    petWalkId: petWalk.id,
-    ownerId: user.id,
-  });
   await Review.create(
     {
       score: params.score,
@@ -26,7 +20,7 @@ exports.createReview = async ({ petWalk, options, params, user }) => {
     logger.error('Error updating the reservation, reason:', error);
     throw databaseError(error.message);
   });
-  await petWalk.walker.update({ score: petWalk.walker.score + params.score }, options).catch(error => {
+  await petWalk.petWalker.update({ score: petWalk.petWalker.score + params.score }, options).catch(error => {
     logger.error('Error updating the walker score, reason:', error);
     throw databaseError(error.message);
   });
