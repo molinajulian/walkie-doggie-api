@@ -177,7 +177,7 @@ exports.beginPetWalk = async ({ petWalkId, reservationIds }) => {
             { transaction },
           );
         });
-        await petWalk.walker.update({ petWalksAmount: petWalk.walker.petWalksAmount + 1 });
+        await petWalk.petWalker.update({ petWalksAmount: petWalk.walker.petWalksAmount + 1 });
         await petWalk.update({ status: PET_WALK_STATUS.IN_PROGRESS }, { transaction });
         await sendOwnerBeganPetWalkNotification({ petWalk, owners });
         await sendWalkerBeganPetWalkNotification({ petWalk });

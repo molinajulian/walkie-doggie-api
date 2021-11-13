@@ -104,6 +104,12 @@ exports.doPetWalkInstructionSchema = {
 };
 
 exports.createReviewSchema = {
+  pet_walk_id: {
+    in: ['params'],
+    isNumeric: true,
+    toInt: true,
+    errorMessage: petWalkIdParam,
+  },
   score: {
     in: ['body'],
     isNumeric: true,
