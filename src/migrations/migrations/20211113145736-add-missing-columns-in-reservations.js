@@ -1,18 +1,12 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) =>
+  up: queryInterface =>
     Promise.all([
-      queryInterface.addColumn('reservations', 'total_price', {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      }),
-      queryInterface.addColumn('reservations', 'code', {
-        type: Sequelize.STRING,
-        allowNull: false,
-      }),
+      queryInterface.sequelize.query('ALTER TABLE "reservations" ADD COLUMN IF NOT EXISTS "total_price" INTEGER;'),
+      queryInterface.sequelize.query('ALTER TABLE "reservations" ADD COLUMN IF NOT EXISTS "code" INTEGER;'),
     ]),
-  down: (queryInterface, Sequelize) =>
+  down: queryInterface =>
     Promise.all([
       queryInterface.removeColumn('reservations', 'total_price'),
       queryInterface.removeColumn('reservations', 'code'),
