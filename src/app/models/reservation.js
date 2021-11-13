@@ -17,6 +17,8 @@ module.exports = (sequelize, DataTypes) => {
       ownerId: { type: DataTypes.INTEGER, allowNull: true },
       duration: { type: DataTypes.INTEGER, allowNull: false },
       position: { type: DataTypes.INTEGER, allowNull: true },
+      code: { type: DataTypes.STRING, allowNull: true },
+      totalPrice: { type: DataTypes.STRING, allowNull: true },
     },
     { timestamps: true, underscored: true, paranoid: false, tableName: 'reservations' },
   );

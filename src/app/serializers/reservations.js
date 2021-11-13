@@ -17,6 +17,8 @@ exports.reservationsListSerializer = reservations => {
       duration,
       id,
       reservationPetWalk,
+      code,
+      totalPrice,
     }) => ({
       id,
       pet: {
@@ -62,6 +64,8 @@ exports.reservationsListSerializer = reservations => {
       start_at: startHour,
       end_at: endHour,
       pet_walk: reservationPetWalk ? petWalkSerializer(reservationPetWalk) : {},
+      code,
+      total_price: totalPrice,
     }),
   );
 };

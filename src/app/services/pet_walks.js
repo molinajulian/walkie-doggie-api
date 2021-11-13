@@ -72,8 +72,12 @@ exports.createPetWalk = async ({ params, options, user }) => {
   });
   // update reservation status
   await Bluebird.Promise.each(reservations, async (reservation, index) => {
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
     await reservation
-      .update({ status: RESERVATION_STATUS.ACCEPTED_BY_WALKER, petWalkId: petWalk.id, position: index + 1 }, options)
+      .update(
+        { status: RESERVATION_STATUS.ACCEPTED_BY_WALKER, petWalkId: petWalk.id, position: index + 1, code },
+        options,
+      )
       .catch(error => {
         logger.error('Error getting reservations, reason:', error);
         throw databaseError(error.message);

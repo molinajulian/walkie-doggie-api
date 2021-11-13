@@ -20,6 +20,7 @@ exports.createReservation = ({ reservationData, options }) => {
       duration: reservationData.duration,
       observations: reservationData.comments,
       status: RESERVATION_STATUS.PENDING,
+      totalPrice: parseInt(reservationData.walker.pricePerHour) * (parseInt(reservationData.duration) * 60),
     },
     options,
   ).catch(error => {
