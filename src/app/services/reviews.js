@@ -4,6 +4,12 @@ const { databaseError } = require('../errors/builders');
 const { RESERVATION_STATUS } = require('../utils/constants');
 
 exports.createReview = async ({ petWalk, options, params, user }) => {
+  console.log({
+    score: params.score,
+    description: params.description,
+    petWalkId: petWalk.id,
+    ownerId: user.id,
+  });
   await Review.create(
     {
       score: params.score,
