@@ -47,7 +47,7 @@ exports.getUserSerializer = user => {
       price_per_hour: user.pricePerHour,
       cover_letter: user.coverLetter,
       pet_walks_amount: user.petWalksAmount,
-      score: Math.round((user.score / user.reviewsAmount) * 10) / 10,
+      score: user.reviewsAmount > 0 ? Math.round((user.score / user.reviewsAmount) * 10) / 10 : null,
       allows_tracking: user.allowsTracking,
     };
   }
@@ -71,7 +71,7 @@ exports.listWalkerSerializer = ({ count, rows }) => ({
     first_name: user.firstName,
     last_name: user.lastName,
     email: user.email,
-    score: Math.round((user.score / user.reviewsAmount) * 10) / 10,
+    score: user.reviewsAmount > 0 ? Math.round((user.score / user.reviewsAmount) * 10) / 10 : null,
     type: user.type,
     pet_walks_amount: user.petWalksAmount,
     phone: user.phone,
