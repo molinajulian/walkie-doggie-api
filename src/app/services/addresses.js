@@ -4,7 +4,7 @@ const { databaseError } = require('../errors/builders');
 
 exports.createAddress = async ({ data, options }) => {
   return Address.create(data, options).catch(error => {
-    logger.error('Error creating an address, reason:', error);
+    logger.error('Error creating an address, reason: ', error);
     throw databaseError(error.message);
   });
 };
