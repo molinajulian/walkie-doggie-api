@@ -20,8 +20,13 @@ exports.createReview = async ({ petWalk, options, params, user }) => {
     logger.error('Error updating the reservation, reason:', error);
     throw databaseError(error.message);
   });
-  await petWalk.petWalker.update({ score: petWalk.petWalker.score + params.score }, options).catch(error => {
-    logger.error('Error updating the walker score, reason:', error);
-    throw databaseError(error.message);
-  });
+  await petWalk.petWalker
+    .update(
+      { score: petWalk.petWalker.score + params.score, reviewsAmount: petWalk.petWalker.reviewsAmount + 1 },
+      options,
+    )
+    .catch(error => {
+      logger.error('Error updating the walker score, reason:', error);
+      throw databaseError(error.message);
+    });
 };
