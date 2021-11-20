@@ -49,6 +49,7 @@ exports.getUserSerializer = user => {
       pet_walks_amount: user.petWalksAmount,
       score: user.reviewsAmount > 0 ? Math.round((user.score / user.reviewsAmount) * 10) / 10 : null,
       allows_tracking: user.allowsTracking,
+      reviewsAmount: user.reviewsAmount,
     };
   }
   const pets = user.pets.map(pet => ({
@@ -87,5 +88,7 @@ exports.reviewsOfWalker = ({ reviews, walker }) => ({
     score: review.score,
     description: review.description,
     reviewer: exports.createUserSerializer(review.reviewer),
+    created_at: review.createdAt,
+    updated_at: review.updatedAt,
   })),
 });
