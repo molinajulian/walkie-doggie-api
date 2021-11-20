@@ -1,8 +1,12 @@
 const { sequelizeInstance: sequelize } = require('../models');
 const logger = require('../logger');
-const { createReviewMapper } = require('../mappers/reviews');
+const { createReviewMapper, getReviewsMapper } = require('../mappers/reviews');
 const { getPetWalkOfOwner } = require('../services/pet_walks');
-const { createReview } = require('../services/reviews');
+const { createReview, getReviews } = require('../services/reviews');
+const { findByPk } = require('../services/users');
+const { invalidUserType } = require('../errors/builders');
+const { USER_TYPES } = require('../utils/constants');
+const { reviewsOfWalker } = require('../serializers/users');
 
 exports.createReview = async (req, res, next) => {
   let transaction = {};
@@ -18,6 +22,20 @@ exports.createReview = async (req, res, next) => {
   } catch (error) {
     logger.error(error);
     if (transaction) await transaction.rollback();
+    return next(error);
+  }
+};
+
+exports.getReviews = async (req, res, next) => {
+  try {
+    const params = getReviewsMapper(req);
+    const walker = await findByPk(params.walkerId);
+    if (walker.type !== USER_TYPES.WALKER)
+      throw invalidUserType('The provided user must be walker and the logged user must be owner');
+    const reviews = await getReviews({ walker });
+    return res.send(reviewsOfWalker({ reviews, walker }));
+  } catch (error) {
+    logger.error(error);
     return next(error);
   }
 };

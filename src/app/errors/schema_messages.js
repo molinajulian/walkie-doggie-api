@@ -99,3 +99,4 @@ exports.petWalkInstructionIdParam = `${numberMessage('pet_walk_instruction_id')}
 exports.reservationCode = `${numberMessage('code')} ${containedMessage('query')}`;
 exports.score = `${numberMessage('number')} ${containedMessage('body')}`;
 exports.descriptionReview = `${stringMessage('description')} ${containedMessage('body')}`;
+exports.petWalkIdQuery = `${numberMessage('pet_walk_id')} ${containedMessage('query')}`;

@@ -78,3 +78,14 @@ exports.listWalkerSerializer = ({ count, rows }) => ({
     profile_photo_uri: user.profilePhotoUri,
   })),
 });
+
+exports.reviewsOfWalker = ({ reviews, walker }) => ({
+  reviews_amount: walker.reviewsAmount,
+  score: walker.reviewsAmount > 0 ? Math.round((walker.score / walker.reviewsAmount) * 10) / 10 : null,
+  reviews: reviews.map(review => ({
+    id: review.id,
+    score: review.score,
+    description: review.description,
+    reviewer: exports.createUserSerializer(review.reviewer),
+  })),
+});

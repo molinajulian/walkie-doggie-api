@@ -21,6 +21,7 @@ const {
   longitudeAddress,
   latitude,
   longitude,
+  petWalkIdQuery,
 } = require('../errors/schema_messages');
 const { isString } = require('lodash');
 const { RESERVATION_STATUS } = require('../utils/constants');
@@ -114,6 +115,14 @@ exports.getReservationsSchema = {
     },
     trim: true,
     errorMessage: queryReservationStatus,
+    optional: true,
+  },
+  pet_walk_id: {
+    in: ['query'],
+    isNumeric: true,
+    toNumeric: true,
+    trim: true,
+    errorMessage: petWalkIdQuery,
     optional: true,
   },
 };

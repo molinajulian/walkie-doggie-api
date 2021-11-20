@@ -3,6 +3,7 @@ exports.reservationListMapper = req => ({
   reservationStatus: req.query.status,
   userId: req.params.id,
   loggedUser: req.user,
+  petWalkId: req.query.pet_walk_id,
 });
 
 exports.changeStatusOfReservationOwnerMapper = req => ({

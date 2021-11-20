@@ -80,3 +80,15 @@ exports.listWalkers = filters => {
     throw databaseError(`Error listing the walkers, reason: ${error.message}`);
   });
 };
+
+exports.findByPk = id => {
+  return User.findByPk(id)
+    .catch(error => {
+      logger.error(inspect(error));
+      throw databaseError(`Error getting the user, reason: ${error.message}`);
+    })
+    .then(user => {
+      if (!user) throw notFound('User not found');
+      return user;
+    });
+};

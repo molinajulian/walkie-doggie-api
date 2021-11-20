@@ -2,6 +2,7 @@ const { Router: createRouter } = require('express');
 
 const usersController = require('../controllers/users');
 const petsController = require('../controllers/pets');
+const reviewsController = require('../controllers/reviews');
 const {
   getUserSchema,
   editOwnerSchema,
@@ -9,6 +10,7 @@ const {
   createFirebaseTokenSchema,
   deleteFirebaseTokenSchema,
   listWalkerSchema,
+  getReviewsSchema,
 } = require('../schemas/users');
 const { checkTokenAndSetUser } = require('../middlewares/users');
 const { createUserSchema, onBoardingWalkerSchema, onBoardingOwnerSchema } = require('../schemas/users');
@@ -18,8 +20,6 @@ const { createFirebaseToken, deleteFirebaseToken } = require('../controllers/use
 const {
   getReservationsSchema,
   createReservationSchema,
-  changeStatusOfReservationByOwnerMapper,
-  changeStatusOfReservationByWalkerMapper,
   changeStatusOfReservationByOwnerSchema,
   changeStatusOfReservationByWalkerSchema,
 } = require('../schemas/reservations');
@@ -103,6 +103,11 @@ exports.init = app => {
     '/:id/owner/reservations/:reservation_id/status',
     [validateSchemaAndFail(changeStatusOfReservationByOwnerSchema), checkTokenAndSetUser],
     usersController.changeStatusOfReservationByOwner,
+  );
+  userRouter.get(
+    '/:id/reviews',
+    [validateSchemaAndFail(getReviewsSchema), checkTokenAndSetUser],
+    reviewsController.getReviews,
   );
   userRouter.get('/:id', [validateSchemaAndFail(getUserSchema), checkTokenAndSetUser], usersController.get);
 };

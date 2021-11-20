@@ -425,3 +425,8 @@ exports.listWalkerSchema = {
     errorMessage: petWalksAmountQuery,
   },
 };
+
+exports.getReviewsSchema = {
+  ...authorization,
+  ...exports.idParamSchema,
+};
