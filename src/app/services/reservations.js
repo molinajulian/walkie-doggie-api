@@ -1,7 +1,7 @@
 const logger = require('../logger');
 const { Reservation, Pet, PetWalk, Address, User, FirebaseToken } = require('../models');
 const { databaseError, forbidden, badRequest } = require('../errors/builders');
-const { RESERVATION_STATUS, USER_TYPES } = require('../utils/constants');
+const { RESERVATION_STATUS, USER_TYPES, PET_WALK_INSTRUCTION } = require('../utils/constants');
 const { moment } = require('../utils/moment');
 const { Op } = require('sequelize');
 
@@ -130,7 +130,9 @@ exports.getReservationsBy = conditions => {
   });
 };
 
-exports.checkReservationCode = async ({ code, options, petWalk }) => {
+exports.checkReservationCode = async ({ code, options, petWalkInstruction }) => {
+  const { petWalk, instruction } = petWalkInstruction;
+
   const reservation = await Reservation.findOne({
     where: { petWalkId: petWalk.id, code: code },
     include: [
@@ -148,8 +150,13 @@ exports.checkReservationCode = async ({ code, options, petWalk }) => {
     throw databaseError(error.message);
   });
   if (!reservation) throw badRequest('The provided code is invalid');
-  return reservation.update({ status: RESERVATION_STATUS.PENDING_REVIEW }, options).catch(error => {
-    logger.error('Error updating reservation, reason:', error);
-    throw databaseError(error.message);
-  });
+
+  if (instruction === PET_WALK_INSTRUCTION.LEAVE) {
+    return reservation.update({ status: RESERVATION_STATUS.PENDING_REVIEW }, options).catch(error => {
+      logger.error('Error updating reservation, reason:', error);
+      throw databaseError(error.message);
+    });
+  }
+
+  return reservation;
 };
