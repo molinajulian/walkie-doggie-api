@@ -186,7 +186,7 @@ exports.sendOwnerFinishedPetWalk = async ({ petWalk, walker, reservation, petWal
       },
     };
     const messages = [];
-    reservation.owner.firebaseTokens.forEach(ft => {
+    reservation.reservationOwner.firebaseTokens.forEach(ft => {
       const token = ft.token;
       if (Expo.isExpoPushToken(token)) {
         messages.push({
