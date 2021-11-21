@@ -274,7 +274,7 @@ exports.checkPreviousInstructions = async ({ petWalkInstruction, options }) => {
     const isPreviousInstructionDone =
       (await PetWalkInstruction.count({
         where: {
-          petId: petWalkInstruction.id,
+          petId: petWalkInstruction.petId,
           petWalkId: petWalkInstruction.petWalkId,
           instruction: PET_WALK_INSTRUCTION.PICK_UP,
           done: true,
