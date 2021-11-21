@@ -81,7 +81,11 @@ exports.doPetWalkInstruction = async (req, res, next) => {
     const options = { transaction };
     const params = doPetWalkInstructionMapper(req);
     const petWalkInstruction = await getPetWalkInstruction({ user: req.user, params, options });
-    const reservation = await checkReservationCode({ code: params.code, petWalk: petWalkInstruction.petWalk, options });
+    const reservation = await checkReservationCode({
+      code: params.code,
+      options,
+      petWalkInstruction,
+    });
     await checkPreviousInstructions({ petWalkInstruction, options });
     await doPetWalkInstruction({ petWalkInstruction, options });
     await sendOwnerFinishedPetWalk({
