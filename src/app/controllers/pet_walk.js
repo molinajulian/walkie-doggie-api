@@ -3,6 +3,7 @@ const {
   getPetWalksMapper,
   getPetWalkMapper,
   doPetWalkInstructionMapper,
+  finishPetWalkMapper,
 } = require('../mappers/pet_walks');
 const { sequelizeInstance: sequelize } = require('../models');
 const { forbidden } = require('../errors/builders');
@@ -14,6 +15,7 @@ const {
   getPetWalkInstruction,
   checkPreviousInstructions,
   doPetWalkInstruction,
+  checkAndFinishPetWalk,
 } = require('../services/pet_walks');
 const { sendNewPetWalkNotification, sendOwnerFinishedPetWalk } = require('../services/firebase_tokens');
 const { petWalkListSerializer, completePetWalkSerializer } = require('../serializers/pet_walks');
@@ -94,6 +96,26 @@ exports.doPetWalkInstruction = async (req, res, next) => {
       petWalkInstruction,
       petWalk: petWalkInstruction.petWalk,
     });
+    await transaction.commit();
+    return res.sendStatus(200);
+  } catch (error) {
+    logger.error(error);
+    if (transaction) await transaction.rollback();
+    return next(error);
+  }
+};
+
+exports.finishPetWalk = async (req, res, next) => {
+  let transaction = {};
+  try {
+    transaction = await sequelize.transaction();
+    const options = { transaction };
+    const params = finishPetWalkMapper(req);
+
+    const petWalk = await getPetWalk({ user: req.user, params, options: { transaction } });
+
+    await checkAndFinishPetWalk({ petWalk, options });
+
     await transaction.commit();
     return res.sendStatus(200);
   } catch (error) {

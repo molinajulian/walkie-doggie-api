@@ -312,3 +312,24 @@ exports.getPetWalkOfOwner = async ({ params, options, user }) => {
   if (!petWalk) throw notFound('The provided pet walk does not exist');
   return petWalk;
 };
+
+exports.checkAndFinishPetWalk = async ({ petWalk, options }) => {
+  const isAnyInstructionPending =
+    (await PetWalkInstruction.count({
+      where: {
+        petWalkId: petWalk.id,
+        done: false,
+      },
+      ...options,
+    }).catch(error => {
+      logger.error('Error counting pet walk instructions, reason:', error);
+      throw databaseError(error.message);
+    })) > 0;
+
+  if (isAnyInstructionPending) throw forbidden('PetWalk cannot be finished due to pending instructions');
+
+  await petWalk.update({ status: PET_WALK_STATUS.FINISHED }, options).catch(error => {
+    logger.error('Error updating petWalk, reason:', error);
+    throw databaseError(error.message);
+  });
+};
