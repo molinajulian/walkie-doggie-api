@@ -14,6 +14,7 @@ exports.petWalkSerializer = petWalk => ({
     last_name: petWalk.petWalker.lastName,
     email: petWalk.petWalker.email,
     phone: petWalk.petWalker.phone,
+    allows_tracking: petWalk.petWalker.allowsTracking,
   },
   status: petWalk.status,
   start_date: petWalk.startDate,
