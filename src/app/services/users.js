@@ -6,7 +6,7 @@ const { User } = require('../models');
 
 const { moment } = require('../utils/moment');
 const { USER_TYPES } = require('../utils/constants');
-const { Op, where, fn, col } = require('sequelize');
+const { Op, where, fn, col, literal } = require('sequelize');
 const lodash = require('lodash');
 
 exports.createUser = attrs => {
@@ -70,7 +70,20 @@ exports.listWalkers = filters => {
     );
   }
   if (filters.score) {
-    andClause.push({ score: { [Op.gte]: filters.score } });
+    andClause.push(
+      where(
+        fn(
+          'round',
+          literal(
+            'COALESCE("User"."score", 0)::decimal / (CASE WHEN "User"."reviews_amount" > 0 THEN "User"."reviews_amount" ::decimal ELSE 1::decimal END)',
+          ),
+          1,
+        ),
+        {
+          [Op.gte]: filters.score,
+        },
+      ),
+    );
   }
   if (filters.petWalksAmount) {
     andClause.push({ petWalksAmount: { [Op.gte]: filters.petWalksAmount } });
