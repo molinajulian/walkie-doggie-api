@@ -133,7 +133,14 @@ exports.getReservationsBy = conditions => {
 exports.checkReservationCode = async ({ code, options, petWalk }) => {
   const reservation = await Reservation.findOne({
     where: { petWalkId: petWalk.id, code: code },
-    include: [{ model: User, as: 'reservationOwner', required: true, include: [FirebaseToken] }],
+    include: [
+      {
+        model: User,
+        as: 'reservationOwner',
+        required: true,
+        include: [{ model: FirebaseToken, as: 'firebaseTokens' }],
+      },
+    ],
     ...options,
     subQuery: false,
   }).catch(error => {

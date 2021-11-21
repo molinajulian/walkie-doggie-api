@@ -172,8 +172,8 @@ exports.sendPetWalkCancelledNotification = async ({ petWalk }) => {
   await sendPushNotifications(messages);
 };
 
-exports.sendOwnerFinishedPetWalk = async ({ petWalk, walker, reservation }) => {
-  if (petWalk.instruction === PET_WALK_INSTRUCTION.LEAVE) {
+exports.sendOwnerFinishedPetWalk = async ({ petWalk, walker, reservation, petWalkInstruction }) => {
+  if (petWalkInstruction.instruction === PET_WALK_INSTRUCTION.LEAVE) {
     const notification = {
       title: `Tu paseo con ${walker.firstName}, ${walker.lastName} ha finalizado.`,
       body: 'No olvides dejar una reseña y contar tu experiencia.',

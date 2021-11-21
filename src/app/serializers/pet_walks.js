@@ -24,6 +24,7 @@ exports.petWalkListSerializer = petWalks => petWalks.map(exports.petWalkSerializ
 exports.completePetWalkSerializer = petWalk => ({
   ...exports.petWalkSerializer(petWalk),
   instructions: petWalk.petWalkInstructions.map(petWalkInstruction => ({
+    id: petWalkInstruction.id,
     instruction: petWalkInstruction.instruction,
     address_latitude: petWalkInstruction.addressLatitude,
     address_longitude: petWalkInstruction.addressLongitude,
