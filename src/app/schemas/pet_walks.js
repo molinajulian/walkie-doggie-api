@@ -123,3 +123,12 @@ exports.createReviewSchema = {
     errorMessage: descriptionReview,
   },
 };
+
+exports.finishPetWalkSchema = {
+  pet_walk_id: {
+    in: ['params'],
+    isNumeric: true,
+    toInt: true,
+    errorMessage: petWalkIdParam,
+  },
+};
