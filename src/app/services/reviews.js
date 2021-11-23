@@ -37,6 +37,7 @@ exports.getReviews = ({ walker }) => {
       { model: PetWalk, as: 'petWalk', where: { walkerId: walker.id }, required: true },
       { model: User, as: 'reviewer', required: true },
     ],
+    order: [['createdAt', 'desc']],
   }).catch(error => {
     logger.error('Error getting the reviews, reason:', error);
     throw databaseError(error.message);
